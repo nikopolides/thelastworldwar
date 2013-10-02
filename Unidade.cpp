@@ -26,8 +26,8 @@ int Unidade::show()
 {
 	rect.x = 0;
 	rect.y = 0;
-	rect.w = 60;
-	rect.h = 60;
+	rect.w = 30;
+	rect.h = 30;
 
 	apply_surface( posX*30, posY*30, civilizationUnits, screen, &rect);
 
