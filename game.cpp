@@ -11,6 +11,9 @@ SDL_Surface *screen = NULL;
 SDL_Surface *logoEmpresa = NULL;
 SDL_Surface *logoJogo = NULL;
 
+//carregando imagem das unidades
+SDL_Surface *civilizationUnits = NULL;
+
 //The event structure that will be used
 SDL_Event event;
 
@@ -24,12 +27,21 @@ int quadroEstado = 0;
 //cenarios
 enum {
 	TELA_INICIAL,
-	MENU_INICIAL
+	MENU_INICIAL,
+	INICIO				//trabalhar nesta para fazer a proxima entrega
 };
 int scenarioAtual = TELA_INICIAL;
 
+//LINHAS_MAPA = 20, COLUNAS_MAPA = 28;
+const int LINHAS_MAPA = 22;
+const int COLUNAS_MAPA = 33;
+
 /*	FIM	*/
 
+#include "Unidade.cpp"
+
+//inicializando uma unidade pra testar
+Unidade* unit1 = NULL;
 
 
 int initialize()
@@ -61,6 +73,7 @@ int initialize()
     //Load the images
 	logoEmpresa = load_image( "img_gamaSoft.jpg" );
     logoJogo = load_image( "coollogo_com-301376238.jpg" );
+	civilizationUnits = load_image( "civilization2Units.png" );
 
 	return 1;	//sucess
 }
@@ -70,6 +83,10 @@ int finalize()
     //Free the surfaces
     SDL_FreeSurface( logoEmpresa );
     SDL_FreeSurface( logoJogo );
+    SDL_FreeSurface( civilizationUnits );
+
+	if(unit1 != NULL)
+		delete(unit1);
 
     //Quit SDL
     SDL_Quit();
@@ -104,9 +121,20 @@ int get_inputs()
 		if( event.type == SDL_KEYDOWN )
 		{
 			if( event.key.keysym.sym == SDLK_ESCAPE ) 
-			{ 
 				quit = true;
-			}			
+
+			if( event.key.keysym.sym == SDLK_1 ) 
+				unit1 = new Unidade(10, 10, SOLDADO);
+
+			if( event.key.keysym.sym == SDLK_LEFT ) 
+				(*unit1).posX -= 1;
+			if( event.key.keysym.sym == SDLK_RIGHT ) 
+				(*unit1).posX += 1;
+			if( event.key.keysym.sym == SDLK_UP ) 
+				(*unit1).posY -= 1;
+			if( event.key.keysym.sym == SDLK_DOWN ) 
+				(*unit1).posY += 1;
+
 		}
         if( event.type == SDL_QUIT )	//If the user has Xed out the window
         {
@@ -140,7 +168,7 @@ int atualizarEstados()
 
 					apply_surface( 200, 100, logoEmpresa, screen);
 					SDL_Delay(2000);
-					//scenarioAtual = MENU_INICIAL;
+					scenarioAtual = INICIO;					//trabalhando com esse para esta entrega
 					break;
 		}
 	}		
@@ -156,9 +184,9 @@ int do_logic()
 
 int do_drawing()
 {
-	if(scenarioAtual==TELA_INICIAL)
+	/*if(scenarioAtual==TELA_INICIAL)
 	{
-		switch(quadroEstado)
+		switch(quadroEstado)			//switch para diferenciar
 		{
 			case 1:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
@@ -170,6 +198,72 @@ int do_drawing()
 					apply_surface( 100, 270, logoJogo, screen );
 					break;
 		}
+	}
+	else*/ scenarioAtual=INICIO;
+	if(scenarioAtual==INICIO)
+	{
+		SDL_FillRect(screen, NULL, 0xFFFFFF);	//limpando tela anterior colocando a cor branca no lugar
+
+		enum {
+			AZUL,
+			MARROM,
+			VERDE,
+			AMARELO,
+			BRANCO
+		};
+		Uint32 cores[] = {0x0000FF, 0x9F6F2F, 0x00CC00, 0xFFFF00, 0xFFFFFF};		//correspondendo as cores definidas no enum
+
+		//array que guardara valores representativos da cor (0 - Azul (agua), 1 - marrom (Terra), 2 - Verde (floresta), 3 - Amarelo (deserto), 4 - Branco (neve))
+		/*int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = {{0, 0, 0, 0, 0},
+													{0, 2, 2, 2, 0},
+													{0, 2, 1, 2, 0},
+													{0, 2, 2, 2, 0},
+													{0, 0, 0, 0, 0}};*/
+		/*int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = {{AZUL, AZUL, 	AZUL, 	AZUL, 	AZUL},
+													{AZUL, VERDE, 	VERDE, 	VERDE, 	AZUL},
+													{AZUL, VERDE, 	MARROM, VERDE, 	AZUL},
+													{AZUL, VERDE, 	VERDE, 	VERDE, 	AZUL},
+													{AZUL, AZUL, 	AZUL, 	AZUL, 	AZUL}};		*/
+
+		int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
+		   {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+		for(int i = 0; i<LINHAS_MAPA; i++)
+		{
+			for(int j = 0; j<COLUNAS_MAPA; j++)
+			{
+				rect.x = j*30;
+				rect.y = i*30;
+				rect.w = 30;
+				rect.h = 30;
+
+				SDL_FillRect(screen, &rect, cores[mapaMundi[i][j]]);
+			}
+		}
+
+		if(unit1 != NULL)
+			(*unit1).show();
 	}
 
 	if( SDL_Flip( screen ) == -1 )
