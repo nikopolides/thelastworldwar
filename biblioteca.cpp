@@ -44,7 +44,7 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
     offset.x = x;
     offset.y = y;
 
-    //Blit
+    //Colagem da SDL_Surface na screen
     SDL_BlitSurface( source, clip, destination, &offset );
 }
 
