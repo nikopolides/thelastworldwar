@@ -1,9 +1,7 @@
-
-SDL_Surface *load_image( std::string filename )
+SDL_Surface *load_image( std::string filename) 
 {
     //Temporary storage for the image that's loaded
     SDL_Surface* loadedImage = NULL;
-
     //The optimized image that will be used
     SDL_Surface* optimizedImage = NULL;
 
@@ -35,7 +33,7 @@ SDL_Surface *load_image( std::string filename )
     return optimizedImage;
 }
 
-void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL )
+int apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL )
 {
     //Holds offsets
     SDL_Rect offset;
@@ -44,8 +42,12 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
     offset.x = x;
     offset.y = y;
 
+
     //Colagem da SDL_Surface na screen
-    SDL_BlitSurface( source, clip, destination, &offset );
+   // SDL_BlitSurface( source, clip, destination, &offset );
+
+    //Blit
+    return SDL_BlitSurface( source, clip, destination, &offset );
 }
 
 string intToString(int x)

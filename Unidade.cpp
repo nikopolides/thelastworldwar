@@ -24,12 +24,22 @@ Unidade::Unidade(int _posX, int _posY, int _tipo)
 }
 int Unidade::show()
 {
-	rect.x = 0;
-	rect.y = 0;
+	if(tipo == SOLDADO)
+	{
+		rect.x = 30*0;
+		rect.y = 30*0;
+	}
+	if (tipo == NAVIO)
+	{
+		rect.x = 30*0;
+		rect.y = 32*4+1;
+	}
+	
 	rect.w = 30;
-	rect.h = 30;
+	rect.h = 30;	
 
 	apply_surface( posX*30, posY*30, civilizationUnits, screen, &rect);
+
 
 	/*rect.x = posX*30;
 	rect.y = posY*30;
