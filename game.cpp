@@ -33,7 +33,17 @@ enum {
 int scenarioAtual = TELA_INICIAL;
 
 //carregando tiles do mapa-mundi
-//LINHAS_MAPA = 20, COLUNAS_MAPA = 28;
+enum {
+	AZUL,		//oceano
+	MARROM,		//terra
+	VERDE,		//floresta
+	AMARELO,	//areia
+	BRANCO,		//neve
+
+	PRETO		//unidade
+};
+Uint32 cores[] = {0x0000FF, 0x9F6F2F, 0x00CC00, 0xFFFF00, 0xFFFFFF};		//correspondendo as cores definidas no enum
+
 const int LINHAS_MAPA = 22;
 const int COLUNAS_MAPA = 33;
 int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
@@ -60,15 +70,26 @@ int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] =
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
+//modo de apresentacao desse mapa de bits
+enum {
+	MODO_NORMAL,
+	MODO_QUADRADOS_PREENCHIDOS,
+	MODO_QUADRADOS,
+	MODO_CIRCULOS,
+};
+int modo = MODO_NORMAL;
 
 /*	FIM	*/
 
 #include "Unidade.cpp"
 
 //inicializando uma unidade pra testar
-Unidade* unit1 = NULL;
+/*Unidade* unit1 = NULL;
 Unidade* unit2 = NULL;
-Unidade* unidadeSelecionada = NULL;
+Unidade* unidadeSelecionada = NULL;*/
+Unidade* unit1 = new Unidade(10, 10, SOLDADO, 13);
+Unidade* unit2 =  new Unidade(2, 2, NAVIO, 10);
+Unidade* unidadeSelecionada = unit1;
 
 int initialize()
 {
@@ -113,6 +134,8 @@ int finalize()
 
 	if(unit1 != NULL)
 		delete(unit1);
+	if(unit2 != NULL)
+		delete(unit1);
 
     //Quit SDL
     SDL_Quit();
@@ -149,17 +172,20 @@ int get_inputs()
 			if( event.key.keysym.sym == SDLK_ESCAPE ) 
 				quit = true;
 
-			if( event.key.keysym.sym == SDLK_1 ) 
+			/*if( event.key.keysym.sym == SDLK_1 ) 
 				unit1 = new Unidade(10, 10, SOLDADO);
 			
 			if( event.key.keysym.sym == SDLK_2 ) 
-				unit2 = new Unidade(2, 2, NAVIO);
+				unit2 = new Unidade(2, 2, NAVIO);*/
 
-			if(event.key.keysym.sym == SDLK_3)			
-			unidadeSelecionada = unit1;
+			if(event.key.keysym.sym == SDLK_1)			
+				unidadeSelecionada = unit1;
 
-			if(event.key.keysym.sym == SDLK_4)			
-			unidadeSelecionada = unit2;
+			if(event.key.keysym.sym == SDLK_2)			
+				unidadeSelecionada = unit2;
+
+			if(event.key.keysym.sym == SDLK_3)
+				(*unit1).attack(unit2);
 
 			if( event.key.keysym.sym == SDLK_LEFT ) 
 				(*unidadeSelecionada).posX -= 1;
@@ -170,6 +196,11 @@ int get_inputs()
 			if( event.key.keysym.sym == SDLK_DOWN ) 
 				(*unidadeSelecionada).posY += 1;
 
+			//alternando modo do mapa
+			if(event.key.keysym.sym == SDLK_0)
+			{
+				modo = ++modo % 4;		//4 modos
+			}
 		}
 
         if( event.type == SDL_QUIT )	//If the user has Xed out the window
@@ -238,84 +269,42 @@ int do_drawing()
 	else scenarioAtual=INICIO;
 	if(scenarioAtual==INICIO)
 	{
-		SDL_FillRect(screen, NULL, 0xFFFFFF);	//limpando tela anterior colocando a cor branca no lugar
+		//limpando tela anterior colocando a cor branca no lugar
+		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
-		enum {
-			AZUL,
-			MARROM,
-			VERDE,
-			AMARELO,
-			BRANCO
-		};
-		Uint32 cores[] = {0x0000FF, 0x9F6F2F, 0x00CC00, 0xFFFF00, 0xFFFFFF};		//correspondendo as cores definidas no enum
-
-		//array que guardara valores representativos da cor (0 - Azul (agua), 1 - marrom (Terra), 2 - Verde (floresta), 3 - Amarelo (deserto), 4 - Branco (neve))
-		/*int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = {{0, 0, 0, 0, 0},
-													{0, 2, 2, 2, 0},
-													{0, 2, 1, 2, 0},
-													{0, 2, 2, 2, 0},
-													{0, 0, 0, 0, 0}};*/
-		/*int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = {{AZUL, AZUL, 	AZUL, 	AZUL, 	AZUL},
-													{AZUL, VERDE, 	VERDE, 	VERDE, 	AZUL},
-													{AZUL, VERDE, 	MARROM, VERDE, 	AZUL},
-													{AZUL, VERDE, 	VERDE, 	VERDE, 	AZUL},
-													{AZUL, AZUL, 	AZUL, 	AZUL, 	AZUL}};		*/
-
-		int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
-		   {{0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-
+		//desenhando mapa de bits de acordo ao modo
 		for(int i = 0; i<LINHAS_MAPA; i++)
 		{
 			for(int j = 0; j<COLUNAS_MAPA; j++)
 			{
-
-				if(cores[mapaMundi[i][j]]==2)
-				{
-					rect.x = 0;
-					rect.y = 0;
-					rect.w = 30;
-					rect.h = 30;
-
-					apply_surface( 0*30, 0*30, civilizationUnits, screen, &rect);
-					continue;
-				}
-
 				rect.x = j*30;
 				rect.y = i*30;
 				rect.w = 30;
 				rect.h = 30;
-
-				SDL_FillRect(screen, &rect, cores[mapaMundi[i][j]]);
+				
+				switch(modo)
+				{
+					case MODO_NORMAL:
+					case MODO_QUADRADOS_PREENCHIDOS:
+						SDL_FillRect(screen, &rect, cores[mapaMundi[i][j]]);
+						break;
+					case MODO_QUADRADOS:
+						drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[mapaMundi[i][j]]);
+						break;
+					case MODO_CIRCULOS:
+						drawCircle(screen, rect.x, rect.y, rect.w/2, cores[mapaMundi[i][j]], false);
+						break;
+				}
 			}
 		}
 
-		if(unit1 != NULL)
+		if(unit1 != NULL && !(*unit1).isDead)
 			(*unit1).show();
 
-		if(unit2 != NULL)
+		if(unit2 != NULL && !(*unit2).isDead)
 			(*unit2).show();
-				
+
+		Uint32 yellow = SDL_MapRGB(screen->format, 0xff, 0x00, 0x00);
 	}
 
 	if( SDL_Flip( screen ) == -1 )
