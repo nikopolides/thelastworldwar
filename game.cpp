@@ -220,7 +220,7 @@ int do_logic()
 
 int do_drawing()
 {
-	/*if(scenarioAtual==TELA_INICIAL)
+	if(scenarioAtual==TELA_INICIAL)
 	{
 		switch(quadroEstado)			//switch para diferenciar
 		{
@@ -235,7 +235,7 @@ int do_drawing()
 					break;
 		}
 	}
-	else*/ scenarioAtual=INICIO;
+	else scenarioAtual=INICIO;
 	if(scenarioAtual==INICIO)
 	{
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	//limpando tela anterior colocando a cor branca no lugar
