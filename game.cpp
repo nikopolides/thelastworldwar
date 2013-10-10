@@ -87,7 +87,7 @@ int modo = MODO_NORMAL;
 /*Unidade* unit1 = NULL;
 Unidade* unit2 = NULL;
 Unidade* unidadeSelecionada = NULL;*/
-Unidade* unit1 = new Unidade(10, 10, SOLDADO, 13);
+Unidade* unit1 = new Unidade(10, 10, SOLDADO, 10);
 Unidade* unit2 =  new Unidade(2, 2, NAVIO, 10);
 Unidade* unidadeSelecionada = unit1;
 

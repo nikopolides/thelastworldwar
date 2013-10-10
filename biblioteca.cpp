@@ -229,7 +229,13 @@ void drawCircle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pix
             error -= x;
             error -= x;
         }
-    }
+    }	
+}
+
+int random(int limit)
+{
+	srand(time(NULL));
+	return (rand() % limit) +1;
 }
 
 

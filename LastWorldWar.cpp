@@ -7,6 +7,7 @@ and may not be redistributed without written permission.*/
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <ctime>
 
 using namespace std;
 

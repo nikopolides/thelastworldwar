@@ -79,7 +79,11 @@ int Unidade::show()
 
 int Unidade::attack(Unidade * inimigo){
 
-	if(forca > (*inimigo).forca){
+
+	int ataque = forca*random(10);
+	int defesa = (*inimigo).forca * random(10);
+
+	if(ataque > defesa){
 		(* inimigo).isDead = true;		
 	}
 	else
