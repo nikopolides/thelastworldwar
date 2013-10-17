@@ -18,7 +18,6 @@ class Unidade
 		Unidade(int, int, int, int);
 		int show();
 		int attack(Unidade *); 
-		
 };
 
 Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca)
@@ -54,40 +53,32 @@ int Unidade::show()
 	switch(modo)
 	{
 		case MODO_NORMAL:
-			apply_surface( posX*30, posY*30, civilizationUnits, screen, &rect);
+			(*drawObj).apply_surface( posX*30, posY*30, civilizationUnits, screen, &rect);
 			break;
 		case MODO_QUADRADOS_PREENCHIDOS:
 			SDL_FillRect(screen, &rect, cores[PRETO]);
 			break;
 		case MODO_QUADRADOS:
-			drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[PRETO]);
+			(*drawObj).drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[PRETO]);
 			break;
 		case MODO_CIRCULOS:
-			drawCircle(screen, rect.x, rect.y, rect.w/2, cores[PRETO]);
+			(*drawObj).drawCircle(screen, rect.x, rect.y, rect.w/2, cores[PRETO]);
 			break;
 	}
-
-	/*rect.x = posX*30;
-	rect.y = posY*30;
-	rect.w = 30;
-	rect.h = 30;
-
-	SDL_FillRect(screen, &rect, 0x000000);*/	
 
 	return 1;
 }
 
-int Unidade::attack(Unidade * inimigo){
-
-
-	int ataque = forca*random(10);
-	int defesa = (*inimigo).forca * random(10);
+int Unidade::attack(Unidade * inimigo)
+{
+	//80% da forca mais 20% da forca vezes um numero aleatorio de 1 a 10
+	int ataque = 0.8 * forca 			+ 0.2 * forca * (*randomObj).gerarNumero(10);
+	int defesa = 0.8 * (*inimigo).forca + 0.2 * (*inimigo).forca * (*randomObj).gerarNumero(10);
 
 	if(ataque > defesa){
 		(* inimigo).isDead = true;		
 	}
 	else
-	isDead = true;	
-
-
+	isDead = true;
 }
+

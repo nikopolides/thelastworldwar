@@ -1,7 +1,3 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2012)
-and may not be redistributed without written permission.*/
-
-//The headers
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include <iostream>
@@ -14,12 +10,16 @@ using namespace std;
 //Funcoes que coletei/modifiquei
 #include "biblioteca.cpp"
 
+//Bibliotecas
+#include "ImageHandlerSDL.cpp"
+#include "Draw.cpp"
+#include "Random.cpp"
+
 //Funcoes com informacoes especificas deste jogo
 #include "game.cpp"
 
 int main( int argc, char* args[] )
 {
-
 	initialize();
 
     while( quit == false )		//main loop
@@ -42,3 +42,4 @@ int main( int argc, char* args[] )
 
     return 0;
 }
+

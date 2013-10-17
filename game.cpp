@@ -24,6 +24,10 @@ bool quit = false;
 
 int quadroEstado = 0;
 
+ImageHandlerSDL* ImageHandlerSDLObj = NULL;
+Draw* drawObj = NULL;
+Random* randomObj = NULL;
+
 //cenarios
 enum {
 	TELA_INICIAL,
@@ -32,7 +36,7 @@ enum {
 };
 int scenarioAtual = TELA_INICIAL;
 
-//carregando tiles do mapa-mundi
+//carregando cores dos tiles do mapa-mundi
 enum {
 	AZUL,		//oceano
 	MARROM,		//terra
@@ -43,32 +47,6 @@ enum {
 	PRETO		//unidade
 };
 Uint32 cores[] = {0x0000FF, 0x9F6F2F, 0x00CC00, 0xFFFF00, 0xFFFFFF};		//correspondendo as cores definidas no enum
-
-const int LINHAS_MAPA = 22;
-const int COLUNAS_MAPA = 33;
-int mapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
-		   {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
 //modo de apresentacao desse mapa de bits
 enum {
@@ -81,6 +59,12 @@ int modo = MODO_NORMAL;
 
 /*	FIM	*/
 
+#include "Tile.cpp"
+
+#include "Cenario.cpp"
+
+Cenario* cenario = NULL;
+
 #include "Unidade.cpp"
 
 //inicializando uma unidade pra testar
@@ -91,6 +75,73 @@ Unidade* unit1 = new Unidade(10, 10, SOLDADO, 10);
 Unidade* unit2 =  new Unidade(2, 2, NAVIO, 10);
 Unidade* unidadeSelecionada = unit1;
 
+//diferentes cenarios
+int initializeCenario1()
+{
+	const int LINHAS_MAPA = 22;
+	const int COLUNAS_MAPA = 33;
+
+	int **mapaMundi = (int**)calloc(LINHAS_MAPA*COLUNAS_MAPA, sizeof(int*));
+	for(int i = 0; i<LINHAS_MAPA; i++)
+	{
+		mapaMundi[i] = (int*)calloc(COLUNAS_MAPA, sizeof(int));
+	}
+
+	//criando a variavel auxiliar apenas para aproveitar esta forma de declaracao de array com chaves, carregar de arquivo depois
+	int auxMapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
+			   {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+	
+	for(int i = 0; i<LINHAS_MAPA; i++)
+	{
+		for(int j = 0; j<COLUNAS_MAPA; j++)
+		{
+			mapaMundi[i][j] = auxMapaMundi[i][j];
+		}
+	}
+
+	//criando o objeto e enviando o array com as posicoes deste cenario MAPA MUNDI
+	cenario = new Cenario(COLUNAS_MAPA, LINHAS_MAPA);
+	(*cenario).initialize(mapaMundi);
+
+	//desalocando
+	for(int i = 0; i<LINHAS_MAPA; i++)
+	{
+		free(mapaMundi[i]);
+	}
+	free(mapaMundi);
+
+	return 1;
+}
+
+int finalizeCenario1()
+{
+	(*cenario).finalize();
+	delete(cenario);
+}
+
+
+//main loop functions
 int initialize()
 {
 	/*	Setando coisas	*/
@@ -117,10 +168,18 @@ int initialize()
     //Set the window caption
     SDL_WM_SetCaption( "The World Last War", NULL );	
 
+	//objetos principais
+	ImageHandlerSDLObj = new ImageHandlerSDL();
+	drawObj = new Draw();
+	randomObj = new Random();
+
     //Load the images
-	logoEmpresa = load_image( "img_gamaSoft.jpg" );
-    logoJogo = load_image( "coollogo_com-301376238.jpg" );
-	civilizationUnits = load_image( "civilization2Units.png" );
+	logoEmpresa = (*ImageHandlerSDLObj).load_image( "images/img_gamaSoft.jpg" );
+    logoJogo = (*ImageHandlerSDLObj).load_image( "images/coollogo_com-301376238.jpg" );
+	civilizationUnits = (*ImageHandlerSDLObj).load_image( "images/civilization2Units.png" );
+
+	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
+	initializeCenario1();
 
 	return 1;	//sucess
 }
@@ -132,10 +191,19 @@ int finalize()
     SDL_FreeSurface( logoJogo );
     SDL_FreeSurface( civilizationUnits );
 
+	//delete units
 	if(unit1 != NULL)
 		delete(unit1);
 	if(unit2 != NULL)
-		delete(unit1);
+		delete(unit2);
+
+	//cenario
+	finalizeCenario1();
+
+	//delete other objects
+	delete(ImageHandlerSDLObj);
+	delete(drawObj);
+	delete(randomObj);
 
     //Quit SDL
     SDL_Quit();
@@ -227,13 +295,13 @@ int atualizarEstados()
 			case 2:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 
-					apply_surface( 200, 100, logoEmpresa, screen);
+					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen);
 					SDL_Delay(2000);
 					break;
 			case 3:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 
-					apply_surface( 200, 100, logoEmpresa, screen);
+					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen);
 					SDL_Delay(2000);
 					scenarioAtual = INICIO;					//trabalhando com esse para esta entrega
 					break;
@@ -251,31 +319,35 @@ int do_logic()
 
 int do_drawing()
 {
+	scenarioAtual=INICIO;
+
 	if(scenarioAtual==TELA_INICIAL)
 	{
-		switch(quadroEstado)			//switch para diferenciar
+		switch(quadroEstado)			//switch para diferenciar parte da animacao por quadro
 		{
 			case 1:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-					apply_surface( 200, 100, logoEmpresa, screen);
+					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen);
 					break;
 			case 2:
 			default:
 					SDL_FillRect(screen, NULL, 0x000000);
-					apply_surface( 100, 270, logoJogo, screen );
+					(*drawObj).apply_surface( 100, 270, logoJogo, screen );
 					break;
 		}
 	}
-	else scenarioAtual=INICIO;
+	else 
+		scenarioAtual=INICIO;
+
 	if(scenarioAtual==INICIO)
 	{
 		//limpando tela anterior colocando a cor branca no lugar
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
 		//desenhando mapa de bits de acordo ao modo
-		for(int i = 0; i<LINHAS_MAPA; i++)
+		for(int i = 0; i < (*cenario).numeroTilesY; i++)
 		{
-			for(int j = 0; j<COLUNAS_MAPA; j++)
+			for(int j = 0; j < (*cenario).numeroTilesX; j++)
 			{
 				rect.x = j*30;
 				rect.y = i*30;
@@ -286,13 +358,13 @@ int do_drawing()
 				{
 					case MODO_NORMAL:
 					case MODO_QUADRADOS_PREENCHIDOS:
-						SDL_FillRect(screen, &rect, cores[mapaMundi[i][j]]);
+						SDL_FillRect(screen, &rect, cores[(*cenario).tiles[i][j] -> tipo]);
 						break;
 					case MODO_QUADRADOS:
-						drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[mapaMundi[i][j]]);
+						(*drawObj).drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[(*cenario).tiles[i][j] -> tipo]);
 						break;
 					case MODO_CIRCULOS:
-						drawCircle(screen, rect.x, rect.y, rect.w/2, cores[mapaMundi[i][j]], false);
+						(*drawObj).drawCircle(screen, rect.x, rect.y, rect.w/2, cores[(*cenario).tiles[i][j] -> tipo], false);
 						break;
 				}
 			}
@@ -337,4 +409,5 @@ int do_miscAfter()
 
 	return 1;
 }
+
 

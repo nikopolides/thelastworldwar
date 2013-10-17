@@ -1,5 +1,5 @@
 all:
-	g++ `sdl-config --cflags --libs` LastWorldWar.cpp -lSDL -lSDL_image -o LastWorldWar
+	g++ `sdl-config --cflags --libs` LastWorldWar.cpp -Wall -w -ansi -lSDL -lSDL_image -o LastWorldWar
 
 init: LastWorldWar
 	./LastWorldWar
