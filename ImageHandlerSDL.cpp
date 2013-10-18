@@ -1,9 +1,4 @@
-class ImageHandlerSDL
-{
-	public:
-		ImageHandlerSDL();
-		SDL_Surface *load_image(string, Uint32);
-};
+#include "ImageHandlerSDL.h"
 
 ImageHandlerSDL::ImageHandlerSDL()
 {

@@ -1,9 +1,4 @@
-class Random
-{
-	public:
-		Random();
-		int gerarNumero(int);
-};
+#include "Random.h"
 
 Random::Random()
 {

@@ -8,15 +8,17 @@
 using namespace std;
 
 //Funcoes que coletei/modifiquei
-#include "biblioteca.cpp"
+#include "biblioteca.h"
 
 //Bibliotecas
-#include "ImageHandlerSDL.cpp"
-#include "Draw.cpp"
-#include "Random.cpp"
+#include "ImageHandlerSDL.h"
+#include "Draw.h"
+#include "Random.h"
 
 //Funcoes com informacoes especificas deste jogo
-#include "game.cpp"
+#include "game.h"
+#include "globals.h"
+#include "globalsGame.h"
 
 int main()
 {
@@ -25,7 +27,8 @@ int main()
     while( quit == false )		//main loop
     {
 		//outras funcoes (rede, tempo)
-		do_miscBefore();
+		updateTime();
+		receiveNetworkMessages();
 
 		//get inputs
 		get_inputs();
@@ -35,7 +38,8 @@ int main()
 		do_drawing();
 
 		//outras funcoes (som, rede, tempo)
-		do_miscAfter();
+		sound();
+		sendNetworkMessages();
     }
 
 	finalize();

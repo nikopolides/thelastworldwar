@@ -1,3 +1,5 @@
+#include "Unidade.h"
+
 enum {
 	AVIAO,
 	NAVIO,
@@ -5,28 +7,14 @@ enum {
 	CANHAO
 };
 
-class Unidade
-{
-	public:
-		int posX;	//tile X do mapa onde atualmente habita
-		int posY;	//tile Y do mapa onde atualmente habita
-		int tipo;	//aviao,navio,soldado,canhao,etc...
-		
-		int forca;
-		bool isDead;
-
-		Unidade(int, int, int, int);
-		int show();
-		int attack(Unidade *); 
-};
-
-Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca)
+Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, string nacao)
 {
 	posX = _posX;
 	posY = _posY;
 	tipo = _tipo;
 	forca = _forca;
 	isDead = false;
+	nacao = nacao;
 }
 int Unidade::show()
 {
@@ -62,7 +50,7 @@ int Unidade::show()
 			(*drawObj).drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[PRETO]);
 			break;
 		case MODO_CIRCULOS:
-			(*drawObj).drawCircle(screen, rect.x, rect.y, rect.w/2, cores[PRETO]);
+			(*drawObj).drawCircle(screen, rect.x, rect.y, rect.w/2, cores[PRETO],false);
 			break;
 	}
 

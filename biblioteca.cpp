@@ -1,4 +1,4 @@
-
+#include "biblioteca.h"
 
 //util
 string intToString(int x)

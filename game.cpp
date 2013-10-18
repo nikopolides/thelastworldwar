@@ -1,76 +1,29 @@
-#include "Tile.h"
-#include "Cenario.h"
+#include "game.h"
+#include "globalsGame.h" 
+#include "Nacao.h"
+#include "Unidade.h"
 
-/* Setando variaveis importantes globais */
+Nacao nacao1 = Nacao(10,10,10,10);
+Nacao nacao2 = Nacao(20,20,20,20);	
 
-//The surfaces that will be used
-SDL_Surface *screen = NULL;
-SDL_Surface *logoEmpresa = NULL;
-SDL_Surface *logoJogo = NULL;
-
-//carregando imagem das unidades
-SDL_Surface *civilizationUnits = NULL;
-
-//The event structure that will be used
-SDL_Event event;
-
-//utilizarei para fazer os recortes
-SDL_Rect rect;
-
-bool quit = false;
-
-int quadroEstado = 0;
-
-ImageHandlerSDL* ImageHandlerSDLObj = NULL;
-Draw* drawObj = NULL;
-Random* randomObj = NULL;
-
-//cenarios
-enum {
-	TELA_INICIAL,
-	MENU_INICIAL,
-	INICIO				//trabalhar nesta para fazer a proxima entrega
-};
-int scenarioAtual = TELA_INICIAL;
-
-//carregando cores dos tiles do mapa-mundi
-enum {
-	AZUL,		//oceano
-	MARROM,		//terra
-	VERDE,		//floresta
-	AMARELO,	//areia
-	BRANCO,		//neve
-
-	PRETO		//unidade
-};
-Uint32 cores[] = {0x0000FF, 0x9F6F2F, 0x00CC00, 0xFFFF00, 0xFFFFFF};		//correspondendo as cores definidas no enum
-
-//modo de apresentacao desse mapa de bits
-enum {
-	MODO_NORMAL,
-	MODO_QUADRADOS_PREENCHIDOS,
-	MODO_QUADRADOS,
-	MODO_CIRCULOS
-};
-int modo = MODO_NORMAL;
-
-/*	FIM	*/
-
-Cenario* cenario = NULL;
-
-#include "Unidade.cpp"
-
-//inicializando uma unidade pra testar
-/*Unidade* unit1 = NULL;
-Unidade* unit2 = NULL;
-Unidade* unidadeSelecionada = NULL;*/
-Unidade* unit1 = new Unidade(10, 10, SOLDADO, 10);
-Unidade* unit2 =  new Unidade(2, 2, NAVIO, 10);
-Unidade* unidadeSelecionada = unit1;
+/*
+//Criar nacao
+void criarNacao(){
+	Nacao nacao1 = Nacao(10,10,10,10);
+	Nacao nacao2 = Nacao(20,20,20,20);	
+}
+*/
 
 //diferentes cenarios
 int initializeCenario1()
 {
+	
+	nacao1.exercitoAdd(new Unidade(3,3,2, 10,"nacao1"));
+	nacao1.exercitoAdd(new Unidade(5,2,1,10,"nacao1"));
+
+	nacao1.exercitoAdd(new Unidade(24,16,2,10,"nacao2"));
+	nacao1.exercitoAdd(new Unidade(20,18,1,10, "nacao2"));	
+
 	const int LINHAS_MAPA = 22;
 	const int COLUNAS_MAPA = 33;
 
@@ -174,9 +127,9 @@ int initialize()
 	randomObj = new Random();
 
     //Load the images
-	logoEmpresa = (*ImageHandlerSDLObj).load_image( "images/img_gamaSoft.jpg" );
-    logoJogo = (*ImageHandlerSDLObj).load_image( "images/coollogo_com-301376238.jpg" );
-	civilizationUnits = (*ImageHandlerSDLObj).load_image( "images/civilization2Units.png" );
+	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/civilization2Units.png",0);
+    logoJogo = (*ImageHandlerSDLObj).load_image("images/coollogo_com-301376238.jpg",0);
+	civilizationUnits = (*ImageHandlerSDLObj).load_image("images/civilization2Units.png",0);
 
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	initializeCenario1();
@@ -191,11 +144,13 @@ int finalize()
     SDL_FreeSurface( logoJogo );
     SDL_FreeSurface( civilizationUnits );
 
+	/*
 	//delete units
 	if(unit1 != NULL)
 		delete(unit1);
 	if(unit2 != NULL)
 		delete(unit2);
+	*/
 
 	//cenario
 	finalizeCenario1();
@@ -225,14 +180,6 @@ int receiveNetworkMessages()
 	return 1;
 }
 
-int do_miscBefore()
-{
-	updateTime();
-	receiveNetworkMessages();
-
-	return 1;
-}
-
 int get_inputs()
 {
     while( SDL_PollEvent( &event ) )
@@ -242,11 +189,15 @@ int get_inputs()
 			if( event.key.keysym.sym == SDLK_ESCAPE ) 
 				quit = true;
 
+			//Remover última unidade adicionada na lista: Vai ser útil quando implementarmos o ataque corretamente
+			if(event.key.keysym.sym == SDLK_3)
+				nacao1.exercitoPop();
+
 			/*if( event.key.keysym.sym == SDLK_1 ) 
 				unit1 = new Unidade(10, 10, SOLDADO);
 			
 			if( event.key.keysym.sym == SDLK_2 ) 
-				unit2 = new Unidade(2, 2, NAVIO);*/
+				unit2 = new Unidade(2, 2, NAVIO);
 
 			if(event.key.keysym.sym == SDLK_1)			
 				unidadeSelecionada = unit1;
@@ -265,6 +216,9 @@ int get_inputs()
 				(*unidadeSelecionada).posY -= 1;
 			if( event.key.keysym.sym == SDLK_DOWN ) 
 				(*unidadeSelecionada).posY += 1;
+			*/
+
+			
 
 			//alternando modo do mapa
 			if(event.key.keysym.sym == SDLK_0)
@@ -299,13 +253,13 @@ int atualizarEstados()
 			case 2:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 
-					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen);
+					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
 					SDL_Delay(2000);
 					break;
 			case 3:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 
-					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen);
+					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
 					SDL_Delay(2000);
 					scenarioAtual = INICIO;					//trabalhando com esse para esta entrega
 					break;
@@ -333,12 +287,12 @@ int do_drawing()
 		{
 			case 1:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen);
+					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
 					break;
 			case 2:
 			default:
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 100, 270, logoJogo, screen );
+					(*drawObj).apply_surface( 100, 270, logoJogo, screen,0);
 					break;
 		}
 	}
@@ -376,12 +330,26 @@ int do_drawing()
 			}
 		}
 
+		//criarNacao();		
+
+
+		//Laço responsável por criar (show) todas as unidades criadas na Nacao
+		for(list<Unidade *>::iterator it = nacao1.exercito.begin(); it != nacao1.exercito.end(); it++)
+			(*(*it)).show(); 
+
+		
+		for(list<Unidade *>::iterator it2 = nacao2.exercito.begin(); it2 != nacao2.exercito.end(); it2++)
+			(*(*it2)).show(); 
+
+		/*
 		if(unit1 != NULL && !(*unit1).isDead)
 			(*unit1).show();
 
 		if(unit2 != NULL && !(*unit2).isDead)
-			(*unit2).show();
+			(*unit2).show(); */
 	}
+		
+
 
 	if( SDL_Flip( screen ) == -1 )
 	{
