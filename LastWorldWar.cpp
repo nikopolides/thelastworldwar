@@ -1,30 +1,34 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2012)
-and may not be redistributed without written permission.*/
-
-//The headers
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <ctime>
 
 using namespace std;
 
 //Funcoes que coletei/modifiquei
-#include "biblioteca.cpp"
+#include "biblioteca.h"
+
+//Bibliotecas
+#include "ImageHandlerSDL.h"
+#include "Draw.h"
+#include "Random.h"
 
 //Funcoes com informacoes especificas deste jogo
-#include "game.cpp"
+#include "game.h"
+#include "globals.h"
+#include "globalsGame.h"
 
-int main( int argc, char* args[] )
+int main()
 {
-
 	initialize();
 
     while( quit == false )		//main loop
     {
 		//outras funcoes (rede, tempo)
-		do_miscBefore();
+		updateTime();
+		receiveNetworkMessages();
 
 		//get inputs
 		get_inputs();
@@ -34,10 +38,12 @@ int main( int argc, char* args[] )
 		do_drawing();
 
 		//outras funcoes (som, rede, tempo)
-		do_miscAfter();
+		sound();
+		sendNetworkMessages();
     }
 
 	finalize();
 
     return 0;
 }
+
