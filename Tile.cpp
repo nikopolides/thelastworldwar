@@ -1,14 +1,4 @@
-
-class Tile
-{
-	public:
-		int posX;
-		int posY;
-		int tipo;
-		void* ocupante;
-
-		Tile(int, int, int);
-};
+#include "Tile.h"
 
 Tile::Tile(int _posX, int _posY, int _tipo)
 {

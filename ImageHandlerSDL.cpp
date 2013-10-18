@@ -10,7 +10,7 @@ ImageHandlerSDL::ImageHandlerSDL()
 	
 }
 
-SDL_Surface * ImageHandlerSDL::load_image( string filename, Uint32 corTransparencia = NULL) 
+SDL_Surface * ImageHandlerSDL::load_image( string filename, Uint32 corTransparencia = 0) 
 {
     //ponteiro para a imagem que sera carregada
     SDL_Surface* loadedImage = NULL;
@@ -25,7 +25,7 @@ SDL_Surface * ImageHandlerSDL::load_image( string filename, Uint32 corTransparen
     if( loadedImage != NULL )
     {
         //criando uma imagem otimizada
-		if( ( filename.find(".png") > 0 || filename.find(".PNG") > 0 ) && corTransparencia == NULL )	//se encontrar a extensao png jah pega a componente alpha de transparencia
+		if( ( filename.find(".png") > 0 || filename.find(".PNG") > 0 ) && corTransparencia != 0 )	//se encontrar a extensao png jah pega a componente alpha de transparencia
 		{        
 			optimizedImage = SDL_DisplayFormatAlpha( loadedImage );
 		}
@@ -33,14 +33,14 @@ SDL_Surface * ImageHandlerSDL::load_image( string filename, Uint32 corTransparen
         	optimizedImage = SDL_DisplayFormat( loadedImage );
 
 		//If the image was optimized just fine 
-		if( optimizedImage != NULL ) 
+		if( optimizedImage != 0 ) 
 		{
 			//liberando a imagem nao otimizada e utilizando a otimizada
 	        SDL_FreeSurface( loadedImage );
 			loadedImage = optimizedImage;
 		}
 
-		if( corTransparencia != NULL )
+		if( corTransparencia != 0 )
 		{
 			//setando pixels da cor definida como transparentes
 			SDL_SetColorKey( loadedImage, SDL_SRCCOLORKEY, corTransparencia ); 

@@ -1,3 +1,6 @@
+#include "Tile.h"
+#include "Cenario.h"
+
 /* Setando variaveis importantes globais */
 
 //The attributes of the screen
@@ -53,15 +56,11 @@ enum {
 	MODO_NORMAL,
 	MODO_QUADRADOS_PREENCHIDOS,
 	MODO_QUADRADOS,
-	MODO_CIRCULOS,
+	MODO_CIRCULOS
 };
 int modo = MODO_NORMAL;
 
 /*	FIM	*/
-
-#include "Tile.cpp"
-
-#include "Cenario.cpp"
 
 Cenario* cenario = NULL;
 
@@ -138,6 +137,8 @@ int finalizeCenario1()
 {
 	(*cenario).finalize();
 	delete(cenario);
+
+	return 1;
 }
 
 
@@ -146,7 +147,7 @@ int initialize()
 {
 	/*	Setando coisas	*/
 
-    bool quit = false;
+    quit = false;
 
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
@@ -216,11 +217,13 @@ int finalize()
 int	updateTime()
 {
 	
+	return 1;
 }
 
 int receiveNetworkMessages()
 {
 
+	return 1;
 }
 
 int do_miscBefore()
@@ -267,7 +270,8 @@ int get_inputs()
 			//alternando modo do mapa
 			if(event.key.keysym.sym == SDLK_0)
 			{
-				modo = ++modo % 4;		//4 modos
+				modo++;
+				modo = modo % 4;		//4 modos
 			}
 		}
 
@@ -283,6 +287,7 @@ int get_inputs()
 int tratarColisoes()
 {
 	
+	return 1;
 }
 
 int atualizarEstados()
@@ -307,6 +312,8 @@ int atualizarEstados()
 					break;
 		}
 	}		
+
+	return 1;
 }
 
 int do_logic()
@@ -375,8 +382,6 @@ int do_drawing()
 
 		if(unit2 != NULL && !(*unit2).isDead)
 			(*unit2).show();
-
-		Uint32 yellow = SDL_MapRGB(screen->format, 0xff, 0x00, 0x00);
 	}
 
 	if( SDL_Flip( screen ) == -1 )

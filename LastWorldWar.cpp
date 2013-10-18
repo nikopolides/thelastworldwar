@@ -18,7 +18,7 @@ using namespace std;
 //Funcoes com informacoes especificas deste jogo
 #include "game.cpp"
 
-int main( int argc, char* args[] )
+int main()
 {
 	initialize();
 

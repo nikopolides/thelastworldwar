@@ -79,6 +79,8 @@ int Unidade::attack(Unidade * inimigo)
 		(* inimigo).isDead = true;		
 	}
 	else
-	isDead = true;
+		isDead = true;
+
+	return 1;
 }
 

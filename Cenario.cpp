@@ -1,15 +1,4 @@
-
-class Cenario
-{
-	public:
-		int numeroTilesX;
-		int numeroTilesY;
-		Tile ***tiles;
-
-		Cenario(int, int);
-		int initialize(int**);
-		int finalize();
-};
+#include "Cenario.h"
 
 Cenario::Cenario(int _numeroTilesX, int _numeroTilesY)
 {
