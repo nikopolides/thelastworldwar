@@ -3,12 +3,6 @@
 
 /* Setando variaveis importantes globais */
 
-//The attributes of the screen
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
-const int SCREEN_BPP = 32;
-const int FRAMES_PER_SECOND = 20;
-
 //The surfaces that will be used
 SDL_Surface *screen = NULL;
 SDL_Surface *logoEmpresa = NULL;
@@ -155,6 +149,11 @@ int initialize()
 		cout << "Problemas ao inicializar sistemas e subsistemas do SDL" << endl;    
 		return -1;
 	}
+
+	//The attributes of the screen
+	const int SCREEN_WIDTH = 1024;
+	const int SCREEN_HEIGHT = 768;
+	const int SCREEN_BPP = 32;
 
     //Set up the screen
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
