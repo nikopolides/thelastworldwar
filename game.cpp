@@ -127,9 +127,12 @@ int initialize()
 	randomObj = new Random();
 
     //Load the images
-	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/civilization2Units.png",0);
-    logoJogo = (*ImageHandlerSDLObj).load_image("images/coollogo_com-301376238.jpg",0);
+	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/gamaSoft.jpg",0);
+        logoJogo = (*ImageHandlerSDLObj).load_image("images/logo.png",0);
+	logoRecursos = (*ImageHandlerSDLObj).load_image("images/recursosTecnologicos.png",0);
 	civilizationUnits = (*ImageHandlerSDLObj).load_image("images/civilization2Units.png",0);
+	classificacaoIndicativa = (*ImageHandlerSDLObj).load_image("images/classificacaoIndicativa.png",0);	
+	menu = (*ImageHandlerSDLObj).load_image("images/menu.png",0);
 
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	initializeCenario1();
@@ -142,7 +145,10 @@ int finalize()
     //Free the surfaces
     SDL_FreeSurface( logoEmpresa );
     SDL_FreeSurface( logoJogo );
-    SDL_FreeSurface( civilizationUnits );
+    SDL_FreeSurface(logoRecursos );
+    SDL_FreeSurface( menu );
+    SDL_FreeSurface( classificacaoIndicativa );
+	
 
 	/*
 	//delete units
@@ -256,13 +262,32 @@ int atualizarEstados()
 					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
 					SDL_Delay(2000);
 					break;
+
 			case 3:
+					SDL_FillRect(screen, NULL, 0x000000);
+
+					(*drawObj).apply_surface( 200, 0, logoRecursos, screen,0);
+					SDL_Delay(2000);
+					
+					break;
+
+
+			case 4:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 
-					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
+					(*drawObj).apply_surface( 0, 0, classificacaoIndicativa, screen,0);
+					SDL_Delay(2000);
+			
+					break;
+			case 6:
+					SDL_FillRect(screen, NULL, 0xFFFFFF);
+
+					(*drawObj).apply_surface( 0, 0, menu, screen,0);
 					SDL_Delay(2000);
 					scenarioAtual = INICIO;					//trabalhando com esse para esta entrega
 					break;
+			
+		
 		}
 	}		
 
@@ -279,7 +304,7 @@ int do_logic()
 
 int do_drawing()
 {
-	scenarioAtual=INICIO;
+	//scenarioAtual=INICIO;
 
 	if(scenarioAtual==TELA_INICIAL)
 	{
@@ -289,11 +314,24 @@ int do_drawing()
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
 					break;
+
 			case 2:
+					SDL_FillRect(screen, NULL, 0xFFFFFF);
+					(*drawObj).apply_surface( 50, 0, logoRecursos, screen,0);
+					break;
+			
+			case 3:
+					SDL_FillRect(screen, NULL, 0x000000);
+					(*drawObj).apply_surface( 0, 0, classificacaoIndicativa, screen,0);
+					break;
+
+			case 4:
 			default:
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 100, 270, logoJogo, screen,0);
+					(*drawObj).apply_surface( 0, 0, menu, screen,0);
 					break;
+
+
 		}
 	}
 	else 

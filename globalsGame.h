@@ -41,6 +41,9 @@ extern int modo;
 extern SDL_Surface *screen;
 extern SDL_Surface *logoEmpresa;
 extern SDL_Surface *logoJogo;
+extern SDL_Surface *logoRecursos;
+extern SDL_Surface *classificacaoIndicativa;
+extern SDL_Surface *menu;
 
 //carregando imagem das unidades
 extern SDL_Surface *civilizationUnits;

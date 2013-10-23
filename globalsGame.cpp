@@ -8,6 +8,10 @@ int modo = MODO_NORMAL;
 SDL_Surface *screen = NULL;
 SDL_Surface *logoEmpresa = NULL;
 SDL_Surface *logoJogo = NULL;
+SDL_Surface *logoRecursos = NULL;
+SDL_Surface *menu = NULL;
+SDL_Surface *classificacaoIndicativa = NULL;
+
 
 //carregando imagem das unidades
 SDL_Surface *civilizationUnits = NULL;
