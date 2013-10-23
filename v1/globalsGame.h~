@@ -1,0 +1,26 @@
+#ifndef GLOBALSGAME_H
+#define GLOBALSGAME_H
+
+#include "SDL/SDL.h"
+
+/*
+//cenarios
+enum {
+	TELA_INICIAL,
+	MENU_INICIAL,
+	INICIO				//trabalhar nesta para fazer a proxima entrega
+};
+*/
+
+//extern int scenarioAtual;
+
+//The surfaces that will be used
+/*
+extern SDL_Surface *screen;
+extern SDL_Surface *logoEmpresa;
+extern SDL_Surface *logoJogo;
+*/
+
+extern bool quit;
+
+#endif
