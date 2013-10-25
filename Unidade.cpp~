@@ -59,7 +59,7 @@ int Unidade::show()
 
 int Unidade::attack(Unidade * inimigo)
 {
-	if((nacao == "nacao1" && (*inimigo).nacao == "nacao1") || (nacao == "nacao2" && (*inimigo).nacao == "nacao2"))	
+	if((nacao == "nacao1" && (*inimigo).nacao == "nacao1") || (nacao == "nacao2" && (*inimigo).nacao == "nacao2")	
 		return 1;
 
 
