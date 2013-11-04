@@ -10,6 +10,34 @@ Nacao nacao2 = Nacao(20,20,20,20);
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;
 
+//Funcao Menu
+void selecionarMenu(){
+
+	if(event.type == SDL_MOUSEBUTTONUP) 
+	{
+			
+		int X = event.button.x;
+		int Y = event.button.y;
+
+		int tileX = X/30;
+		int tileY = Y/30;
+
+		//Abrir jogo
+		if( (tileX>=10 && tileX<=19) && (tileY>=10 && tileY<=13) )
+			scenarioAtual=INICIO;	
+		//Opcoes
+		if ( (tileX>=10 && tileX<=19) && (tileY>=10 && tileY<=13) )
+		//Sair	
+		if( (tileX>=10 && tileX<=19) && (tileY>=21 && tileY<=24) )
+			quit = true;
+	
+	
+
+			printf("Tile X:%d \n\n Tile Y: %d \n\n",tileX,tileY);
+		}
+}
+
+
 /*
 //Criar nacao
 void criarNacao(){
@@ -17,6 +45,8 @@ void criarNacao(){
 	Nacao nacao2 = Nacao(20,20,20,20);	
 }
 */
+
+
 
 //diferentes cenarios
 int initializeCenario1()
@@ -337,13 +367,15 @@ int atualizarEstados()
 					SDL_Delay(2000);
 			
 					break;
+					
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 
 					(*drawObj).apply_surface( 0, 0, menu, screen,0);
-					SDL_Delay(2000);
-					scenarioAtual = INICIO;					//trabalhando com esse para esta entrega
+					SDL_Delay(2000);				//trabalhando com esse para esta entrega
 					break;
+
+			
 		}
 	}		
 
@@ -361,7 +393,7 @@ int do_logic()
 int do_drawing()
 {
 	//comecando do inicio do jogo
-	scenarioAtual=INICIO;
+	//scenarioAtual=INICIO;
 
 	if(scenarioAtual==TELA_INICIAL)
 	{
@@ -386,13 +418,18 @@ int do_drawing()
 			default:
 					SDL_FillRect(screen, NULL, 0x000000);
 					(*drawObj).apply_surface( 0, 0, menu, screen,0);
+			
+					selecionarMenu();
+					
+
 					break;
-
-
 		}
 	}
+
+	/*
 	else 
 		scenarioAtual=INICIO;
+	*/
 
 	if(scenarioAtual==INICIO)
 	{
@@ -489,5 +526,8 @@ int do_miscAfter()
 
 	return 1;
 }
+
+
+
 
 

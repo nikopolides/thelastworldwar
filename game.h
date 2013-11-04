@@ -26,6 +26,9 @@ extern int receiveNetworkMessages();
 //get inputs
 extern int get_inputs();
 
+//funcao menu
+extern void selecionarMenu();
+
 //do Logic
 extern int tratarColisoes();
 extern int atualizarEstados();
