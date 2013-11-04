@@ -190,6 +190,35 @@ int receiveNetworkMessages()
 	return 1;
 }
 
+void selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
+{
+		for(list<Unidade *>::iterator it1 = nacao.exercito.begin(); it1 != nacao.exercito.end(); it1++) 
+		{
+			 //(*(*it1)).isDead = true;
+
+			if(tileX == (*(*it1)).posX && tileY == (*(*it1)).posY)
+			{
+				if(unidadeSelecionada==0)
+				{
+					unidadeSelecionada = (*it1);
+					
+					if ((*(*it1)).isDead == false)
+					{
+						(*unidadeSelecionada).selecionado = true;	
+					}			
+				}					
+				else
+				{
+					(*unidadeSelecionada).selecionado = false;					
+					unidadeAlvo = (*it1);
+					(*unidadeSelecionada).attack(unidadeAlvo);
+					unidadeSelecionada = 0;					
+					unidadeAlvo = 0;	
+				}
+			}
+		}
+}
+
 int get_inputs()
 {
     while( SDL_PollEvent( &event ) )
@@ -218,8 +247,6 @@ int get_inputs()
 					(*unidadeSelecionada).posY += 1;
 			}
 
-			
-
 			//alternando modo do mapa
 			if(event.key.keysym.sym == SDLK_0)
 			{
@@ -237,65 +264,15 @@ int get_inputs()
 			int tileY = Y/30;
 
 			//unidadeSelecionada
-		
-		for(list<Unidade *>::iterator it1 = nacao1.exercito.begin(); it1 != nacao1.exercito.end(); it1++) 
-		{
-			 //(*(*it1)).isDead = true;
-
-			if(tileX == (*(*it1)).posX && tileY == (*(*it1)).posY)
-			{
-				if(unidadeSelecionada==0)
-				{
-					unidadeSelecionada = (*it1);
-					
-					if ((*(*it1)).isDead == false)
-					{
-					
-					(*unidadeSelecionada).selecionado = true;	
-					
-					}			
-				}					
-				else
-				{
-					(*unidadeSelecionada).selecionado = false;					
-					unidadeAlvo = (*it1);
-					(*unidadeSelecionada).attack(unidadeAlvo);
-					unidadeSelecionada = 0;					
-					unidadeAlvo = 0;
-					
-				}
-
-			}
-		}
-	
-			
-		for(list<Unidade *>::iterator it2 = nacao2.exercito.begin(); it2 != nacao2.exercito.end(); it2++) 
-		{
-
-		//(*(*it2)).isDead = true;
-			 
-			if(tileX == (*(*it2)).posX && tileY == (*(*it2)).posY)
-			{
-				if(unidadeSelecionada==0)
-					unidadeSelecionada = (*it2);
-				else
-				{
-					unidadeAlvo = (*it2);
-					(*unidadeSelecionada).attack(unidadeAlvo);
-					unidadeSelecionada = 0;					
-					unidadeAlvo = 0;
-				}
-			}
-		}		
-
+			selecionarUnidadeNacao(nacao1, tileX, tileY);
+			selecionarUnidadeNacao(nacao2, tileX, tileY);
 		
 		}
 		
-
-        	if( event.type == SDL_QUIT )	//If the user has Xed out the window
-        	{
-            		quit = true;
-       		}
+    	if( event.type == SDL_QUIT )	//If the user has Xed out the window
+    	{
+        		quit = true;
+   		}
     }
 
 	return 1;
@@ -316,30 +293,22 @@ int atualizarEstados()
 		{
 			case 2:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-
 					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
 					SDL_Delay(2000);
 					break;
 
 			case 3:
 					SDL_FillRect(screen, NULL, 0x000000);
-
 					(*drawObj).apply_surface( 200, 0, logoRecursos, screen,0);
-					SDL_Delay(2000);
-					
+					SDL_Delay(2000);			
 					break;
-
-
 			case 4:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-
 					(*drawObj).apply_surface( 0, 0, classificacaoIndicativa, screen,0);
 					SDL_Delay(2000);
-			
 					break;
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-
 					(*drawObj).apply_surface( 0, 0, menu, screen,0);
 					SDL_Delay(2000);
 					scenarioAtual = INICIO;					//trabalhando com esse para esta entrega
@@ -356,6 +325,16 @@ int do_logic()
 	atualizarEstados();
 
 	return 1;
+}
+
+void mostrandoUnidadesNacao(Nacao nacao)
+{
+	//Laço responsável por criar (show) todas as unidades criadas na Nacao
+	for(list<Unidade *>::iterator it1 = nacao.exercito.begin(); it1 != nacao.exercito.end(); it1++)
+	{
+		if((*it1) != NULL && !(*(*it1)).isDead)
+		(*(*it1)).show(); 
+	}
 }
 
 int do_drawing()
@@ -387,8 +366,6 @@ int do_drawing()
 					SDL_FillRect(screen, NULL, 0x000000);
 					(*drawObj).apply_surface( 0, 0, menu, screen,0);
 					break;
-
-
 		}
 	}
 	else 
@@ -425,36 +402,8 @@ int do_drawing()
 			}
 		}
 
-		//criarNacao();		
-
-
-		//Laço responsável por criar (show) todas as unidades criadas na Nacao
-		for(list<Unidade *>::iterator it1 = nacao1.exercito.begin(); it1 != nacao1.exercito.end(); it1++)
-		{
-			if((*it1) != NULL && !(*(*it1)).isDead)
-			(*(*it1)).show(); 
-
-			rect.x = (*(*it1)).posX*30;
-			rect.y = (*(*it1)).posY*30;
-			rect.w = 30;
-			rect.h = 30;
-
-
-			if ((*(*it1)).selecionado == true)
-				SDL_FillRect(screen, &rect, 0x000000AA);
-		}
-		
-		for(list<Unidade *>::iterator it2 = nacao2.exercito.begin(); it2 != nacao2.exercito.end(); it2++)
-		{
-			if((*it2) != NULL && !(*(*it2)).isDead)
-			(*(*it2)).show(); 
-		}
-		/*
-		if(unit1 != NULL && !(*unit1).isDead)
-			(*unit1).show();
-
-		if(unit2 != NULL && !(*unit2).isDead)
-			(*unit2).show(); */
+		mostrandoUnidadesNacao(nacao1);
+		mostrandoUnidadesNacao(nacao2);
 	}
 		
 

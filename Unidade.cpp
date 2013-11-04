@@ -42,7 +42,11 @@ int Unidade::show()
 	switch(modo)
 	{
 		case MODO_NORMAL:
+			if(selecionado)
+				SDL_SetAlpha(civilizationUnits, SDL_SRCALPHA, 100);
 			(*drawObj).apply_surface( posX*30, posY*30, civilizationUnits, screen, &rect);
+			//SDL_FillRect(screen, &rect, 0x000000AA);
+			SDL_SetAlpha(civilizationUnits, SDL_SRCALPHA, 255);
 			break;
 		case MODO_QUADRADOS_PREENCHIDOS:
 			SDL_FillRect(screen, &rect, cores[PRETO]);
