@@ -82,7 +82,7 @@ void Draw::drawLine(SDL_Surface *surface, float x1, float y1, float x2, float y2
         std::swap(x1, y1);
         std::swap(x2, y2);
     }
-
+ 
     if(x1 > x2)
     {
         std::swap(x1, x2);
