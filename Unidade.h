@@ -18,6 +18,8 @@ class Unidade
 		int forca;
 		bool isDead;
 
+		bool selecionado;
+
 		Unidade(int, int, int, int, string);
 		int show();
 		int attack(Unidade *); 

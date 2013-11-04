@@ -245,14 +245,26 @@ int get_inputs()
 			if(tileX == (*(*it1)).posX && tileY == (*(*it1)).posY)
 			{
 				if(unidadeSelecionada==0)
+				{
 					unidadeSelecionada = (*it1);
+					
+					if ((*(*it1)).isDead == false)
+					{
+					
+					(*unidadeSelecionada).selecionado = true;	
+					
+					}			
+				}					
 				else
 				{
+					(*unidadeSelecionada).selecionado = false;					
 					unidadeAlvo = (*it1);
 					(*unidadeSelecionada).attack(unidadeAlvo);
 					unidadeSelecionada = 0;					
 					unidadeAlvo = 0;
+					
 				}
+
 			}
 		}
 	
@@ -421,6 +433,15 @@ int do_drawing()
 		{
 			if((*it1) != NULL && !(*(*it1)).isDead)
 			(*(*it1)).show(); 
+
+			rect.x = (*(*it1)).posX*30;
+			rect.y = (*(*it1)).posY*30;
+			rect.w = 30;
+			rect.h = 30;
+
+
+			if ((*(*it1)).selecionado == true)
+				SDL_FillRect(screen, &rect, 0x000000AA);
 		}
 		
 		for(list<Unidade *>::iterator it2 = nacao2.exercito.begin(); it2 != nacao2.exercito.end(); it2++)

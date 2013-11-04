@@ -15,6 +15,7 @@ Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, string nacao)
 	forca = _forca;
 	isDead = false;
 	nacao = nacao;
+	selecionado = false;
 }
 int Unidade::show()
 {
