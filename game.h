@@ -2,12 +2,14 @@
 #define GAME_H
 
 #include "SDL/SDL.h"
+#include "SDL/SDL_ttf.h"
 #include "Tile.h"
 #include "Cenario.h"
 #include "Unidade.h"
 #include "globals.h"
 #include "globalsGame.h"
 #include "ImageHandlerSDL.h"
+#include "Timer.h"
 #include "Draw.h"
 #include <iostream>
 

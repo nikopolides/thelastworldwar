@@ -1,13 +1,11 @@
 #include "ImageHandlerSDL.h"
-#include <iostream>	
-using namespace std;
 
 ImageHandlerSDL::ImageHandlerSDL()
 {
 	
 }
 
-SDL_Surface * ImageHandlerSDL::load_image( string filename, Uint32 corTransparencia) 
+SDL_Surface * ImageHandlerSDL::load_image( string filename, Uint32 corTransparencia = 0) 
 {
     //ponteiro para a imagem que sera carregada
     SDL_Surface* loadedImage = NULL;
@@ -36,7 +34,6 @@ SDL_Surface * ImageHandlerSDL::load_image( string filename, Uint32 corTransparen
 	        SDL_FreeSurface( loadedImage );
 			loadedImage = optimizedImage;
 		}
-		
 
 		if( corTransparencia != 0 )
 		{

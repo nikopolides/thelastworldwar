@@ -1,8 +1,9 @@
 #ifndef CENARIO_H
 #define CENARIO_H
 
-#include "Tile.h"
 #include <cstdlib>
+
+class Tile;
 
 class Cenario
 {
@@ -14,6 +15,7 @@ class Cenario
 		Cenario(int _numeroTilesX, int _numeroTilesY);
 		int initialize(int **tipos);
 		int finalize();
+		void show();
 };
 
 #endif

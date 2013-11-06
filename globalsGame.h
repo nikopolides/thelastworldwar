@@ -38,7 +38,6 @@ extern Uint32 cores[];		//correspondendo as cores definidas no enum
 extern int modo;
 
 //The surfaces that will be used
-extern SDL_Surface *screen;
 extern SDL_Surface *logoEmpresa;
 extern SDL_Surface *logoJogo;
 extern SDL_Surface *logoRecursos;

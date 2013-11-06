@@ -2,10 +2,10 @@
 #include "globalsGame.h" 
 #include "Nacao.h"
 #include "Unidade.h"
+#include "SDL/SDL_ttf.h"
 
 Nacao nacao1 = Nacao(10,10,10,10);
 Nacao nacao2 = Nacao(20,20,20,20);
-
 	
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;
@@ -29,9 +29,6 @@ void selecionarMenu(){
 		if( (tileX>=10 && tileX<=19) && (tileY>=21 && tileY<=24) )
 			quit = true;
 	
-	
-
-			//printf("Tile X:%d \n\n Tile Y: %d \n\n",tileX,tileY);
 		}
 }
 
@@ -55,6 +52,7 @@ int initializeCenario1()
 
 	nacao2.exercitoAdd(new Unidade(24,16,2,10,&nacao2));
 	nacao2.exercitoAdd(new Unidade(20,18,1,10,&nacao2));	
+
 
 	const int LINHAS_MAPA = 22;
 	const int COLUNAS_MAPA = 33;
@@ -135,6 +133,10 @@ int initialize()
 		return -1;
 	}
 
+    //Initialize SDL_ttf 
+    if( TTF_Init() == -1 ) 
+	    return false;
+
 	//The attributes of the screen
 	const int SCREEN_WIDTH = 1024;
 	const int SCREEN_HEIGHT = 768;
@@ -157,6 +159,7 @@ int initialize()
 	ImageHandlerSDLObj = new ImageHandlerSDL();
 	drawObj = new Draw();
 	randomObj = new Random();
+	timer = new Timer();
 
     //Load the images
 	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/gamaSoft.jpg",0);
@@ -166,8 +169,15 @@ int initialize()
 	classificacaoIndicativa = (*ImageHandlerSDLObj).load_image("images/classificacaoIndicativa.png",0);	
 	menu = (*ImageHandlerSDLObj).load_image("images/menu.png",0);
 
+    font = TTF_OpenFont( "lazy.ttf", 28 );
+	SDL_Color textColor = {255, 255, 255, 255};
+	string saida = "SCORE MLK";
+	message = TTF_RenderText_Solid( font, saida.c_str(), textColor );
+
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	initializeCenario1();
+
+	(*timer).start();
 
 	return 1;	//sucess
 }
@@ -180,7 +190,8 @@ int finalize()
     SDL_FreeSurface(logoRecursos );
     SDL_FreeSurface( menu );
     SDL_FreeSurface( classificacaoIndicativa );
-	
+
+    SDL_FreeSurface( message );	
 
 	/*
 	//delete units
@@ -197,6 +208,8 @@ int finalize()
 	delete(ImageHandlerSDLObj);
 	delete(drawObj);
 	delete(randomObj);
+
+	TTF_CloseFont( font );
 
     //Quit SDL
     SDL_Quit();
@@ -411,6 +424,8 @@ int do_drawing()
 		//limpando tela anterior colocando a cor branca no lugar
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
+		//(*cenario).show();
+
 		//desenhando mapa de bits de acordo ao modo
 		for(int i = 0; i < (*cenario).numeroTilesY; i++)
 		{
@@ -424,6 +439,7 @@ int do_drawing()
 				switch(modo)
 				{
 					case MODO_NORMAL:
+						(*cenario).tiles[i][j] -> show();
 					case MODO_QUADRADOS_PREENCHIDOS:
 						SDL_FillRect(screen, &rect, cores[(*cenario).tiles[i][j] -> tipo]);
 						break;
@@ -439,6 +455,8 @@ int do_drawing()
 
 		mostrandoUnidadesNacao(nacao1);
 		mostrandoUnidadesNacao(nacao2);
+
+		(*drawObj).apply_surface( 0, 0, message, screen, 0 );
 	}
 		
 
@@ -448,6 +466,15 @@ int do_drawing()
 		cout << "Nao conseguiu realizar a funcao SDL_Flip" << endl;
 	    return -1;
 	}
+
+    frame++;
+
+    //If a second has passed since the caption was last updated
+	if( (*timer).get_ticks() < 1000 / FRAMES_PER_SECOND )
+    {
+        //Sleep the remaining frame time
+        SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - (*timer).get_ticks() );
+    }
 
 	return 1;
 }

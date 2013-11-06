@@ -1,4 +1,5 @@
 #include "Cenario.h"
+#include "Tile.h"
 
 Cenario::Cenario(int _numeroTilesX, int _numeroTilesY)
 {
@@ -43,5 +44,16 @@ int Cenario::finalize()
 	free(tiles);
 
 	return 1;
+}
+
+void Cenario::show()
+{
+	for(int i = 0; i<numeroTilesY; i++)
+	{
+		for(int j = 0; j<numeroTilesX; j++)
+		{
+			tiles[i][j] -> show();
+		}
+	}
 }
 
