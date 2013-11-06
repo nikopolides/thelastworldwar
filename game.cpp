@@ -4,8 +4,8 @@
 #include "Unidade.h"
 #include "SDL/SDL_ttf.h"
 
-Nacao nacao1 = Nacao(10,10,10,10);
-Nacao nacao2 = Nacao(20,20,20,20);
+Nacao nacao1 = Nacao(400,400,400,400);
+Nacao nacao2 = Nacao(400,400,400,400);
 	
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;

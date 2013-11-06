@@ -16,30 +16,67 @@ Nacao::Nacao(int _petroleo, int _madeira, int _comida, int _ferro)
 
 void Nacao::exercitoAdd(Unidade* unidade)
 {
-	exercito.push_back(unidade);
 
 	if( (*unidade).tipo == AVIAO)
 	{
-		petroleo -= 200;
-		ferro -= 200;
+		if(petroleo < 200 || ferro < 200) 
+		{
+			printf("Não há recursos o suficiente para criacao do AVIAO");		
+		}
+			else 
+			{
+				petroleo -= 200;
+				ferro -= 200;
+		
+				exercito.push_back(unidade);
+			}
+
 	}
 
 	if( (*unidade).tipo == NAVIO)
 	{
-		petroleo -= 200;
-		ferro -= 200;	
+		if(petroleo < 200 || ferro < 200) 
+		{
+			printf("Não há recursos o suficiente para criacao do NAVIO");		
+		}
+			else 
+			{
+				petroleo -= 200;
+				ferro -= 200;
+		
+				exercito.push_back(unidade);
+			}	
 	}	
 
 	if( (*unidade).tipo == SOLDADO)
 	{
-		comida -= 200;	
+			if(comida < 200) 
+		{
+			printf("Não há recursos o suficiente para criacao do SOLDADO");		
+		}
+			else 
+			{
+				comida -= 200;
+
+				exercito.push_back(unidade);
+			}		
 	}	
 
 	if( (*unidade).tipo == CANHAO)
 	{
-		madeira -= 200;
-		ferro -= 200;	
+		if(ferro < 200 || madeira < 200 ) 
+		{
+			printf("Não há recursos o suficiente para criacao do CANHAO");		
+		}
+			else 
+			{
+				ferro -= 200;
+				madeira -= 200;		
+	
+				exercito.push_back(unidade);
+			}	
 	}
+
 
 }
 
