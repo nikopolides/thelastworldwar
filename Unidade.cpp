@@ -1,4 +1,5 @@
 #include "Unidade.h"
+#include "Nacao.h"
 
 enum {
 	AVIAO,
@@ -7,14 +8,14 @@ enum {
 	CANHAO
 };
 
-Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, string nacao)
+Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao) 
 {
 	posX = _posX;
 	posY = _posY;
 	tipo = _tipo;
 	forca = _forca;
 	isDead = false;
-	nacao = nacao;
+	nacao = _nacao;
 	selecionado = false;
 }
 int Unidade::show()
@@ -64,8 +65,11 @@ int Unidade::show()
 
 int Unidade::attack(Unidade * inimigo)
 {
-	if((nacao == "nacao1" && (*inimigo).nacao == "nacao1") || (nacao == "nacao2" && (*inimigo).nacao == "nacao2"))	
+	if( nacao == (*inimigo).nacao)
+	{
+		//printf("Nao pode atacar alguem da mesma nacao\n\n");
 		return 1;
+	}	
 
 
 	//80% da forca mais 20% da forca vezes um numero aleatorio de 1 a 10

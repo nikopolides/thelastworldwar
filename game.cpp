@@ -25,15 +25,13 @@ void selecionarMenu(){
 		//Abrir jogo
 		if( (tileX>=10 && tileX<=19) && (tileY>=10 && tileY<=13) )
 			scenarioAtual=INICIO;	
-		//Opcoes
-		if ( (tileX>=10 && tileX<=19) && (tileY>=10 && tileY<=13) )
 		//Sair	
 		if( (tileX>=10 && tileX<=19) && (tileY>=21 && tileY<=24) )
 			quit = true;
 	
 	
 
-			printf("Tile X:%d \n\n Tile Y: %d \n\n",tileX,tileY);
+			//printf("Tile X:%d \n\n Tile Y: %d \n\n",tileX,tileY);
 		}
 }
 
@@ -52,11 +50,11 @@ void criarNacao(){
 int initializeCenario1()
 {
 	
-	nacao1.exercitoAdd(new Unidade(3,3,2, 10,"nacao1"));
-	nacao1.exercitoAdd(new Unidade(5,2,1,10,"nacao1"));
+	nacao1.exercitoAdd(new Unidade(3,3,2,10,&nacao1));
+	nacao1.exercitoAdd(new Unidade(5,2,1,10,&nacao1));
 
-	nacao2.exercitoAdd(new Unidade(24,16,2,10,"nacao2"));
-	nacao2.exercitoAdd(new Unidade(20,18,1,10, "nacao2"));	
+	nacao2.exercitoAdd(new Unidade(24,16,2,10,&nacao2));
+	nacao2.exercitoAdd(new Unidade(20,18,1,10,&nacao2));	
 
 	const int LINHAS_MAPA = 22;
 	const int COLUNAS_MAPA = 33;
@@ -164,7 +162,7 @@ int initialize()
 	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/gamaSoft.jpg",0);
     logoJogo = (*ImageHandlerSDLObj).load_image("images/logo.png",0);
 	logoRecursos = (*ImageHandlerSDLObj).load_image("images/recursosTecnologicos.png",0);
-	civilizationUnits = (*ImageHandlerSDLObj).load_image("images/civilization2Units.png",0);
+	civilizationUnits = (*ImageHandlerSDLObj).load_image("images/unidades2.png",0);
 	classificacaoIndicativa = (*ImageHandlerSDLObj).load_image("images/classificacaoIndicativa.png",0);	
 	menu = (*ImageHandlerSDLObj).load_image("images/menu.png",0);
 

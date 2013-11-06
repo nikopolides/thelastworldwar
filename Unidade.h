@@ -6,6 +6,8 @@
 #include "globalsGame.h"
 #include <string>
 
+class Nacao;
+
 class Unidade
 {
 	public:
@@ -13,14 +15,14 @@ class Unidade
 		int posY;	//tile Y do mapa onde atualmente habita
 		int tipo;	//aviao,navio,soldado,canhao,etc...
 
-		string nacao;	//Nacao que a Unidade faz parte
-		
+		Nacao* nacao;
+
 		int forca;
 		bool isDead;
 
 		bool selecionado;
 
-		Unidade(int, int, int, int, string);
+		Unidade(int, int, int, int, Nacao*);
 		int show();
 		int attack(Unidade *); 
 };
