@@ -18,7 +18,7 @@ enum {
 	MARROM,		//terra
 	VERDE,		//floresta
 	AMARELO,	//areia
-	BRANCO,		//neve
+	BRANCO,		//fronteira agua e terra
 
 	PRETO		//unidade
 };
@@ -26,9 +26,9 @@ enum {
 //modo de apresentacao desse mapa de bits
 enum {
 	MODO_NORMAL,
-	MODO_QUADRADOS_PREENCHIDOS,
-	MODO_QUADRADOS,
-	MODO_CIRCULOS
+	MODO_QUADRADOS_PREENCHIDOS
+	//MODO_QUADRADOS,
+	//MODO_CIRCULOS
 };
 
 extern int scenarioAtual;
@@ -44,6 +44,7 @@ extern SDL_Surface *logoJogo;
 extern SDL_Surface *logoRecursos;
 extern SDL_Surface *classificacaoIndicativa;
 extern SDL_Surface *menu;
+extern SDL_Surface *mapa;
 
 //carregando imagem das unidades
 extern SDL_Surface *civilizationUnits;

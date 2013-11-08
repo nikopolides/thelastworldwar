@@ -11,6 +11,7 @@ SDL_Surface *logoJogo = NULL;
 SDL_Surface *logoRecursos = NULL;
 SDL_Surface *menu = NULL;
 SDL_Surface *classificacaoIndicativa = NULL;
+SDL_Surface *mapa = NULL;
 
 
 //carregando imagem das unidades
