@@ -10,7 +10,7 @@ class Nacao
 
 		int petroleo;
 		int madeira;
-		int comida;
+		int ouro;
 		int ferro;
 
 		Nacao(int, int, int, int);
