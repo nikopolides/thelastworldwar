@@ -13,6 +13,7 @@ SDL_Surface *logoJogo = NULL;
 SDL_Surface *logoRecursos = NULL;
 SDL_Surface *menu = NULL;
 SDL_Surface *classificacaoIndicativa = NULL;
+SDL_Surface *mapa = NULL;
 
 SDL_Surface *messageRecursos = NULL;
 SDL_Surface *messageUnidades = NULL;

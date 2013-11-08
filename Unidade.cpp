@@ -52,12 +52,12 @@ int Unidade::show()
 		case MODO_QUADRADOS_PREENCHIDOS:
 			SDL_FillRect(screen, &rect, cores[PRETO]);
 			break;
-		case MODO_QUADRADOS:
-			(*drawObj).drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[PRETO]);
-			break;
-		case MODO_CIRCULOS:
-			(*drawObj).drawCircle(screen, rect.x, rect.y, rect.w/2, cores[PRETO],false);
-			break;
+		// case MODO_QUADRADOS:
+		// 	(*drawObj).drawRect(screen, rect.x, rect.y, rect.w, rect.h, cores[PRETO]);
+		// 	break;
+		// case MODO_CIRCULOS:
+		// 	(*drawObj).drawCircle(screen, rect.x, rect.y, rect.w/2, cores[PRETO],false);
+		// 	break;
 	}
 
 	return 1;
