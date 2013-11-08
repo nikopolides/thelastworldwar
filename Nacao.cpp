@@ -5,14 +5,61 @@
 #define SOLDADO 2
 #define CANHAO 3
 
-Nacao::Nacao(int _petroleo, int _madeira, int _ouro, int _ferro)
+
+
+Nacao::Nacao(int _petroleo, int _madeira, int _ouro, int _ferro, string _nome)
 {
 	petroleo = _petroleo;
 	madeira = _madeira;
 	ouro = _ouro;
 	ferro = _ferro;
 
+	nome = _nome;
+	
+	qtdNacao[0] = 0;
+	qtdNacao[1] = 0;
+	qtdNacao[2] = 0;
+	qtdNacao[3] = 0;
+
+
 }
+
+void Nacao::contarExercito()
+{	
+	int i;
+	
+	for(i=0;i<4;i++)
+		qtdNacao[i] = 0;	
+	
+	for(list<Unidade *>::iterator it1 = exercito.begin(); it1 != exercito.end(); it1++)
+	{
+		if ((*(*it1)).isDead)
+			continue;
+
+		switch ((*(*it1)).tipo)
+		{
+			case SOLDADO: 
+					qtdNacao[SOLDADO]++;   
+			break;
+
+			case NAVIO: 
+					qtdNacao[NAVIO]++;   
+			break;
+
+			case CANHAO: 
+					qtdNacao[CANHAO]++;   
+			break;
+	
+			case AVIAO: 
+					qtdNacao[AVIAO]++;   
+			break;
+
+		}
+				
+	}
+
+}
+
 
 void Nacao::exercitoAdd(Unidade* unidade)
 {
@@ -82,8 +129,8 @@ void Nacao::exercitoAdd(Unidade* unidade)
 				exercito.push_back(unidade);
 			}	
 	}
-
-
+	
+	contarExercito();
 }
 
 void Nacao::exercitoPop()
@@ -91,13 +138,14 @@ void Nacao::exercitoPop()
 	exercito.pop_front();
 }
 
+
 void Nacao::carregaScore()
 {
 	SDL_Color textColor = {255, 255, 255, 255};
 	
-	sprintf(scoreRecursosNacao1,"Nacao1 -> Madeira: %d Ferro: %d Ouro: %d Petroleo: %d",madeira,ferro,ouro,petroleo);
+	sprintf(scoreRecursosNacao1,"%s -> Madeira: %d Ferro: %d Ouro: %d Petroleo: %d",nome.c_str(),madeira,ferro,ouro,petroleo);
 	
-	sprintf(scoreUnidadesNacao1,"Nacao1 -> Soldado: %d Navio: %d Canhao: %d Aviao: %d",qtdNacao1[0],qtdNacao1[1],qtdNacao1[2],qtdNacao1[3]);
+	sprintf(scoreUnidadesNacao1,"%s -> Soldado: %d Navio: %d Canhao: %d Aviao: %d",nome.c_str(),qtdNacao[SOLDADO],qtdNacao[NAVIO],qtdNacao[CANHAO],qtdNacao[AVIAO]);
 
 	messageRecursos = TTF_RenderText_Solid( font, scoreRecursosNacao1,textColor );
 	messageUnidades = TTF_RenderText_Solid( font, scoreUnidadesNacao1,textColor );

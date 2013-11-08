@@ -50,9 +50,6 @@ extern SDL_Surface *messageUnidades;
 
 extern char scoreRecursosNacao1[300];
 extern char scoreUnidadesNacao1[300];	
-	
-extern int qtdNacao1[4];
-
 
 
 //carregando imagem das unidades

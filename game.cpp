@@ -4,9 +4,10 @@
 #include "Unidade.h"
 #include "SDL/SDL_ttf.h"
 
-Nacao nacao1 = Nacao(400,400,400,400);
-Nacao nacao2 = Nacao(400,400,400,400);
-	
+Nacao* nacao1 = new Nacao(400,400,400,400,"Estados Unidos");
+Nacao* nacao2 = new Nacao(400,400,400,400, "Siria");
+Nacao* nacaoSelecionada = nacao1;
+
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;
 
@@ -33,26 +34,15 @@ void selecionarMenu(){
 }
 
 
-/*
-//Criar nacao
-void criarNacao(){
-	Nacao nacao1 = Nacao(10,10,10,10);
-	Nacao nacao2 = Nacao(20,20,20,20);	
-}
-*/
-
-
-
 //diferentes cenarios
 int initializeCenario1()
 {
+	(*nacao1).exercitoAdd(new Unidade(3,3,2,10,nacao1));
+	(*nacao1).exercitoAdd(new Unidade(5,2,1,10,nacao1));
 	
-	nacao1.exercitoAdd(new Unidade(3,3,2,10,&nacao1));
-	nacao1.exercitoAdd(new Unidade(5,2,1,10,&nacao1));
-
-	nacao2.exercitoAdd(new Unidade(24,16,2,10,&nacao2));
-	nacao2.exercitoAdd(new Unidade(20,18,1,10,&nacao2));	
-
+	(*nacao2).exercitoAdd(new Unidade(24,16,2,10,nacao2));
+	(*nacao2).exercitoAdd(new Unidade(20,18,1,10,nacao2));	
+	
 
 	const int LINHAS_MAPA = 22;
 	const int COLUNAS_MAPA = 33;
@@ -177,7 +167,6 @@ int initialize()
 
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	initializeCenario1();
-	nacao1.carregaScore();
 
 	(*timer).start();
 
@@ -265,6 +254,17 @@ void selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
 		}
 }
 
+void mostrandoUnidadesNacao(Nacao nacao)
+{
+	//Laço responsável por criar (show) todas as unidades criadas na Nacao
+	for(list<Unidade *>::iterator it1 = nacao.exercito.begin(); it1 != nacao.exercito.end(); it1++)
+	{
+		if((*it1) != NULL && !(*(*it1)).isDead)
+		(*(*it1)).show(); 
+	}
+}
+
+
 int get_inputs()
 {
     while( SDL_PollEvent( &event ) )
@@ -299,6 +299,23 @@ int get_inputs()
 				modo++;
 				modo = modo % 4;		//4 modos
 			}
+			
+			if(event.key.keysym.sym == SDLK_8)
+			{
+				nacaoSelecionada = nacao1;
+			}
+
+			if(event.key.keysym.sym == SDLK_9)
+			{
+				nacaoSelecionada = nacao2;
+			}
+
+			if(event.key.keysym.sym == SDLK_1)
+			{
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,2,10,nacaoSelecionada));
+				mostrandoUnidadesNacao((*nacaoSelecionada));
+			}
+
 		}
 
 		if(event.type == SDL_MOUSEBUTTONUP)
@@ -310,8 +327,8 @@ int get_inputs()
 			int tileY = Y/30;
 
 			//unidadeSelecionada
-			selecionarUnidadeNacao(nacao1, tileX, tileY);
-			selecionarUnidadeNacao(nacao2, tileX, tileY);
+			selecionarUnidadeNacao((*nacao1), tileX, tileY);
+			selecionarUnidadeNacao((*nacao2), tileX, tileY);
 		
 		}
 		
@@ -375,15 +392,7 @@ int do_logic()
 	return 1;
 }
 
-void mostrandoUnidadesNacao(Nacao nacao)
-{
-	//Laço responsável por criar (show) todas as unidades criadas na Nacao
-	for(list<Unidade *>::iterator it1 = nacao.exercito.begin(); it1 != nacao.exercito.end(); it1++)
-	{
-		if((*it1) != NULL && !(*(*it1)).isDead)
-		(*(*it1)).show(); 
-	}
-}
+
 
 int do_drawing()
 {
@@ -458,8 +467,10 @@ int do_drawing()
 			}
 		}
 
-		mostrandoUnidadesNacao(nacao1);
-		mostrandoUnidadesNacao(nacao2);
+		mostrandoUnidadesNacao((*nacao1));
+		mostrandoUnidadesNacao((*nacao2));
+
+		(*nacaoSelecionada).carregaScore();
 
 		(*drawObj).apply_surface( 0, 0, messageRecursos, screen, 0 );
 		

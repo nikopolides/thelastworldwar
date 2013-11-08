@@ -76,11 +76,16 @@ int Unidade::attack(Unidade * inimigo)
 	int ataque = 0.8 * forca 			+ 0.2 * forca * (*randomObj).gerarNumero(10);
 	int defesa = 0.8 * (*inimigo).forca + 0.2 * (*inimigo).forca * (*randomObj).gerarNumero(10);
 
-	if(ataque > defesa){
+	if(ataque > defesa)
+	{
 		(* inimigo).isDead = true;		
+		(*(* inimigo).nacao).contarExercito();	
 	}
 	else
+	{
 		isDead = true;
+		(*nacao).contarExercito();
+	}
 
 	return 1;
 }

@@ -13,11 +13,17 @@ class Nacao
 		int ouro;
 		int ferro;
 
-		Nacao(int, int, int, int);
+	
+		int qtdNacao[4];
+
+		string nome;
+
+		Nacao(int, int, int, int, string);
 		void init();
 		void exercitoAdd(Unidade *);
 		void exercitoPop();		
 		void carregaScore();
+		void contarExercito();
 };
 
 #endif

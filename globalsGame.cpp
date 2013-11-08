@@ -18,17 +18,9 @@ SDL_Surface *messageUnidades = NULL;
 char scoreRecursosNacao1[300];
 char scoreUnidadesNacao1[300];	
 	
-int qtdNacao1[4] = {0,0,0,0};
-
 
 //carregando imagem das unidades
 SDL_Surface *civilizationUnits = NULL;
 
 Cenario* cenario = NULL;
 
-/*
-//inicializando uma unidade pra testar
-Unidade* unit1 = new Unidade(10, 10, SOLDADO, 10);
-Unidade* unit2 =  new Unidade(2, 2, NAVIO, 10);
-Unidade* unidadeSelecionada = unit1;
-*/
