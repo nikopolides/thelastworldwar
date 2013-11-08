@@ -270,9 +270,10 @@ void mostrandoUnidadesNacao(Nacao nacao)
 	}
 }
 
-
+		
 int get_inputs()
 {
+	
     while( SDL_PollEvent( &event ) )
     {
 		if( event.type == SDL_KEYDOWN )
@@ -289,14 +290,63 @@ int get_inputs()
 
 			if(unidadeSelecionada != 0)
 			{
-				if( event.key.keysym.sym == SDLK_a ) 
-					(*unidadeSelecionada).posX -= 1;
+				if( event.key.keysym.sym == SDLK_a )
+				{ 	
+			
+					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
+					{
+						(*unidadeSelecionada).posX -= 1;							
+						contadorMovimentosSoldado--;					
+					}	
+					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
+					{
+						(*unidadeSelecionada).posX -= 1;							
+						contadorMovimentosNavio--;					
+					}							
+			
+				}
+
 				if( event.key.keysym.sym == SDLK_d ) 
-					(*unidadeSelecionada).posX += 1;
+				{	
+					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
+					{
+						(*unidadeSelecionada).posX += 1;							
+						contadorMovimentosSoldado--;					
+					}
+					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
+					{
+						(*unidadeSelecionada).posX += 1;							
+						contadorMovimentosNavio--;					
+					}	
+				}				
+			
 				if( event.key.keysym.sym == SDLK_w ) 
-					(*unidadeSelecionada).posY -= 1;
+				{
+					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
+					{
+						(*unidadeSelecionada).posY -= 1;							
+						contadorMovimentosSoldado--;					
+					}
+					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
+					{
+						(*unidadeSelecionada).posY -= 1;							
+						contadorMovimentosNavio--;					
+					}	
+				}
+				
 				if( event.key.keysym.sym == SDLK_s ) 
-					(*unidadeSelecionada).posY += 1;
+				{
+					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
+					{
+						(*unidadeSelecionada).posY += 1;								
+						contadorMovimentosSoldado--;					
+					}
+					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
+					{
+						(*unidadeSelecionada).posY += 1;							
+						contadorMovimentosNavio--;					
+					}	
+				}
 			}
 
 			//alternando modo do mapa
@@ -354,7 +404,10 @@ int get_inputs()
 			int tileY = Y/30;
 
 			//unidadeSelecionada
+			if(nacaoSelecionada == nacao1 || unidadeSelecionada != 0)
 			selecionarUnidadeNacao((*nacao1), tileX, tileY);
+
+			if(nacaoSelecionada == nacao2 || unidadeSelecionada != 0)			
 			selecionarUnidadeNacao((*nacao2), tileX, tileY);
 		
 		}

@@ -36,6 +36,8 @@ extern int scenarioAtual;
 extern Uint32 cores[];		//correspondendo as cores definidas no enum
 
 extern int modo;
+extern int contadorMovimentosSoldado;
+extern int contadorMovimentosNavio;
 
 //The surfaces that will be used
 extern SDL_Surface *logoEmpresa;
