@@ -4,6 +4,12 @@
 #include "Unidade.h"
 #include "SDL/SDL_ttf.h"
 
+#define AVIAO 0
+#define NAVIO 1
+#define SOLDADO 2
+#define CANHAO 3
+
+
 Nacao* nacao1 = new Nacao(400,400,400,400,"Estados Unidos");
 Nacao* nacao2 = new Nacao(400,400,400,400, "Siria");
 Nacao* nacaoSelecionada = nacao1;
@@ -312,11 +318,32 @@ int get_inputs()
 
 			if(event.key.keysym.sym == SDLK_1)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,2,10,nacaoSelecionada));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,SOLDADO,10,nacaoSelecionada));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
+			if(event.key.keysym.sym == SDLK_2)
+			{
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,NAVIO,10,nacaoSelecionada));
+				mostrandoUnidadesNacao((*nacaoSelecionada));
+			}
+
+			/*
+
+			if(event.key.keysym.sym == SDLK_3)
+			{
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,CANHAO,10,nacaoSelecionada));
+				mostrandoUnidadesNacao((*nacaoSelecionada));
+			}
+
+			if(event.key.keysym.sym == SDLK_4)
+			{
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada));
+				mostrandoUnidadesNacao((*nacaoSelecionada));
+			}
+			*/
 		}
+		
 
 		if(event.type == SDL_MOUSEBUTTONUP)
 		{
