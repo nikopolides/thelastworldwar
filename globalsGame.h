@@ -44,6 +44,17 @@ extern SDL_Surface *logoRecursos;
 extern SDL_Surface *classificacaoIndicativa;
 extern SDL_Surface *menu;
 
+
+extern SDL_Surface *messageRecursos;
+extern SDL_Surface *messageUnidades;
+
+extern char scoreRecursosNacao1[300];
+extern char scoreUnidadesNacao1[300];	
+	
+extern int qtdNacao1[4];
+
+
+
 //carregando imagem das unidades
 extern SDL_Surface *civilizationUnits;
 

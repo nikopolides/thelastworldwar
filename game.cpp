@@ -119,6 +119,8 @@ int finalizeCenario1()
 }
 
 
+
+
 //main loop functions
 int initialize()
 {
@@ -169,18 +171,19 @@ int initialize()
 	classificacaoIndicativa = (*ImageHandlerSDLObj).load_image("images/classificacaoIndicativa.png",0);	
 	menu = (*ImageHandlerSDLObj).load_image("images/menu.png",0);
 
+
     font = TTF_OpenFont( "lazy.ttf", 28 );
-	SDL_Color textColor = {255, 255, 255, 255};
-	string saida = "SCORE MLK";
-	message = TTF_RenderText_Solid( font, saida.c_str(), textColor );
+
 
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	initializeCenario1();
+	nacao1.carregaScore();
 
 	(*timer).start();
 
 	return 1;	//sucess
 }
+
 
 int finalize()
 {
@@ -191,8 +194,10 @@ int finalize()
     SDL_FreeSurface( menu );
     SDL_FreeSurface( classificacaoIndicativa );
 
-    SDL_FreeSurface( message );	
-
+    SDL_FreeSurface( messageRecursos );	
+	
+    SDL_FreeSurface( messageUnidades );	
+	
 	/*
 	//delete units
 	if(unit1 != NULL)
@@ -456,7 +461,9 @@ int do_drawing()
 		mostrandoUnidadesNacao(nacao1);
 		mostrandoUnidadesNacao(nacao2);
 
-		(*drawObj).apply_surface( 0, 0, message, screen, 0 );
+		(*drawObj).apply_surface( 0, 0, messageRecursos, screen, 0 );
+		
+		(*drawObj).apply_surface( 0, 40, messageUnidades, screen, 0 );	
 	}
 		
 

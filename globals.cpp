@@ -7,7 +7,6 @@ SDL_Event event;
 SDL_Rect rect;
 
 TTF_Font *font = NULL; 
-SDL_Surface *message = NULL;
 
 bool quit = false;
 int quadroEstado = 0;

@@ -90,3 +90,16 @@ void Nacao::exercitoPop()
 {
 	exercito.pop_front();
 }
+
+void Nacao::carregaScore()
+{
+	SDL_Color textColor = {255, 255, 255, 255};
+	
+	sprintf(scoreRecursosNacao1,"Nacao1 -> Madeira: %d Ferro: %d Ouro: %d Petroleo: %d",madeira,ferro,ouro,petroleo);
+	
+	sprintf(scoreUnidadesNacao1,"Nacao1 -> Soldado: %d Navio: %d Canhao: %d Aviao: %d",qtdNacao1[0],qtdNacao1[1],qtdNacao1[2],qtdNacao1[3]);
+
+	messageRecursos = TTF_RenderText_Solid( font, scoreRecursosNacao1,textColor );
+	messageUnidades = TTF_RenderText_Solid( font, scoreUnidadesNacao1,textColor );
+
+}

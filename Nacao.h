@@ -16,7 +16,8 @@ class Nacao
 		Nacao(int, int, int, int);
 		void init();
 		void exercitoAdd(Unidade *);
-		void exercitoPop();
+		void exercitoPop();		
+		void carregaScore();
 };
 
 #endif

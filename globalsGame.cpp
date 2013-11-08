@@ -11,6 +11,15 @@ SDL_Surface *logoRecursos = NULL;
 SDL_Surface *menu = NULL;
 SDL_Surface *classificacaoIndicativa = NULL;
 
+SDL_Surface *messageRecursos = NULL;
+SDL_Surface *messageUnidades = NULL;
+
+
+char scoreRecursosNacao1[300];
+char scoreUnidadesNacao1[300];	
+	
+int qtdNacao1[4] = {0,0,0,0};
+
 
 //carregando imagem das unidades
 SDL_Surface *civilizationUnits = NULL;

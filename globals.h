@@ -14,7 +14,6 @@ extern SDL_Rect rect;
 
 //The font that's going to be used 
 extern TTF_Font *font; 
-extern SDL_Surface *message;
 
 extern bool quit;
 extern int quadroEstado;
