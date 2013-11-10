@@ -17,8 +17,10 @@ enum {
 	AZUL,		//oceano
 	MARROM,		//terra
 	VERDE,		//floresta
-	AMARELO,	//areia
+	AMARELO,	//OURO
 	BRANCO,		//fronteira agua e terra
+	VERMELHO,  //PETROLEO
+	CINZA, //FERRO
 
 	PRETO		//unidade
 };
