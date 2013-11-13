@@ -42,6 +42,19 @@ void carregarLoading(){
 								}
 					}
 }
+
+Mix_Music *music = NULL;
+Mix_Music *musicGame = NULL;
+Mix_Music *musicaAtual = NULL;
+
+int sound()
+{
+	
+
+	return 1;	
+}
+
+
 //Funcao Menu
 void selecionarMenu(){
 
@@ -339,6 +352,13 @@ int initialize()
     if( TTF_Init() == -1 ) 
 	    return false;
 
+	
+	//Initialize Audio
+	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    {
+        return false;
+    }
+
 	//The attributes of the screen
 	const int SCREEN_WIDTH = 1980;
 	const int SCREEN_HEIGHT = 1024 ;
@@ -346,6 +366,9 @@ int initialize()
 
     //Set up the screen
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+
+	music = Mix_LoadMUS( "soundtrack/musica1.ogg" );
+	musicGame = Mix_LoadMUS( "soundtrack/musica2.ogg");
 
     //If there was an error in setting up the screen
     if( screen == NULL )
@@ -408,6 +431,10 @@ int finalize()
     SDL_FreeSurface( telaCreditos );
     SDL_FreeSurface( telaLoading );
     SDL_FreeSurface( loading );
+	
+		Mix_FreeMusic( music );
+		Mix_FreeMusic( musicGame );
+		Mix_FreeMusic( musicaAtual );
 
     SDL_FreeSurface( messageRecursos );	
     SDL_FreeSurface( messageUnidades );	
@@ -450,6 +477,14 @@ int finalize()
 
 	TTF_CloseFont( font );
 	TTF_CloseFont( fontMenu);
+
+	 //Free the music
+    //Mix_FreeMusic( music );
+
+
+    //Quit SDL_mixer
+    Mix_CloseAudio();
+
 
     //Quit SDL
     SDL_Quit();
@@ -694,6 +729,10 @@ int atualizarEstados()
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 					(*drawObj).apply_surface( height,width, menu, screen,0);
+					musica = MENU;
+					playMusic();
+					              
+
 					SDL_Delay(2000);				//trabalhando com esse para esta entrega
 					break;
 
@@ -713,7 +752,45 @@ int do_logic()
 	return 1;
 }
 
+int playMusic(){
+	Mix_HaltMusic();	
+	musicaAtual = NULL;
+	 if(musica == MENU){
+	 	musicaAtual = music;
 
+	 }else{
+	 	if(musica == JOGO){
+	 		musicaAtual = musicGame;
+	 	}
+
+	 }
+
+	if( Mix_PlayingMusic() == 0 )
+	{ 
+		//Play the music
+		if( Mix_PlayMusic( musicaAtual, -1 ) == -1 )
+		{
+			return 1;
+		}
+	}
+	//If music is being played
+	else
+	{
+		//If the music is paused
+		if( Mix_PausedMusic() == 1 )
+		{
+		//Resume the music
+			Mix_ResumeMusic();
+		}
+		//If the music is playing
+		else
+		{
+			//Pause the music
+			Mix_PauseMusic();
+		}
+	}     
+		 	return 1; 
+}
 
 int do_drawing()
 {
@@ -776,6 +853,9 @@ int do_drawing()
 					
 					selecionarMenu();
 					
+					
+					break;
+		}
 	}
   //Telas Instrucoes
 	if (scenarioAtual==INSTRUCOES){
@@ -933,6 +1013,8 @@ int do_drawing()
 	//Inicio do jogo
 	if(scenarioAtual==INICIO)
 	{
+
+
 		//limpando tela anterior colocando a cor branca no lugar
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
@@ -940,6 +1022,9 @@ int do_drawing()
 		//desenhando mapa de bits de acordo ao modo
 		if(modo == MODO_NORMAL) {
 			(*drawObj).apply_surface( height, width, mapa, screen,0);
+
+					musica = JOGO;
+					playMusic();
 		}
 		else{
 			for(int i = 0; i < (*cenario).numeroTilesY; i++)
@@ -993,12 +1078,7 @@ int do_drawing()
 	return 1;
 }
 
-int sound()
-{
 
-
-	return 1;	
-}
 
 int sendNetworkMessages()
 {
@@ -1014,7 +1094,6 @@ int do_miscAfter()
 
 	return 1;
 }
-
 
 
 

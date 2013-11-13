@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "SDL/SDL_mixer.h"
 #include "SDL/SDL.h"
 #include "SDL/SDL_ttf.h"
 #include "Tile.h"
@@ -38,7 +39,7 @@ extern void carregarLoading();
 //do Logic
 extern int tratarColisoes();
 extern int atualizarEstados();
-extern int do_logic();	
+extern int do_logic();  
 
 //do drawing
 extern int do_drawing();
@@ -46,5 +47,6 @@ extern int do_drawing();
 //outras funcoes (som, rede, tempo)
 extern int sound();
 extern int sendNetworkMessages();
+extern int playMusic();
 
 #endif
