@@ -10,8 +10,8 @@
 #define CANHAO 3
 
 
-Nacao* nacao1 = new Nacao(400,400,400,400,"Estados Unidos");
-Nacao* nacao2 = new Nacao(400,400,400,400, "Siria");
+Nacao* nacao1 = new Nacao(800,800,800,800,"Estados Unidos");
+Nacao* nacao2 = new Nacao(800,800,800,800, "Siria");
 Nacao* nacaoSelecionada = nacao1;
 
 Unidade* unidadeSelecionada = NULL;
@@ -44,10 +44,14 @@ void selecionarMenu(){
 int initializeCenario1()
 {
 	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
-	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));
-	
+	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
+	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
+	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
+
 	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
 	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
+	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
+	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
 	
 
 	const int LINHAS_MAPA = 24;
@@ -352,6 +356,11 @@ int get_inputs()
 					else if((*(*it1)).tipo == NAVIO)
 					(*(*it1)).qtdMovimentos = 3; 
 					
+					else if((*(*it1)).tipo == AVIAO)
+					(*(*it1)).qtdMovimentos = 10; 
+
+					else if((*(*it1)).tipo == CANHAO)
+					(*(*it1)).qtdMovimentos = 5; 	
 				}
 
 				nacaoSelecionada = nacao1;
@@ -364,8 +373,14 @@ int get_inputs()
 					if((*(*it1)).tipo == SOLDADO)
 					(*(*it1)).qtdMovimentos = 5; 
 
-					else if((*(*it1)).tipo == NAVIO)
+					if((*(*it1)).tipo == NAVIO)
 					(*(*it1)).qtdMovimentos = 3; 
+								
+					if((*(*it1)).tipo == AVIAO)
+					(*(*it1)).qtdMovimentos = 10; 
+
+					if((*(*it1)).tipo == CANHAO)
+					(*(*it1)).qtdMovimentos = 5;
 				}
 				nacaoSelecionada = nacao2;
 			}
@@ -382,20 +397,18 @@ int get_inputs()
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
-			/*
-
 			if(event.key.keysym.sym == SDLK_3)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,CANHAO,10,nacaoSelecionada));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,CANHAO,10,nacaoSelecionada,5));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
 			if(event.key.keysym.sym == SDLK_4)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada,10));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
-			*/
+			
 		}
 		
 
