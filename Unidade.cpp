@@ -8,7 +8,7 @@ enum {
 	CANHAO
 };
 
-Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao) 
+Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int _qtdMovimentos) 
 {
 	posX = _posX;
 	posY = _posY;
@@ -17,6 +17,7 @@ Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao)
 	isDead = false;
 	nacao = _nacao;
 	selecionado = false;
+	qtdMovimentos = _qtdMovimentos;
 }
 int Unidade::show()
 {
