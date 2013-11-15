@@ -344,11 +344,29 @@ int get_inputs()
 			
 			if(event.key.keysym.sym == SDLK_8)
 			{
+				for(list<Unidade *>::iterator it1 = (*nacao2).exercito.begin(); it1 != (*nacao2).exercito.end(); it1++)
+				{
+					if((*(*it1)).tipo == SOLDADO)
+					(*(*it1)).qtdMovimentos = 5; 
+
+					else if((*(*it1)).tipo == NAVIO)
+					(*(*it1)).qtdMovimentos = 3; 
+					
+				}
+
 				nacaoSelecionada = nacao1;
 			}
 
 			if(event.key.keysym.sym == SDLK_9)
 			{
+				for(list<Unidade *>::iterator it1 = (*nacao1).exercito.begin(); it1 != (*nacao1).exercito.end(); it1++)
+				{
+					if((*(*it1)).tipo == SOLDADO)
+					(*(*it1)).qtdMovimentos = 5; 
+
+					else if((*(*it1)).tipo == NAVIO)
+					(*(*it1)).qtdMovimentos = 3; 
+				}
 				nacaoSelecionada = nacao2;
 			}
 
