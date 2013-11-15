@@ -9,6 +9,8 @@
 #define SOLDADO 2
 #define CANHAO 3
 
+int height = 0;
+int width = 0;
 
 Nacao* nacao1 = new Nacao(400,400,400,400,"Estados Unidos");
 Nacao* nacao2 = new Nacao(400,400,400,400, "Siria");
@@ -674,24 +676,24 @@ int atualizarEstados()
 		{
 			case 2:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
+					(*drawObj).apply_surface( height + 200,  width + 100, logoEmpresa, screen,0);
 					SDL_Delay(2000);
 					break;
 
 			case 3:
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 200, 0, logoRecursos, screen,0);
+					(*drawObj).apply_surface( height + 200,width, logoRecursos, screen,0);
 					SDL_Delay(2000);			
 					break;
 			case 4:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-					(*drawObj).apply_surface( 0, 0, classificacaoIndicativa, screen,0);
+					(*drawObj).apply_surface( height, width, classificacaoIndicativa, screen,0);
 					SDL_Delay(2000);
 					break;
 					
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-					(*drawObj).apply_surface( 0, 0, menu, screen,0);
+					(*drawObj).apply_surface( height,width, menu, screen,0);
 					SDL_Delay(2000);				//trabalhando com esse para esta entrega
 					break;
 
@@ -724,17 +726,17 @@ int do_drawing()
 		{
 			case 1:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-					(*drawObj).apply_surface( 200, 100, logoEmpresa, screen,0);
+					(*drawObj).apply_surface( height, width, logoEmpresa, screen,0);
 					break;
 
 			case 2:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
-					(*drawObj).apply_surface( 50, 0, logoRecursos, screen,0);
+					(*drawObj).apply_surface( height + 50, width , logoRecursos, screen,0);
 					break;
 			
 			case 3:
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 0, 0, classificacaoIndicativa, screen,0);
+					(*drawObj).apply_surface( height , width, classificacaoIndicativa, screen,0);
 					break;
 
 			case 4:
@@ -747,8 +749,9 @@ int do_drawing()
 
 	//Menu Principal!!
 	if(scenarioAtual==MENU_INICIAL){
+
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 0, 0, menu, screen,0);
+					(*drawObj).apply_surface( height, width, menu, screen,0);
 					
 
 					SDL_Color textColor = {0, 0, 0, 0};
@@ -764,11 +767,11 @@ int do_drawing()
 					opcaoSair = TTF_RenderUTF8_Solid( fontMenu, sair,textColor );
 					opcaoCreditos = TTF_RenderUTF8_Solid( fontMenu, creditos,textColor );
 
-					(*drawObj).apply_surface( 400, 330, opcaoJogar, screen, 0 );
-					(*drawObj).apply_surface( 330, 440, opcaoInstrucoes, screen, 0 );
-					(*drawObj).apply_surface( 380, 550, opcaoOpcoes, screen, 0 );
-					(*drawObj).apply_surface( 400, 660, opcaoSair, screen, 0 );
-					(*drawObj).apply_surface( 350, 770, opcaoCreditos, screen, 0 );
+					(*drawObj).apply_surface( height + 400, width + 330, opcaoJogar, screen, 0 );
+					(*drawObj).apply_surface( height + 330, width + 440, opcaoInstrucoes, screen, 0 );
+					(*drawObj).apply_surface( height + 380, width + 550, opcaoOpcoes, screen, 0 );
+					(*drawObj).apply_surface( height + 400, width + 660, opcaoSair, screen, 0 );
+					(*drawObj).apply_surface( height + 350, width + 770, opcaoCreditos, screen, 0 );
 
 					
 					selecionarMenu();
@@ -791,16 +794,16 @@ int do_drawing()
 					textoCompleto = TTF_RenderUTF8_Solid( fontMenu, texto,textColor );
 					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
 
-					(*drawObj).apply_surface( 520, 290, opcaoInstrucoes, screen, 0 );
-					(*drawObj).apply_surface( 520, 390, textoCompleto, screen, 0 );
-					(*drawObj).apply_surface( 100, 630, opcaoVoltar, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  290, opcaoInstrucoes, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  390, textoCompleto, screen, 0 );
+					(*drawObj).apply_surface( height +  100, width +  630, opcaoVoltar, screen, 0 );
 					//COlocar opcao de voltarp ara o menu principal
 	}
 	//Telas Opcoes
 	if (scenarioAtual==OPCOES){
 
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 0, 0, telaOpcoes, screen,0);
+					(*drawObj).apply_surface( height, width, telaOpcoes, screen,0);
 					
 
 					//SDL_Color textColor = {0, 0, 0, 0};
@@ -815,10 +818,10 @@ int do_drawing()
 					textoSoundE = TTF_RenderUTF8_Solid( font, soundE,textColor );
 					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
 
-					(*drawObj).apply_surface( 520, 250, textoAudio, screen, 0 );
-					(*drawObj).apply_surface( 300, 350, textoSoundT, screen, 0 );
-					(*drawObj).apply_surface( 300, 450, textoSoundE, screen, 0 );
-					(*drawObj).apply_surface( 100, 750, opcaoVoltar, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  250, textoAudio, screen, 0 );
+					(*drawObj).apply_surface( height +  300, width +  350, textoSoundT, screen, 0 );
+					(*drawObj).apply_surface( height +  300, width +  450, textoSoundE, screen, 0 );
+					(*drawObj).apply_surface( height +  100, width +  750, opcaoVoltar, screen, 0 );
 					//COlocar opcao de voltarp ara o menu principal
 
 					selecionarOpcoes();
@@ -826,8 +829,9 @@ int do_drawing()
 	}
 
 	if(scenarioAtual==CREDITOS){
+
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 0, 0, telaCreditos, screen,0);
+					(*drawObj).apply_surface( height, width, telaCreditos, screen,0);
 					
 
 					SDL_Color textColor = {255, 255, 255, 255};
@@ -837,7 +841,7 @@ int do_drawing()
 					creditosCompleto = TTF_RenderUTF8_Solid( font, creditosTexto,textColor );
 					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
 
-					(*drawObj).apply_surface( 400, 330, creditosCompleto, screen, 0 );
+					(*drawObj).apply_surface( height +  400, width +  330, creditosCompleto, screen, 0 );
 
 
 					if(event.type == SDL_MOUSEBUTTONUP) 
@@ -863,8 +867,9 @@ int do_drawing()
 	//Ecolha da nacao
 	if(scenarioAtual==PREPARACAOJOGO)
 	{
+
 		SDL_FillRect(screen, NULL, 0x000000);
-		(*drawObj).apply_surface( 0, 0, escolhaNacao, screen,0);
+		(*drawObj).apply_surface( height, width, escolhaNacao, screen,0);
 
 			SDL_Color textColor = {0, 0, 0, 0};
 			sprintf(eua,"EUA");
@@ -876,9 +881,9 @@ int do_drawing()
 			timeSiria = TTF_RenderUTF8_Solid( fontMenu, siria,textColor );
 			opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
 			
-			(*drawObj).apply_surface( 310, 390, timeEua, screen, 0 );
-			(*drawObj).apply_surface( 900, 380, timeSiria, screen, 0 );
-			(*drawObj).apply_surface( 100, 630, opcaoVoltar, screen, 0 );
+			(*drawObj).apply_surface( height +  310, width +  390, timeEua, screen, 0 );
+			(*drawObj).apply_surface( height +  900, width +  380, timeSiria, screen, 0 );
+			(*drawObj).apply_surface( height +  100, width +  630, opcaoVoltar, screen, 0 );
 
 			selecionaNacao();
 	}
@@ -887,7 +892,7 @@ int do_drawing()
 	if (scenarioAtual==NIVEL){
 
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 0, 0, nivel, screen,0);
+					(*drawObj).apply_surface( height, width, nivel, screen,0);
 					
 
 					SDL_Color textColor = {0, 0, 0, 0};
@@ -906,12 +911,12 @@ int do_drawing()
 					opcaoNivel5 = TTF_RenderUTF8_Solid( fontMenu, nivel5,textColor );
 					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
 
-					(*drawObj).apply_surface( 520, 290, opcaoNivel1, screen, 0 );
-					(*drawObj).apply_surface( 520, 390, opcaoNivel2, screen, 0 );
-					(*drawObj).apply_surface( 520, 500, opcaoNivel3, screen, 0 );
-					(*drawObj).apply_surface( 520, 610, opcaoNivel4, screen, 0 );
-					(*drawObj).apply_surface( 520, 720, opcaoNivel5, screen, 0 );
-					(*drawObj).apply_surface( 80, 750, opcaoVoltar, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  290, opcaoNivel1, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  390, opcaoNivel2, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  500, opcaoNivel3, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  610, opcaoNivel4, screen, 0 );
+					(*drawObj).apply_surface( height +  520, width +  720, opcaoNivel5, screen, 0 );
+					(*drawObj).apply_surface( height +  80, width +  750, opcaoVoltar, screen, 0 );
 					
 					selecionarNivel();
 	}
@@ -920,7 +925,7 @@ int do_drawing()
 	if (scenarioAtual==LOADING){
 
 					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( 0, 0, telaLoading, screen,0);
+					(*drawObj).apply_surface( height, width, telaLoading, screen,0);
 
 					carregarLoading();
 					
@@ -932,11 +937,12 @@ int do_drawing()
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
 		//(*cenario).show();
-	
+		int height = 500;
+		int width = 0;
 
 		//desenhando mapa de bits de acordo ao modo
 		if(modo == MODO_NORMAL) {
-			(*drawObj).apply_surface( 0, 0, mapa, screen,0);
+			(*drawObj).apply_surface( height, width, mapa, screen,0);
 		}
 		else{
 			for(int i = 0; i < (*cenario).numeroTilesY; i++)
@@ -965,9 +971,9 @@ int do_drawing()
 
 		(*nacaoSelecionada).carregaScore();
 
-		(*drawObj).apply_surface( 0, 0, messageRecursos, screen, 0 );
+		(*drawObj).apply_surface( height, width, messageRecursos, screen, 0 );
 		
-		(*drawObj).apply_surface( 0, 40, messageUnidades, screen, 0 );	
+		(*drawObj).apply_surface( height, width + 40, messageUnidades, screen, 0 );	
 	}
 		
 
