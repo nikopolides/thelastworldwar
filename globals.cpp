@@ -7,7 +7,7 @@ SDL_Event event;
 SDL_Rect rect;
 
 TTF_Font *font = NULL; 
-
+TTF_Font *fontMenu = NULL;
 bool quit = false;
 int quadroEstado = 0;
 const int FRAMES_PER_SECOND = 20;

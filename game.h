@@ -30,6 +30,10 @@ extern int get_inputs();
 
 //funcao menu
 extern void selecionarMenu();
+extern void selecionaNacao();
+extern void selecionarNivel();
+extern void selecionarOpcoes();
+extern void carregarLoading();
 
 //do Logic
 extern int tratarColisoes();

@@ -1,7 +1,7 @@
 #include "globalsGame.h"
 
 int scenarioAtual = TELA_INICIAL;
-Uint32 cores[] = {0x0000FF, 0x9F6F2F, 0x00CC00, 0xFFFF00, 0xFFFFFF};		//correspondendo as cores definidas no enum
+Uint32 cores[] = {0x0000FF, 0x9F6F2F, 0x00CC00, 0xFFFF00, 0xFFFFFF, 0xFF0000, 0xC0C0C0, 0x000000};		//correspondendo as cores definidas no enum
 int modo = MODO_NORMAL;
 
 int contadorMovimentosSoldado = 5;
@@ -14,15 +14,56 @@ SDL_Surface *logoRecursos = NULL;
 SDL_Surface *menu = NULL;
 SDL_Surface *classificacaoIndicativa = NULL;
 SDL_Surface *mapa = NULL;
+SDL_Surface *escolhaNacao = NULL;
+SDL_Surface *nivel = NULL;
+SDL_Surface *telaInstrucoes = NULL;
+SDL_Surface *telaOpcoes = NULL;
+SDL_Surface *telaCreditos = NULL;
+SDL_Surface *telaLoading = NULL;
+SDL_Surface *loading = NULL;
 
 SDL_Surface *messageRecursos = NULL;
 SDL_Surface *messageUnidades = NULL;
+SDL_Surface *opcaoJogar = NULL;
+SDL_Surface *opcaoInstrucoes = NULL;
+SDL_Surface *opcaoOpcoes = NULL;
+SDL_Surface *opcaoSair = NULL;
+SDL_Surface *opcaoCreditos = NULL;
+SDL_Surface *textoCompleto = NULL;
 
+SDL_Surface *timeEua = NULL;
+SDL_Surface *timeSiria = NULL;
+SDL_Surface *opcaoVoltar = NULL;
+SDL_Surface *opcaoNivel1 = NULL;
+SDL_Surface *opcaoNivel2 = NULL;
+SDL_Surface *opcaoNivel3 = NULL;
+SDL_Surface *opcaoNivel4 = NULL;
+SDL_Surface *opcaoNivel5 = NULL;
+SDL_Surface *creditosCompleto = NULL;
+SDL_Surface *textoAudio = NULL;
+SDL_Surface *textoSoundT = NULL;
+SDL_Surface *textoSoundE = NULL;
 
 char scoreRecursosNacao1[300];
 char scoreUnidadesNacao1[300];	
-	
-
+char instrucoes[20];
+char jogar[20];
+char opcoes[20];
+char sair[20];
+char creditos[20];
+char eua[20];
+char siria[20];
+char voltar[20];
+char nivel1[20];
+char nivel2[20];
+char nivel3[20];
+char nivel4[20];
+char nivel5[20];
+char texto[300];
+char creditosTexto[300];
+char audio[20];
+char soundT[20];
+char soundE[20];
 
 //carregando imagem das unidades
 SDL_Surface *civilizationUnits = NULL;
