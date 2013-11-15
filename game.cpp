@@ -258,11 +258,11 @@ void selecionarOpcoes(){
 //diferentes cenarios
 int initializeCenario1()
 {
-	(*nacao1).exercitoAdd(new Unidade(3,3,2,10,nacao1));
-	(*nacao1).exercitoAdd(new Unidade(5,2,1,10,nacao1));
+	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
+	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));
 	
-	(*nacao2).exercitoAdd(new Unidade(24,16,2,10,nacao2));
-	(*nacao2).exercitoAdd(new Unidade(20,18,1,10,nacao2));	
+	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
+	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
 	
 
 	const int LINHAS_MAPA = 24;
@@ -568,58 +568,39 @@ int get_inputs()
 				if( event.key.keysym.sym == SDLK_a )
 				{ 	
 			
-					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
+					if((*unidadeSelecionada).qtdMovimentos>0)
 					{
 						(*unidadeSelecionada).posX -= 1;							
-						contadorMovimentosSoldado--;					
+						(*unidadeSelecionada).qtdMovimentos--;					
 					}	
-					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
-					{
-						(*unidadeSelecionada).posX -= 1;							
-						contadorMovimentosNavio--;					
-					}							
+												
 			
 				}
 
 				if( event.key.keysym.sym == SDLK_d ) 
 				{	
-					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
+					if((*unidadeSelecionada).qtdMovimentos>0)
 					{
 						(*unidadeSelecionada).posX += 1;							
-						contadorMovimentosSoldado--;					
-					}
-					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
-					{
-						(*unidadeSelecionada).posX += 1;							
-						contadorMovimentosNavio--;					
+						(*unidadeSelecionada).qtdMovimentos--;					
 					}	
 				}				
 			
 				if( event.key.keysym.sym == SDLK_w ) 
 				{
-					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
+					if((*unidadeSelecionada).qtdMovimentos>0)
 					{
 						(*unidadeSelecionada).posY -= 1;							
-						contadorMovimentosSoldado--;					
+						(*unidadeSelecionada).qtdMovimentos--;					
 					}
-					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
-					{
-						(*unidadeSelecionada).posY -= 1;							
-						contadorMovimentosNavio--;					
-					}	
 				}
 				
 				if( event.key.keysym.sym == SDLK_s ) 
 				{
-					if((*unidadeSelecionada).tipo == SOLDADO && contadorMovimentosSoldado>0)
-					{
-						(*unidadeSelecionada).posY += 1;								
-						contadorMovimentosSoldado--;					
-					}
-					else if((*unidadeSelecionada).tipo == NAVIO && contadorMovimentosNavio>0)			
+					if((*unidadeSelecionada).qtdMovimentos>0)
 					{
 						(*unidadeSelecionada).posY += 1;							
-						contadorMovimentosNavio--;					
+						(*unidadeSelecionada).qtdMovimentos--;					
 					}	
 				}
 			}
@@ -643,13 +624,13 @@ int get_inputs()
 
 			if(event.key.keysym.sym == SDLK_1)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,SOLDADO,10,nacaoSelecionada));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,SOLDADO,10,nacaoSelecionada,5));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
 			if(event.key.keysym.sym == SDLK_2)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,NAVIO,10,nacaoSelecionada));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,NAVIO,10,nacaoSelecionada,3));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 

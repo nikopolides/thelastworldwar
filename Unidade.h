@@ -17,12 +17,14 @@ class Unidade
 
 		Nacao* nacao;
 
+		int qtdMovimentos;		
+		
 		int forca;
 		bool isDead;
 
 		bool selecionado;
 
-		Unidade(int, int, int, int, Nacao*);
+		Unidade(int, int, int, int,Nacao*,int);
 		int show();
 		int attack(Unidade *); 
 };
