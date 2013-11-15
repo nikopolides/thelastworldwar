@@ -23,15 +23,27 @@ int Unidade::show()
 {
 	if(tipo == SOLDADO)
 	{
-		rect.x = 30*0;
-		rect.y = 30*0;
+		rect.x = 30*0+1;
+		rect.y = 30*0+1;
 	}
 	if (tipo == NAVIO)
 	{
 		rect.x = 30*0;
-		rect.y = 32*4+1;
+		rect.y = 32*4+3;
 	}
 	
+	if (tipo == CANHAO)
+	{
+		rect.x = 33*5;
+		rect.y = 30*1+3;
+	}
+
+	if (tipo == AVIAO)
+	{
+		rect.x = 32*8+4;
+		rect.y = 32*4+3;
+	}
+
 	if(modo != MODO_NORMAL)
 	{
 		rect.x = posX*30;

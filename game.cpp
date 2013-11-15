@@ -12,8 +12,8 @@
 int height = 0;
 int width = 0;
 
-Nacao* nacao1 = new Nacao(400,400,400,400,"Estados Unidos");
-Nacao* nacao2 = new Nacao(400,400,400,400, "Siria");
+Nacao* nacao1 = new Nacao(800,800,800,800,"Estados Unidos");
+Nacao* nacao2 = new Nacao(800,800,800,800, "Siria");
 Nacao* nacaoSelecionada = nacao1;
 
 Unidade* unidadeSelecionada = NULL;
@@ -61,15 +61,13 @@ void selecionarMenu(){
 	if(event.type == SDL_MOUSEBUTTONUP) 
 	{
 			
-		int X = event.button.x;
-		int Y = event.button.y;
-
-		int tileX = X/30;
-		int tileY = Y/30;
+		int tileX = event.button.x;
+		int tileY = event.button.y;
 
 	
+	
 		//Abrir jogo
-		if( (tileX>=10 && tileX<=19) && (tileY>=10 && tileY<=13) ){
+		if( (tileX>= (height + 300 )&& tileX<=(height + 570)) && (tileY>=(width + 300) && tileY<= (width+390)) ){
 			
 			scenarioAtual=PREPARACAOJOGO;	
 
@@ -78,7 +76,7 @@ void selecionarMenu(){
 		//Instrucoes
 		if( (tileX>=10 && tileX<=19) && (tileY>=14 && tileY<=17) ){
 			
-			scenarioAtual=INSTRUCOES;	
+			scenarioAtual=INSTRUCOESCENA;	
 
 		}
 		//opcoes
@@ -259,10 +257,14 @@ void selecionarOpcoes(){
 int initializeCenario1()
 {
 	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
-	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));
-	
+	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
+	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
+	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
+
 	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
 	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
+	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
+	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
 	
 
 	const int LINHAS_MAPA = 24;
@@ -622,6 +624,11 @@ int get_inputs()
 					else if((*(*it1)).tipo == NAVIO)
 					(*(*it1)).qtdMovimentos = 3; 
 					
+					else if((*(*it1)).tipo == AVIAO)
+					(*(*it1)).qtdMovimentos = 10; 
+
+					else if((*(*it1)).tipo == CANHAO)
+					(*(*it1)).qtdMovimentos = 5; 	
 				}
 
 				nacaoSelecionada = nacao1;
@@ -634,8 +641,14 @@ int get_inputs()
 					if((*(*it1)).tipo == SOLDADO)
 					(*(*it1)).qtdMovimentos = 5; 
 
-					else if((*(*it1)).tipo == NAVIO)
+					if((*(*it1)).tipo == NAVIO)
 					(*(*it1)).qtdMovimentos = 3; 
+								
+					if((*(*it1)).tipo == AVIAO)
+					(*(*it1)).qtdMovimentos = 10; 
+
+					if((*(*it1)).tipo == CANHAO)
+					(*(*it1)).qtdMovimentos = 5;
 				}
 				nacaoSelecionada = nacao2;
 			}
@@ -652,20 +665,18 @@ int get_inputs()
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
-			/*
-
 			if(event.key.keysym.sym == SDLK_3)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,CANHAO,10,nacaoSelecionada));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,CANHAO,10,nacaoSelecionada,5));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
 			if(event.key.keysym.sym == SDLK_4)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada,10));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
-			*/
+			
 		}
 		
 
@@ -728,8 +739,7 @@ int atualizarEstados()
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 					(*drawObj).apply_surface( height,width, menu, screen,0);
-					musica = MENU;
-					playMusic();
+					
 					              
 
 					SDL_Delay(2000);				//trabalhando com esse para esta entrega
@@ -752,7 +762,6 @@ int do_logic()
 }
 
 int playMusic(){
-	Mix_HaltMusic();	
 	musicaAtual = NULL;
 	 if(musica == MENU){
 	 	musicaAtual = music;
@@ -849,15 +858,16 @@ int do_drawing()
 					(*drawObj).apply_surface( height + 400, width + 660, opcaoSair, screen, 0 );
 					(*drawObj).apply_surface( height + 350, width + 770, opcaoCreditos, screen, 0 );
 
+					musica = MENU;
+					playMusic();
 					
 					selecionarMenu();
-					
-					
-					break;
+
 		}
-	}
+
+	
   //Telas Instrucoes
-	if (scenarioAtual==INSTRUCOES){
+	if (scenarioAtual==INSTRUCOESCENA){
 
 					SDL_FillRect(screen, NULL, 0x000000);
 					(*drawObj).apply_surface( 0, 0, telaInstrucoes, screen,0);

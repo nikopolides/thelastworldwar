@@ -12,9 +12,9 @@ enum {
 	INICIO,	
 	PREPARACAOJOGO,
 	NIVEL,
-	INSTRUCOES,
+	INSTRUCOESCENA,
 	OPCOES,
-	CREDITOS,
+	CREDITOSCENA,
 	LOADING			//trabalhar nesta para fazer a proxima entrega
 };
 
