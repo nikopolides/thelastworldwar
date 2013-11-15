@@ -73,6 +73,19 @@ void selecionarMenu(){
 		if( (tileX>=10 && tileX<=19) && (tileY>=25 && tileY<=27) ){
 			
 			scenarioAtual=CREDITOS;	
+//diferentes cenarios
+int initializeCenario1()
+{
+	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
+	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
+	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
+	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
+
+	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
+	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
+	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
+	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
+	
 
 		}
 
