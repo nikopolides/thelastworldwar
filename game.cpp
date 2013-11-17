@@ -256,6 +256,8 @@ void selecionarOpcoes(){
 //diferentes cenarios
 int initializeCenario1()
 {
+	
+
 	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
 	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
 	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
@@ -370,7 +372,7 @@ int initialize()
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
 
 	music = Mix_LoadMUS( "soundtrack/musica1.ogg" );
-	musicGame = Mix_LoadMUS( "soundtrack/musica2.ogg");
+	//musicGame = Mix_LoadMUS( "soundtrack/musica2.ogg");
 
     //If there was an error in setting up the screen
     if( screen == NULL )
@@ -435,7 +437,7 @@ int finalize()
     SDL_FreeSurface( loading );
 	
 		Mix_FreeMusic( music );
-		Mix_FreeMusic( musicGame );
+		//Mix_FreeMusic( musicGame );
 		Mix_FreeMusic( musicaAtual );
 
     SDL_FreeSurface( messageRecursos );	
@@ -747,8 +749,6 @@ int atualizarEstados()
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 					(*drawObj).apply_surface( height,width, menu, screen,0);
-					musica = MENU;
-					playMusic();
 					SDL_Delay(2000);				//trabalhando com esse para esta entrega
 					break;
 
@@ -773,12 +773,15 @@ int playMusic(){
 	 if(musica == MENU){
 	 	musicaAtual = music;
 
-	 }else{
+	 }
+	/*
+	else{
 	 	if(musica == JOGO){
 	 		musicaAtual = musicGame;
 	 	}
 
 	 }
+	*/
 
 	if( Mix_PlayingMusic() == 0 )
 	{ 
@@ -813,7 +816,8 @@ int do_drawing()
 	//scenarioAtual=INICIO;
 	//Telas de apresentacao
 	if(scenarioAtual==TELA_INICIAL)
-	{
+	{	
+
 		switch(quadroEstado)			//switch para diferenciar parte da animacao por quadro
 		{
 			case 1:
@@ -832,8 +836,14 @@ int do_drawing()
 					break;
 
 			case 4:
-			default:
+			default:			
+					Mix_HaltMusic();
+					musica = MENU;
+					std::thread first (playMusic);
+					first.join();
+		
 					scenarioAtual = MENU_INICIAL;
+					
 					break;
 		}
 	}
@@ -841,6 +851,8 @@ int do_drawing()
 
 	//Menu Principal!!
 	if(scenarioAtual==MENU_INICIAL){
+					
+		
 
 					SDL_FillRect(screen, NULL, 0x000000);
 					(*drawObj).apply_surface( height, width, menu, screen,0);
@@ -865,9 +877,8 @@ int do_drawing()
 					(*drawObj).apply_surface( height + 400, width + 660, opcaoSair, screen, 0 );
 					(*drawObj).apply_surface( height + 350, width + 770, opcaoCreditos, screen, 0 );
 
-					musica = MENU;
-					playMusic();
 					
+				
 					selecionarMenu();
 
 		}
@@ -1038,9 +1049,7 @@ int do_drawing()
 		//desenhando mapa de bits de acordo ao modo
 		if(modo == MODO_NORMAL) {
 			(*drawObj).apply_surface( height, width, mapa, screen,0);
-
-					musica = JOGO;
-					playMusic();
+					
 		}
 		else{
 			for(int i = 0; i < (*cenario).numeroTilesY; i++)

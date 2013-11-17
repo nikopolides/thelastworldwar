@@ -3,6 +3,7 @@
 
 #include "SDL/SDL.h"
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 

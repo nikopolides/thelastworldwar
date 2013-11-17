@@ -76,7 +76,7 @@ void Draw::putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 void Draw::drawLine(SDL_Surface *surface, float x1, float y1, float x2, float y2, Uint32 pixel )
 {
     // Bresenham's line algorithm
-    const bool steep = (abs(y2 - y1) > abs(x2 - x1));
+    const bool steep = (fabs(y2 - y1) > fabs(x2 - x1));
     if(steep)
     {
         std::swap(x1, y1);
@@ -90,7 +90,7 @@ void Draw::drawLine(SDL_Surface *surface, float x1, float y1, float x2, float y2
     }
 
     const float dx = x2 - x1;
-    const float dy = abs(y2 - y1);
+    const float dy = fabs(y2 - y1);
 
     float error = dx / 2.0f;
     const int ystep = (y1 < y2) ? 1 : -1;
