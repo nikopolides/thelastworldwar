@@ -19,33 +19,9 @@ Nacao* nacaoSelecionada = nacao1;
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;
 
-void carregarLoading(){
-					int i = 0;
-					int x = 300;
-					int y = 432;
-				//SUBSTITUIR POR Thread para carregar imagem do Loading:
-					for(i=0; i<13 ; i++)
-					{
-						(*drawObj).apply_surface( x, y, loading, screen,0);
 
-						x+= 30;
-						if(i==13){
-							scenarioAtual=INICIO;
-						}
-						
-						if( event.type == SDL_KEYDOWN )
-								{
-									if(event.key.keysym.sym == SDLK_3)
-										{
-										scenarioAtual=INICIO;
-										}
-								}
-					}
-}
 
 Mix_Music *music = NULL;
-Mix_Music *musicGame = NULL;
-Mix_Music *musicaAtual = NULL;
 
 int sound()
 {
@@ -253,87 +229,6 @@ void selecionarOpcoes(){
 
 		}
 }
-//diferentes cenarios
-int initializeCenario1()
-{
-	
-
-	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
-	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
-	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
-	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
-
-	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
-	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
-	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
-	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
-	
-
-	const int LINHAS_MAPA = 24;
-	const int COLUNAS_MAPA = 33;
-
-	int **mapaMundi = (int**)calloc(LINHAS_MAPA*COLUNAS_MAPA, sizeof(int*));
-	for(int i = 0; i<LINHAS_MAPA; i++)
-	{
-		mapaMundi[i] = (int*)calloc(COLUNAS_MAPA, sizeof(int));
-	}
-
-	//criando a variavel auxiliar apenas para aproveitar esta forma de declaracao de array com chaves, carregar de arquivo depois
-	int auxMapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
-			 {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 4, 4, 4, 4, 4, 4, 4, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 4, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
-				{0, 0, 4, 1, 1, 3, 1, 2, 4, 0, 5, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0},
-				{0, 0, 4, 1, 1, 3, 1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0},
-				{0, 0, 4, 1, 6, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0},
-				{0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 5, 4, 3, 4, 0, 4, 4, 4, 4, 4, 4, 2, 1, 1, 3, 1, 4, 5, 0},
-				{0, 0, 0, 0, 4, 1, 4, 5, 0, 0, 0, 0, 0, 0, 0, 4, 2, 4, 0, 0, 0, 0, 0, 0, 4, 1, 1, 2, 3, 1, 4, 0, 0},
-				{0, 0, 0, 0, 0, 4, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4, 1, 4, 4, 1, 1, 1, 4, 0, 0},
-				{0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 4, 1, 2, 1, 4, 0, 0},
-				{0, 0, 0, 0, 0, 4, 1, 1, 2, 6, 1, 1, 4, 0, 0, 0, 4, 4, 4, 4, 4, 4, 1, 4, 0, 0, 4, 1, 6, 4, 0, 0, 0},
-				{0, 0, 0, 5, 0, 4, 1, 1, 2, 2, 1, 1, 4, 0, 0, 0, 4, 6, 3, 1, 1, 1, 4, 0, 0, 0, 4, 1, 4, 0, 4, 0, 0},
-				{0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 4, 4, 4, 3, 6, 4, 0, 0, 5, 0, 4, 0, 4, 6, 4, 0},
-				{0, 0, 0, 0, 0, 4, 6, 1, 3, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 2, 2, 4, 0, 0, 0, 0, 0, 0, 4, 3, 4, 5},
-				{0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0},
-				{0, 0, 0, 0, 5, 0, 4, 1, 1, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 5, 0, 4, 1, 2, 6, 4, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 4, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 1, 1, 1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-	
-	for(int i = 0; i<LINHAS_MAPA; i++)
-	{
-		for(int j = 0; j<COLUNAS_MAPA; j++)
-		{
-			mapaMundi[i][j] = auxMapaMundi[i][j];
-		}
-	}
-
-	//criando o objeto e enviando o array com as posicoes deste cenario MAPA MUNDI
-	cenario = new Cenario(COLUNAS_MAPA, LINHAS_MAPA);
-	(*cenario).initialize(mapaMundi);
-
-	//desalocando
-	for(int i = 0; i<LINHAS_MAPA; i++)
-	{ 	
-		free(mapaMundi[i]);
-	}
-	free(mapaMundi);
-
-	return 1;
-}
-
-int finalizeCenario1()
-{
-	(*cenario).finalize();
-	delete(cenario);
-
-	return 1;
-}
 
 
 
@@ -370,9 +265,6 @@ int initialize()
 
     //Set up the screen
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
-
-	music = Mix_LoadMUS( "soundtrack/musica1.ogg" );
-	//musicGame = Mix_LoadMUS( "soundtrack/musica2.ogg");
 
     //If there was an error in setting up the screen
     if( screen == NULL )
@@ -437,8 +329,6 @@ int finalize()
     SDL_FreeSurface( loading );
 	
 		Mix_FreeMusic( music );
-		//Mix_FreeMusic( musicGame );
-		Mix_FreeMusic( musicaAtual );
 
     SDL_FreeSurface( messageRecursos );	
     SDL_FreeSurface( messageUnidades );	
@@ -769,24 +659,14 @@ int do_logic()
 }
 
 int playMusic(){
-	musicaAtual = NULL;
-	 if(musica == MENU){
-	 	musicaAtual = music;
-
-	 }
-	/*
-	else{
-	 	if(musica == JOGO){
-	 		musicaAtual = musicGame;
-	 	}
-
-	 }
-	*/
+	
+	music = Mix_LoadMUS( "soundtrack/musica2.ogg" );
+	
 
 	if( Mix_PlayingMusic() == 0 )
 	{ 
 		//Play the music
-		if( Mix_PlayMusic( musicaAtual, -1 ) == -1 )
+		if( Mix_PlayMusic( music, -1 ) == -1 )
 		{
 			return 1;
 		}
@@ -809,6 +689,42 @@ int playMusic(){
 	}     
 		 	return 1; 
 }
+
+int playMusicGame(){
+	
+	Mix_HaltMusic();
+
+	
+		music = Mix_LoadMUS( "soundtrack/musica3.ogg" );
+	
+
+	if( Mix_PlayingMusic() == 0 )
+	{ 
+		//Play the music
+		if( Mix_PlayMusic( music, -1 ) == -1 )
+		{
+			return 1;
+		}
+	}
+	//If music is being played
+	else
+	{
+		//If the music is paused
+		if( Mix_PausedMusic() == 1 )
+		{
+		//Resume the music
+			Mix_ResumeMusic();
+		}
+		//If the music is playing
+		else
+		{
+			//Pause the music
+			Mix_PauseMusic();
+		}
+	}     
+		 	return 1; 
+}
+
 
 int do_drawing()
 {
@@ -837,11 +753,6 @@ int do_drawing()
 
 			case 4:
 			default:			
-					Mix_HaltMusic();
-					musica = MENU;
-					std::thread first (playMusic);
-					first.join();
-		
 					scenarioAtual = MENU_INICIAL;
 					
 					break;
@@ -1041,7 +952,6 @@ int do_drawing()
 	if(scenarioAtual==INICIO)
 	{
 
-
 		//limpando tela anterior colocando a cor branca no lugar
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
@@ -1102,6 +1012,120 @@ int do_drawing()
 
 	return 1;
 }
+
+
+//diferentes cenarios
+int initializeCenario1()
+{
+
+	std::thread first (playMusic);
+	first.join();
+
+	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
+	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
+	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
+	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
+
+	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
+	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
+	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
+	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
+	
+
+	const int LINHAS_MAPA = 24;
+	const int COLUNAS_MAPA = 33;
+
+	int **mapaMundi = (int**)calloc(LINHAS_MAPA*COLUNAS_MAPA, sizeof(int*));
+	for(int i = 0; i<LINHAS_MAPA; i++)
+	{
+		mapaMundi[i] = (int*)calloc(COLUNAS_MAPA, sizeof(int));
+	}
+
+	//criando a variavel auxiliar apenas para aproveitar esta forma de declaracao de array com chaves, carregar de arquivo depois
+	int auxMapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
+			 {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 4, 4, 4, 4, 4, 4, 4, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 4, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
+				{0, 0, 4, 1, 1, 3, 1, 2, 4, 0, 5, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0},
+				{0, 0, 4, 1, 1, 3, 1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0},
+				{0, 0, 4, 1, 6, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0},
+				{0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 5, 4, 3, 4, 0, 4, 4, 4, 4, 4, 4, 2, 1, 1, 3, 1, 4, 5, 0},
+				{0, 0, 0, 0, 4, 1, 4, 5, 0, 0, 0, 0, 0, 0, 0, 4, 2, 4, 0, 0, 0, 0, 0, 0, 4, 1, 1, 2, 3, 1, 4, 0, 0},
+				{0, 0, 0, 0, 0, 4, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4, 1, 4, 4, 1, 1, 1, 4, 0, 0},
+				{0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 4, 1, 2, 1, 4, 0, 0},
+				{0, 0, 0, 0, 0, 4, 1, 1, 2, 6, 1, 1, 4, 0, 0, 0, 4, 4, 4, 4, 4, 4, 1, 4, 0, 0, 4, 1, 6, 4, 0, 0, 0},
+				{0, 0, 0, 5, 0, 4, 1, 1, 2, 2, 1, 1, 4, 0, 0, 0, 4, 6, 3, 1, 1, 1, 4, 0, 0, 0, 4, 1, 4, 0, 4, 0, 0},
+				{0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 4, 4, 4, 3, 6, 4, 0, 0, 5, 0, 4, 0, 4, 6, 4, 0},
+				{0, 0, 0, 0, 0, 4, 6, 1, 3, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 2, 2, 4, 0, 0, 0, 0, 0, 0, 4, 3, 4, 5},
+				{0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0},
+				{0, 0, 0, 0, 5, 0, 4, 1, 1, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 5, 0, 4, 1, 2, 6, 4, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 4, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 1, 1, 1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+	
+	for(int i = 0; i<LINHAS_MAPA; i++)
+	{
+		for(int j = 0; j<COLUNAS_MAPA; j++)
+		{
+			mapaMundi[i][j] = auxMapaMundi[i][j];
+		}
+	}
+
+	//criando o objeto e enviando o array com as posicoes deste cenario MAPA MUNDI
+	cenario = new Cenario(COLUNAS_MAPA, LINHAS_MAPA);
+	(*cenario).initialize(mapaMundi);
+
+	//desalocando
+	for(int i = 0; i<LINHAS_MAPA; i++)
+	{ 	
+		free(mapaMundi[i]);
+	}
+	free(mapaMundi);
+
+	return 1;
+}
+
+void carregarLoading(){
+					int i = 0;
+					int x = 300;
+					int y = 432;
+				//SUBSTITUIR POR Thread para carregar imagem do Loading:
+					for(i=0; i<13 ; i++)
+					{
+						(*drawObj).apply_surface( x, y, loading, screen,0);
+
+						x+= 30;
+						if(i==13){
+							scenarioAtual=INICIO;
+						}
+						
+						if( event.type == SDL_KEYDOWN )
+								{
+									if(event.key.keysym.sym == SDLK_3)
+										{
+										Mix_HaltMusic();
+					std::thread second (playMusicGame);
+					second.join();
+										scenarioAtual=INICIO;
+										}
+								}
+					}
+}
+
+int finalizeCenario1()
+{
+	(*cenario).finalize();
+	delete(cenario);
+
+	return 1;
+}
+
+
 
 int sendNetworkMessages()
 {
