@@ -488,6 +488,14 @@ int finalize()
     Mix_CloseAudio();
 
 
+	 //Free the music
+    //Mix_FreeMusic( music );
+
+
+    //Quit SDL_mixer
+    Mix_CloseAudio();
+
+
     //Quit SDL
     SDL_Quit();
 
@@ -739,9 +747,8 @@ int atualizarEstados()
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 					(*drawObj).apply_surface( height,width, menu, screen,0);
-					
-					              
-
+					musica = MENU;
+					playMusic();
 					SDL_Delay(2000);				//trabalhando com esse para esta entrega
 					break;
 
@@ -1086,8 +1093,6 @@ int do_drawing()
 
 	return 1;
 }
-
-
 
 int sendNetworkMessages()
 {
