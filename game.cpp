@@ -90,7 +90,6 @@ void selecionarMenu(){
 // 	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
 // 	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
 // 	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
-	
 // }
 
 void selecionaNacao(){
