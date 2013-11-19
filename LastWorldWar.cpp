@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <ctime>
-
+ 
 using namespace std;
 
 //Funcoes que coletei/modifiquei
