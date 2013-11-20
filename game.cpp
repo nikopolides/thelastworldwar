@@ -2,6 +2,7 @@
 #include "globalsGame.h" 
 #include "Nacao.h"
 #include "Unidade.h"
+#include "Territorio.h"
 #include "SDL/SDL_ttf.h"
 
 #define AVIAO 0
@@ -13,7 +14,8 @@ int height = 0;
 int width = 0;
 
 Nacao* nacao1 = new Nacao(800,800,800,800,"Estados Unidos");
-Nacao* nacao2 = new Nacao(800,800,800,800, "Siria");
+Nacao* nacao2 = new Nacao(800,800,800,800,"Siria");
+Territorio* brasil = new Territorio();
 Nacao* nacaoSelecionada = nacao1;
 
 Unidade* unidadeSelecionada = NULL;
@@ -25,7 +27,6 @@ Mix_Music *music = NULL;
 
 int sound()
 {
-	
 
 	return 1;	
 }
@@ -296,7 +297,7 @@ int initialize()
 
     //Load the images
 	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/gamaSoft.jpg",0);
-  logoJogo = (*ImageHandlerSDLObj).load_image("images/logo.png",0);
+  	logoJogo = (*ImageHandlerSDLObj).load_image("images/logo.png",0);
 	logoRecursos = (*ImageHandlerSDLObj).load_image("images/recursosTecnologicos.png",0);
 	civilizationUnits = (*ImageHandlerSDLObj).load_image("images/unidades2.png",0);
 	classificacaoIndicativa = (*ImageHandlerSDLObj).load_image("images/classificacaoIndicativa.png",0);	
@@ -304,11 +305,11 @@ int initialize()
 	mapa = (*ImageHandlerSDLObj).load_image("images/gamasoft_mapaTeste.png",0);
 	escolhaNacao = (*ImageHandlerSDLObj).load_image("images/telaNacao.png", 0);
 	nivel = (*ImageHandlerSDLObj).load_image("images/telaNivel.png", 0);
-  telaInstrucoes = (*ImageHandlerSDLObj).load_image("images/telaInstrucoes.png", 0);
-  telaOpcoes = (*ImageHandlerSDLObj).load_image("images/telaOpcoes.png", 0);
-  telaCreditos = (*ImageHandlerSDLObj).load_image("images/telaCreditos.png", 0);
-  telaLoading = (*ImageHandlerSDLObj).load_image("images/telaLoading.png", 0);
-  loading = (*ImageHandlerSDLObj).load_image("images/loadingPiece.png", 0);
+  	telaInstrucoes = (*ImageHandlerSDLObj).load_image("images/telaInstrucoes.png", 0);
+  	telaOpcoes = (*ImageHandlerSDLObj).load_image("images/telaOpcoes.png", 0);
+  	telaCreditos = (*ImageHandlerSDLObj).load_image("images/telaCreditos.png", 0);
+  	telaLoading = (*ImageHandlerSDLObj).load_image("images/telaLoading.png", 0);
+  	loading = (*ImageHandlerSDLObj).load_image("images/loadingPiece.png", 0);
     font = TTF_OpenFont( "lazy.ttf", 28 );
     fontMenu = TTF_OpenFont( "lazy.ttf", 40);
 
@@ -340,14 +341,14 @@ int finalize()
     SDL_FreeSurface( telaLoading );
     SDL_FreeSurface( loading );
 	
-		Mix_FreeMusic( music );
+	Mix_FreeMusic( music );
 
     SDL_FreeSurface( messageRecursos );	
     SDL_FreeSurface( messageUnidades );	
-		SDL_FreeSurface( opcaoJogar );	
-		SDL_FreeSurface( opcaoInstrucoes );	
-		SDL_FreeSurface( opcaoOpcoes );	
-		SDL_FreeSurface( opcaoSair );	
+	SDL_FreeSurface( opcaoJogar );	
+	SDL_FreeSurface( opcaoInstrucoes );	
+	SDL_FreeSurface( opcaoOpcoes );	
+	SDL_FreeSurface( opcaoSair );	
     SDL_FreeSurface( opcaoCreditos );	
     SDL_FreeSurface( textoCompleto );
     SDL_FreeSurface( creditosCompleto );
@@ -356,7 +357,7 @@ int finalize()
     SDL_FreeSurface( textoSoundE );    
 
     SDL_FreeSurface( timeEua );	
-		SDL_FreeSurface( timeSiria );	
+	SDL_FreeSurface( timeSiria );	
     SDL_FreeSurface( opcaoVoltar );
 
     SDL_FreeSurface( opcaoNivel1 );
@@ -365,14 +366,6 @@ int finalize()
     SDL_FreeSurface( opcaoNivel4 );
     SDL_FreeSurface( opcaoNivel5 );
 	
-	/*
-	//delete units
-	if(unit1 != NULL)
-		delete(unit1);
-	if(unit2 != NULL)
-		delete(unit2);
-	*/
-
 	//cenario
 	finalizeCenario1();
 
@@ -387,18 +380,8 @@ int finalize()
 	 //Free the music
     //Mix_FreeMusic( music );
 
-
     //Quit SDL_mixer
     Mix_CloseAudio();
-
-
-	 //Free the music
-    //Mix_FreeMusic( music );
-
-
-    //Quit SDL_mixer
-    Mix_CloseAudio();
-
 
     //Quit SDL
     SDL_Quit();
@@ -487,8 +470,6 @@ int get_inputs()
 						(*unidadeSelecionada).posX -= 1;							
 						(*unidadeSelecionada).qtdMovimentos--;					
 					}	
-												
-			
 				}
 
 				if( event.key.keysym.sym == SDLK_d ) 
@@ -528,6 +509,7 @@ int get_inputs()
 			
 			if(event.key.keysym.sym == SDLK_8)
 			{
+				(*brasil).coletar();
 				for(list<Unidade *>::iterator it1 = (*nacao2).exercito.begin(); it1 != (*nacao2).exercito.end(); it1++)
 				{
 					if((*(*it1)).tipo == SOLDADO)
@@ -1029,6 +1011,7 @@ int do_drawing()
 //diferentes cenarios
 int initializeCenario1()
 {
+	(*brasil).conquistar(nacao1);
 
 	std::thread first (playMusic);
 	first.join();
@@ -1042,7 +1025,6 @@ int initializeCenario1()
 	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
 	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
 	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
-	
 
 	const int LINHAS_MAPA = 24;
 	const int COLUNAS_MAPA = 33;
@@ -1055,30 +1037,30 @@ int initializeCenario1()
 
 	//criando a variavel auxiliar apenas para aproveitar esta forma de declaracao de array com chaves, carregar de arquivo depois
 	int auxMapaMundi[LINHAS_MAPA][COLUNAS_MAPA] = 
-			 {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 4, 4, 4, 4, 4, 4, 4, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 4, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
-				{0, 0, 4, 1, 1, 3, 1, 2, 4, 0, 5, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0},
-				{0, 0, 4, 1, 1, 3, 1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0},
-				{0, 0, 4, 1, 6, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0},
-				{0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 5, 4, 3, 4, 0, 4, 4, 4, 4, 4, 4, 2, 1, 1, 3, 1, 4, 5, 0},
-				{0, 0, 0, 0, 4, 1, 4, 5, 0, 0, 0, 0, 0, 0, 0, 4, 2, 4, 0, 0, 0, 0, 0, 0, 4, 1, 1, 2, 3, 1, 4, 0, 0},
-				{0, 0, 0, 0, 0, 4, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4, 1, 4, 4, 1, 1, 1, 4, 0, 0},
-				{0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 4, 1, 2, 1, 4, 0, 0},
-				{0, 0, 0, 0, 0, 4, 1, 1, 2, 6, 1, 1, 4, 0, 0, 0, 4, 4, 4, 4, 4, 4, 1, 4, 0, 0, 4, 1, 6, 4, 0, 0, 0},
-				{0, 0, 0, 5, 0, 4, 1, 1, 2, 2, 1, 1, 4, 0, 0, 0, 4, 6, 3, 1, 1, 1, 4, 0, 0, 0, 4, 1, 4, 0, 4, 0, 0},
-				{0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 4, 4, 4, 3, 6, 4, 0, 0, 5, 0, 4, 0, 4, 6, 4, 0},
-				{0, 0, 0, 0, 0, 4, 6, 1, 3, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 2, 2, 4, 0, 0, 0, 0, 0, 0, 4, 3, 4, 5},
-				{0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0},
-				{0, 0, 0, 0, 5, 0, 4, 1, 1, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 5, 0, 4, 1, 2, 6, 4, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 4, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0},
+			   {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 1, 1, 1, 1, 1, 1, 1, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
+				{0, 0, 1, 1, 1, 3, 1, 2, 1, 0, 5, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+				{0, 0, 1, 1, 1, 3, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+				{0, 0, 1, 1, 6, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+				{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 1, 3, 1, 0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1, 5, 0},
+				{0, 0, 0, 0, 1, 1, 1, 5, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 3, 1, 1, 0, 0},
+				{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+				{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 2, 1, 1, 0, 0},
+				{0, 0, 0, 0, 0, 1, 1, 1, 2, 6, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 6, 1, 0, 0, 0},
+				{0, 0, 0, 5, 0, 1, 1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 1, 6, 3, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0},
+				{0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 3, 6, 1, 0, 0, 5, 0, 1, 0, 1, 6, 1, 0},
+				{0, 0, 0, 0, 0, 1, 6, 1, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1, 3, 1, 5},
+				{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+				{0, 0, 0, 0, 5, 0, 1, 1, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 5, 0, 1, 1, 2, 6, 1, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 1, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0},
 				{0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 1, 1, 1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 	
 	for(int i = 0; i<LINHAS_MAPA; i++)
 	{
@@ -1098,6 +1080,8 @@ int initializeCenario1()
 		free(mapaMundi[i]);
 	}
 	free(mapaMundi);
+
+	(*brasil).addTile((*cenario).tiles[2][2]);
 
 	return 1;
 }
