@@ -1,5 +1,6 @@
 #include "Unidade.h"
 #include "Nacao.h"
+#include "Tile.h"
 
 enum {
 	AVIAO,
@@ -8,7 +9,7 @@ enum {
 	CANHAO
 };
 
-Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int _qtdMovimentos) 
+Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int _qtdMovimentos, int _ambiente) 
 {
 	posX = _posX;
 	posY = _posY;
@@ -18,6 +19,7 @@ Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int
 	nacao = _nacao;
 	selecionado = false;
 	qtdMovimentos = _qtdMovimentos;
+	ambiente = _ambiente;
 }
 int Unidade::show()
 {
@@ -101,5 +103,17 @@ int Unidade::attack(Unidade * inimigo)
 	}
 
 	return 1;
+}
+
+bool Unidade::canMove(Tile* tileDestino)
+{
+	if((*tileDestino).tipo == 3)
+		return true;
+	if(ambiente != 0 && (*tileDestino).tipo == 1)
+		return true;
+	if(ambiente == 0 && (*tileDestino).tipo == 2)
+		return true;
+
+	return false;
 }
 

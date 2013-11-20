@@ -28,4 +28,6 @@ void Territorio::conquistar(Nacao* _nacao)
 void Territorio::addTile(Tile* tile)
 {
 	tiles.push_back(tile);
+	(*tile).territorio = this;
 }
+

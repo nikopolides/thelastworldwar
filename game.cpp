@@ -15,7 +15,8 @@ int width = 0;
 
 Nacao* nacao1 = new Nacao(800,800,800,800,"Estados Unidos");
 Nacao* nacao2 = new Nacao(800,800,800,800,"Siria");
-Territorio* brasil = new Territorio();
+Territorio* territorioEua = new Territorio();
+Territorio* territorioSiria = new Territorio();
 Nacao* nacaoSelecionada = nacao1;
 
 Unidade* unidadeSelecionada = NULL;
@@ -465,7 +466,7 @@ int get_inputs()
 				if( event.key.keysym.sym == SDLK_a )
 				{ 	
 			
-					if((*unidadeSelecionada).qtdMovimentos>0)
+					if((*unidadeSelecionada).qtdMovimentos>0 && (*unidadeSelecionada).canMove((*cenario).tiles[(*unidadeSelecionada).posX-1][(*unidadeSelecionada).posY]))
 					{
 						(*unidadeSelecionada).posX -= 1;							
 						(*unidadeSelecionada).qtdMovimentos--;					
@@ -474,7 +475,7 @@ int get_inputs()
 
 				if( event.key.keysym.sym == SDLK_d ) 
 				{	
-					if((*unidadeSelecionada).qtdMovimentos>0)
+					if((*unidadeSelecionada).qtdMovimentos>0 && (*unidadeSelecionada).canMove((*cenario).tiles[(*unidadeSelecionada).posX+1][(*unidadeSelecionada).posY]))
 					{
 						(*unidadeSelecionada).posX += 1;							
 						(*unidadeSelecionada).qtdMovimentos--;					
@@ -483,7 +484,7 @@ int get_inputs()
 			
 				if( event.key.keysym.sym == SDLK_w ) 
 				{
-					if((*unidadeSelecionada).qtdMovimentos>0)
+					if((*unidadeSelecionada).qtdMovimentos>0 && (*unidadeSelecionada).canMove((*cenario).tiles[(*unidadeSelecionada).posX][(*unidadeSelecionada).posY-1]))
 					{
 						(*unidadeSelecionada).posY -= 1;							
 						(*unidadeSelecionada).qtdMovimentos--;					
@@ -492,7 +493,7 @@ int get_inputs()
 				
 				if( event.key.keysym.sym == SDLK_s ) 
 				{
-					if((*unidadeSelecionada).qtdMovimentos>0)
+					if((*unidadeSelecionada).qtdMovimentos>0 && (*unidadeSelecionada).canMove((*cenario).tiles[(*unidadeSelecionada).posX][(*unidadeSelecionada).posY+1]))
 					{
 						(*unidadeSelecionada).posY += 1;							
 						(*unidadeSelecionada).qtdMovimentos--;					
@@ -509,7 +510,7 @@ int get_inputs()
 			
 			if(event.key.keysym.sym == SDLK_8)
 			{
-				(*brasil).coletar();
+				(*territorioEua).coletar();
 				for(list<Unidade *>::iterator it1 = (*nacao2).exercito.begin(); it1 != (*nacao2).exercito.end(); it1++)
 				{
 					if((*(*it1)).tipo == SOLDADO)
@@ -530,6 +531,7 @@ int get_inputs()
 
 			if(event.key.keysym.sym == SDLK_9)
 			{
+				(*territorioSiria).coletar();
 				for(list<Unidade *>::iterator it1 = (*nacao1).exercito.begin(); it1 != (*nacao1).exercito.end(); it1++)
 				{
 					if((*(*it1)).tipo == SOLDADO)
@@ -549,25 +551,25 @@ int get_inputs()
 
 			if(event.key.keysym.sym == SDLK_1)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,SOLDADO,10,nacaoSelecionada,5));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,SOLDADO,10,nacaoSelecionada,5,1));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
 			if(event.key.keysym.sym == SDLK_2)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,NAVIO,10,nacaoSelecionada,3));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,NAVIO,10,nacaoSelecionada,3,2));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
 			if(event.key.keysym.sym == SDLK_3)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,CANHAO,10,nacaoSelecionada,5));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,CANHAO,10,nacaoSelecionada,5,1));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 
 			if(event.key.keysym.sym == SDLK_4)
 			{
-				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada,10));
+				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada,10,3));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
 			}
 			
@@ -953,7 +955,14 @@ int do_drawing()
 		//desenhando mapa de bits de acordo ao modo
 		if(modo == MODO_NORMAL) {
 			(*drawObj).apply_surface( height, width, mapa, screen,0);
-					
+
+			/*for(int i = 0; i < (*cenario).numeroTilesY; i++)
+			{
+				for(int j = 0; j < (*cenario).numeroTilesX; j++)
+				{								
+					(*(*cenario).tiles[i][j]).show();
+				}
+			}*/
 		}
 		else{
 			for(int i = 0; i < (*cenario).numeroTilesY; i++)
@@ -1011,20 +1020,21 @@ int do_drawing()
 //diferentes cenarios
 int initializeCenario1()
 {
-	(*brasil).conquistar(nacao1);
+	(*territorioEua).conquistar(nacao1);
+	(*territorioSiria).conquistar(nacao2);
 
 	std::thread first (playMusic);
 	first.join();
 
-	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
-	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
-	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
-	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
+	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5,1));
+	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3,2));	
+	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10,3));	
+	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5,1));
 
-	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
-	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
-	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
-	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
+	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5,1));
+	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3,2));	
+	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10,3));	
+	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5,1));	
 
 	const int LINHAS_MAPA = 24;
 	const int COLUNAS_MAPA = 33;
@@ -1081,7 +1091,8 @@ int initializeCenario1()
 	}
 	free(mapaMundi);
 
-	(*brasil).addTile((*cenario).tiles[2][2]);
+	(*territorioEua).addTile((*cenario).tiles[2][2]);
+	(*territorioSiria).addTile((*cenario).tiles[20][6]);
 
 	return 1;
 }
@@ -1102,7 +1113,7 @@ void carregarLoading(){
 						
 						if( event.type == SDL_KEYDOWN )
 								{
-									if(event.key.keysym.sym == SDLK_3)
+									if(event.key.keysym.sym == SDLK_i)
 										{
 										Mix_HaltMusic();
 					std::thread second (playMusicGame);
