@@ -16,12 +16,11 @@ Nacao* nacao1 = new Nacao(800,800,800,800,"Estados Unidos");
 Nacao* nacao2 = new Nacao(800,800,800,800, "Siria");
 Nacao* nacaoSelecionada = nacao1;
 
+
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;
 
 
-
-Mix_Music *music = NULL;
 
 int sound()
 {
@@ -263,12 +262,6 @@ int initialize()
     if( TTF_Init() == -1 ) 
 	    return false;
 
-	
-	//Initialize Audio
-	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
-    {
-        return false;
-    }
 
 	//The attributes of the screen
 	const int SCREEN_WIDTH = 1980;
@@ -293,6 +286,7 @@ int initialize()
 	drawObj = new Draw();
 	randomObj = new Random();
 	timer = new Timer();
+	audioHandler = new AudioHandler();
 
     //Load the images
 	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/gamaSoft.jpg",0);
@@ -313,6 +307,8 @@ int initialize()
     fontMenu = TTF_OpenFont( "lazy.ttf", 40);
 
     TTF_SetFontStyle(fontMenu, TTF_STYLE_BOLD);
+
+	(*audioHandler).initialize();
 
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	initializeCenario1();
@@ -340,7 +336,7 @@ int finalize()
     SDL_FreeSurface( telaLoading );
     SDL_FreeSurface( loading );
 	
-		Mix_FreeMusic( music );
+	
 
     SDL_FreeSurface( messageRecursos );	
     SDL_FreeSurface( messageUnidades );	
@@ -384,20 +380,7 @@ int finalize()
 	TTF_CloseFont( font );
 	TTF_CloseFont( fontMenu);
 
-	 //Free the music
-    //Mix_FreeMusic( music );
-
-
-    //Quit SDL_mixer
-    Mix_CloseAudio();
-
-
-	 //Free the music
-    //Mix_FreeMusic( music );
-
-
-    //Quit SDL_mixer
-    Mix_CloseAudio();
+	(*audioHandler).finalize();
 
 
     //Quit SDL
@@ -435,6 +418,7 @@ void selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
 					if ((*(*it1)).isDead == false)
 					{
 						(*unidadeSelecionada).selecionado = true;	
+						(*audioHandler).playEffect();
 					}			
 				}					
 				else
@@ -442,6 +426,7 @@ void selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
 					(*unidadeSelecionada).selecionado = false;					
 					unidadeAlvo = (*it1);
 					(*unidadeSelecionada).attack(unidadeAlvo);
+					(*audioHandler).playEffect_Enemy();
 					unidadeSelecionada = 0;					
 					unidadeAlvo = 0;	
 				}
@@ -670,72 +655,6 @@ int do_logic()
 	return 1;
 }
 
-int playMusic(){
-	
-	music = Mix_LoadMUS( "soundtrack/musica2.ogg" );
-	
-
-	if( Mix_PlayingMusic() == 0 )
-	{ 
-		//Play the music
-		if( Mix_PlayMusic( music, -1 ) == -1 )
-		{
-			return 1;
-		}
-	}
-	//If music is being played
-	else
-	{
-		//If the music is paused
-		if( Mix_PausedMusic() == 1 )
-		{
-		//Resume the music
-			Mix_ResumeMusic();
-		}
-		//If the music is playing
-		else
-		{
-			//Pause the music
-			Mix_PauseMusic();
-		}
-	}     
-		 	return 1; 
-}
-
-int playMusicGame(){
-	
-	Mix_HaltMusic();
-
-	
-		music = Mix_LoadMUS( "soundtrack/musica3.ogg" );
-	
-
-	if( Mix_PlayingMusic() == 0 )
-	{ 
-		//Play the music
-		if( Mix_PlayMusic( music, -1 ) == -1 )
-		{
-			return 1;
-		}
-	}
-	//If music is being played
-	else
-	{
-		//If the music is paused
-		if( Mix_PausedMusic() == 1 )
-		{
-		//Resume the music
-			Mix_ResumeMusic();
-		}
-		//If the music is playing
-		else
-		{
-			//Pause the music
-			Mix_PauseMusic();
-		}
-	}     
-		 	return 1; 
-}
 
 
 int do_drawing()
@@ -766,6 +685,8 @@ int do_drawing()
 			case 4:
 			default:			
 					scenarioAtual = MENU_INICIAL;
+					(*audioHandler).playVoiceMenu();
+				
 					
 					break;
 		}
@@ -774,8 +695,8 @@ int do_drawing()
 
 	//Menu Principal!!
 	if(scenarioAtual==MENU_INICIAL){
-					
-		
+
+				
 
 					SDL_FillRect(screen, NULL, 0x000000);
 					(*drawObj).apply_surface( height, width, menu, screen,0);
@@ -1030,8 +951,8 @@ int do_drawing()
 int initializeCenario1()
 {
 
-	std::thread first (playMusic);
-	first.join();
+	(*audioHandler).playMusic();
+	
 
 	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
 	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
@@ -1121,8 +1042,8 @@ void carregarLoading(){
 									if(event.key.keysym.sym == SDLK_3)
 										{
 										Mix_HaltMusic();
-					std::thread second (playMusicGame);
-					second.join();
+										(*audioHandler).playMusicGame();
+					
 										scenarioAtual=INICIO;
 										}
 								}

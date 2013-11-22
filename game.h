@@ -11,6 +11,7 @@
 #include "globalsGame.h"
 #include "ImageHandlerSDL.h"
 #include "Timer.h"
+#include "AudioHandler.h"
 #include "Draw.h"
 #include <iostream>
 #include <thread>
@@ -48,6 +49,8 @@ extern int do_drawing();
 //outras funcoes (som, rede, tempo)
 extern int sound();
 extern int sendNetworkMessages();
-extern int playMusic();
+
+
+
 
 #endif

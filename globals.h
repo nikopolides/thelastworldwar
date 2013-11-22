@@ -8,6 +8,7 @@
 #include "Draw.h"
 #include "Random.h"
 #include "Timer.h"
+#include "AudioHandler.h"
 
 extern SDL_Surface *screen;
 extern SDL_Event event;
@@ -27,5 +28,6 @@ extern ImageHandlerSDL* ImageHandlerSDLObj;
 extern Draw* drawObj;
 extern Random* randomObj;
 extern Timer* timer;
+extern AudioHandler* audioHandler;
 
 #endif
