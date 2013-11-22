@@ -18,10 +18,10 @@ int AudioHandler::playMusicGame(){
 	
 	Mix_HaltMusic();
 	
-	music = Mix_LoadMUS( "soundtrack/musica3.ogg" );
+	music = Mix_LoadMUS( "soundtrack/musica4.ogg" );
 	
 	
-	Mix_VolumeMusic(1);	
+	Mix_VolumeMusic(128);	
 	//Mix_VolumeMusic(this->itens_values[this->select]);
 		 	
 	return Mix_PlayMusic(music, -1);
@@ -30,6 +30,14 @@ int AudioHandler::playMusicGame(){
 int AudioHandler:: playVoiceMenu(){
 	
 	effect = Mix_LoadWAV( "soundtrack/thelastworldwar.ogg" );
+	
+	return Mix_PlayChannel( 2,effect, 0 );
+
+}
+
+int AudioHandler:: playEscolhaNacao(){
+	
+	effect = Mix_LoadWAV( "soundtrack/escolha_nacao.ogg" );
 	
 	return Mix_PlayChannel( 2,effect, 0 );
 

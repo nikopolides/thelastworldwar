@@ -19,6 +19,7 @@ class AudioHandler{
 		 int playMusic();
 		 int playMusicGame();
 		 int playVoiceMenu();
+		 int playEscolhaNacao();
 		 int playEffect();
 		 int playEffect_Enemy();
 

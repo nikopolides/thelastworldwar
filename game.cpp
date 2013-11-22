@@ -45,7 +45,7 @@ void selecionarMenu(){
 		if( (tileX>= (height + 300 )&& tileX<=(height + 570)) && (tileY>=(width + 300) && tileY<= (width+390)) ){
 			
 			scenarioAtual=PREPARACAOJOGO;	
-
+			(*audioHandler).playEscolhaNacao();
 		}
 		
 		//Instrucoes
