@@ -9,15 +9,13 @@
 #include "Random.h"
 #include "Timer.h"
 #include "AudioHandler.h"
+#include "FontHandler.h"
 
 extern SDL_Surface *screen;
 extern SDL_Event event;
 extern SDL_Rect rect;
 
 
-//The font that's going to be used 
-extern TTF_Font *font; 
-extern TTF_Font *fontMenu;
 
 extern bool quit;
 extern int quadroEstado;
@@ -29,5 +27,6 @@ extern Draw* drawObj;
 extern Random* randomObj;
 extern Timer* timer;
 extern AudioHandler* audioHandler;
+extern FontHandler* fontHandler;
 
 #endif

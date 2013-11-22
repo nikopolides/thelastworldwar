@@ -10,6 +10,7 @@
 #include "globals.h"
 #include "globalsGame.h"
 #include "ImageHandlerSDL.h"
+#include "FontHandler.h"
 #include "Timer.h"
 #include "AudioHandler.h"
 #include "Draw.h"

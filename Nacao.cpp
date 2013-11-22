@@ -146,8 +146,9 @@ void Nacao::carregaScore()
 	sprintf(scoreRecursosNacao1,"%s -> Madeira: %d Ferro: %d Ouro: %d Petroleo: %d",nome.c_str(),madeira,ferro,ouro,petroleo);
 	
 	sprintf(scoreUnidadesNacao1,"%s -> Soldado: %d Navio: %d Canhao: %d Aviao: %d",nome.c_str(),qtdNacao[SOLDADO],qtdNacao[NAVIO],qtdNacao[CANHAO],qtdNacao[AVIAO]);
+		
 
-	messageRecursos = TTF_RenderText_Solid( font, scoreRecursosNacao1,textColor );
-	messageUnidades = TTF_RenderText_Solid( font, scoreUnidadesNacao1,textColor );
+	messageRecursos = TTF_RenderText_Solid( (*fontHandler).font, scoreRecursosNacao1,textColor );
+	messageUnidades = TTF_RenderText_Solid( (*fontHandler).font, scoreUnidadesNacao1,textColor );
 
 }

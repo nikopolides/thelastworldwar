@@ -287,6 +287,7 @@ int initialize()
 	randomObj = new Random();
 	timer = new Timer();
 	audioHandler = new AudioHandler();
+	fontHandler = new FontHandler();
 
     //Load the images
 	logoEmpresa = (*ImageHandlerSDLObj).load_image("images/gamaSoft.jpg",0);
@@ -303,12 +304,10 @@ int initialize()
   telaCreditos = (*ImageHandlerSDLObj).load_image("images/telaCreditos.png", 0);
   telaLoading = (*ImageHandlerSDLObj).load_image("images/telaLoading.png", 0);
   loading = (*ImageHandlerSDLObj).load_image("images/loadingPiece.png", 0);
-    font = TTF_OpenFont( "lazy.ttf", 28 );
-    fontMenu = TTF_OpenFont( "lazy.ttf", 40);
-
-    TTF_SetFontStyle(fontMenu, TTF_STYLE_BOLD);
+    
 
 	(*audioHandler).initialize();
+	(*fontHandler).initialize();
 
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	initializeCenario1();
@@ -377,11 +376,9 @@ int finalize()
 	delete(drawObj);
 	delete(randomObj);
 
-	TTF_CloseFont( font );
-	TTF_CloseFont( fontMenu);
 
 	(*audioHandler).finalize();
-
+	(*fontHandler).finalize();
 
     //Quit SDL
     SDL_Quit();
@@ -709,11 +706,11 @@ int do_drawing()
 					sprintf(sair,"Sair");
 					sprintf(creditos,"Créditos");
 	
-					opcaoJogar = TTF_RenderText_Solid( fontMenu, jogar,textColor );
-					opcaoInstrucoes = TTF_RenderUTF8_Solid( fontMenu, instrucoes,textColor );
-					opcaoOpcoes = TTF_RenderUTF8_Solid( fontMenu, opcoes,textColor );
-					opcaoSair = TTF_RenderUTF8_Solid( fontMenu, sair,textColor );
-					opcaoCreditos = TTF_RenderUTF8_Solid( fontMenu, creditos,textColor );
+					opcaoJogar = TTF_RenderText_Solid( (*fontHandler).fontMenu, jogar,textColor );
+					opcaoInstrucoes = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, instrucoes,textColor );
+					opcaoOpcoes = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, opcoes,textColor );
+					opcaoSair = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, sair,textColor );
+					opcaoCreditos = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, creditos,textColor );
 
 					(*drawObj).apply_surface( height + 400, width + 330, opcaoJogar, screen, 0 );
 					(*drawObj).apply_surface( height + 330, width + 440, opcaoInstrucoes, screen, 0 );
@@ -741,9 +738,9 @@ int do_drawing()
 					sprintf(texto,"Escrever o jeito de jogar, com os diferentes de níveis.");
 					sprintf(voltar,"Voltar");
 					
-					opcaoInstrucoes = TTF_RenderUTF8_Solid( fontMenu, instrucoes,textColor );
-					textoCompleto = TTF_RenderUTF8_Solid( fontMenu, texto,textColor );
-					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
+					opcaoInstrucoes = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, instrucoes,textColor );
+					textoCompleto = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, texto,textColor );
+					opcaoVoltar = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, voltar,textColor );
 
 					(*drawObj).apply_surface( height +  520, width +  290, opcaoInstrucoes, screen, 0 );
 					(*drawObj).apply_surface( height +  520, width +  390, textoCompleto, screen, 0 );
@@ -764,10 +761,10 @@ int do_drawing()
 					sprintf(soundE,"Sound Effects");
 					sprintf(voltar,"Voltar");
 
-					textoAudio = TTF_RenderUTF8_Solid( fontMenu, audio,textColor );
-					textoSoundT = TTF_RenderUTF8_Solid( font, soundT,textColor );
-					textoSoundE = TTF_RenderUTF8_Solid( font, soundE,textColor );
-					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
+					textoAudio = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, audio,textColor );
+					textoSoundT = TTF_RenderUTF8_Solid( (*fontHandler).font, soundT,textColor );
+					textoSoundE = TTF_RenderUTF8_Solid( (*fontHandler).font, soundE,textColor );
+					opcaoVoltar = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, voltar,textColor );
 
 					(*drawObj).apply_surface( height +  520, width +  250, textoAudio, screen, 0 );
 					(*drawObj).apply_surface( height +  300, width +  350, textoSoundT, screen, 0 );
@@ -789,8 +786,8 @@ int do_drawing()
 					sprintf(creditosTexto,"Programadores: Fernando Paixão, Gabriela Navarro, Matheus Tristão Artistas: Gabriela Navarro e Victor Navarro");
 					sprintf(voltar,"Voltar");
 	
-					creditosCompleto = TTF_RenderUTF8_Solid( font, creditosTexto,textColor );
-					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
+					creditosCompleto = TTF_RenderUTF8_Solid( (*fontHandler).font, creditosTexto,textColor );
+					opcaoVoltar = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, voltar,textColor );
 
 					(*drawObj).apply_surface( height +  400, width +  330, creditosCompleto, screen, 0 );
 
@@ -828,9 +825,9 @@ int do_drawing()
 			sprintf(voltar,"Voltar");
 			
 
-			timeEua = TTF_RenderText_Solid( fontMenu, eua,textColor );
-			timeSiria = TTF_RenderUTF8_Solid( fontMenu, siria,textColor );
-			opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
+			timeEua = TTF_RenderText_Solid( (*fontHandler).fontMenu, eua,textColor );
+			timeSiria = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, siria,textColor );
+			opcaoVoltar = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, voltar,textColor );
 			
 			(*drawObj).apply_surface( height +  310, width +  390, timeEua, screen, 0 );
 			(*drawObj).apply_surface( height +  900, width +  380, timeSiria, screen, 0 );
@@ -855,12 +852,12 @@ int do_drawing()
 					sprintf(nivel5,"Nível 5");
 					sprintf(voltar,"Voltar");
 	
-					opcaoNivel1 = TTF_RenderUTF8_Solid( fontMenu, nivel1,textColor );
-					opcaoNivel2 = TTF_RenderUTF8_Solid( fontMenu, nivel2,textColor );
-					opcaoNivel3 = TTF_RenderUTF8_Solid( fontMenu, nivel3,textColor );
-					opcaoNivel4 = TTF_RenderUTF8_Solid( fontMenu, nivel4,textColor );
-					opcaoNivel5 = TTF_RenderUTF8_Solid( fontMenu, nivel5,textColor );
-					opcaoVoltar = TTF_RenderUTF8_Solid( fontMenu, voltar,textColor );
+					opcaoNivel1 = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, nivel1,textColor );
+					opcaoNivel2 = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, nivel2,textColor );
+					opcaoNivel3 = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, nivel3,textColor );
+					opcaoNivel4 = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, nivel4,textColor );
+					opcaoNivel5 = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, nivel5,textColor );
+					opcaoVoltar = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, voltar,textColor );
 
 					(*drawObj).apply_surface( height +  520, width +  290, opcaoNivel1, screen, 0 );
 					(*drawObj).apply_surface( height +  520, width +  390, opcaoNivel2, screen, 0 );
