@@ -20,9 +20,7 @@ int AudioHandler::playMusicGame(){
 	
 	music = Mix_LoadMUS( "soundtrack/musica4.ogg" );
 	
-	
-	Mix_VolumeMusic(128);	
-	//Mix_VolumeMusic(this->itens_values[this->select]);
+	 Mix_VolumeMusic(5);	
 		 	
 	return Mix_PlayMusic(music, -1);
 }
@@ -30,7 +28,7 @@ int AudioHandler::playMusicGame(){
 int AudioHandler:: playVoiceMenu(){
 	
 	effect = Mix_LoadWAV( "soundtrack/thelastworldwar.ogg" );
-	
+	Mix_VolumeChunk(effect,MIX_MAX_VOLUME); 
 	return Mix_PlayChannel( 2,effect, 0 );
 
 }
@@ -47,9 +45,7 @@ int AudioHandler:: playEffect(){
 	
 	effect = Mix_LoadWAV( "sound_effects/effect_selecionar.ogg" );
 	
-	
-	Mix_VolumeMusic(128);
-
+	Mix_VolumeChunk(effect,MIX_MAX_VOLUME);
 	return Mix_PlayChannel( 2,effect, 0 );
 
 }
@@ -58,8 +54,7 @@ int AudioHandler::playEffect_Enemy(){
 	
 	effect = Mix_LoadWAV( "sound_effects/effect_selecionar_inimigo.ogg" );
 	
-	
-	Mix_VolumeMusic(128);
+	Mix_VolumeChunk(effect,MIX_MAX_VOLUME);
 
 	return Mix_PlayChannel( 2,effect, 0 );
 

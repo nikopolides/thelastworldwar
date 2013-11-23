@@ -633,7 +633,6 @@ int atualizarEstados()
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 					(*drawObj).apply_surface( height,width, menu, screen,0);
-					SDL_Delay(2000);				//trabalhando com esse para esta entrega
 					break;
 
 
