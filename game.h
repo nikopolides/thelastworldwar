@@ -46,5 +46,6 @@ extern int do_drawing();
 //outras funcoes (som, rede, tempo)
 extern int sound();
 extern int sendNetworkMessages();
+extern bool criacaoNacao();
 
 #endif

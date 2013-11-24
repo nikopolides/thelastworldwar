@@ -62,16 +62,16 @@ using namespace std;
       } else if (msg[0] == 'D') {
         cout << "Origem enviando dados" << endl;
         //Ver tamanho da mensagem
-        if (lerTCP(clients[posicao][origem],4,msg)) {
+        if (lerTCP(clients[posicao][origem],4,msg+1)) {
           int tamDados = 0;
-          for (int i=0;i<4;i++) {
+          for (int i=1;i<5;i++) {
             tamDados = tamDados * 10 + ( msg[i] - '0' );
           }
           cout << "Tamanho da mensagem " << tamDados << endl;
-          if (lerTCP(clients[posicao][origem],tamDados,msg)) {
+          if (lerTCP(clients[posicao][origem],tamDados,msg+5)) {
             ok = true;
             // Envia para guest
-            if (!escreveTCP(clients[posicao][destino],tamDados,msg)) {
+            if (!escreveTCP(clients[posicao][destino],tamDados+5,msg)) {
               finaliza(posicao,destino,origem);
             }
           }
@@ -127,7 +127,7 @@ using namespace std;
       if(client != NULL) {  // Novo client conectou
           cout << "Conexão Iniciada!" << endl;
           //Recupera ip do client
-          if(ipClient = SDLNet_TCP_GetPeerAddress(client)){
+          if ((ipClient = SDLNet_TCP_GetPeerAddress(client))) {
             cout << "Cliente conectado: " << SDLNet_Read32(&ipClient->host) << " " << SDLNet_Read16(&ipClient->port) << endl;
             // Verifica se existe slots disponivel
             bool achou = false;
