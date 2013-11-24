@@ -92,10 +92,12 @@
       }
       cout << ")" << endl;
     #endif
+
     if(tamLido < tamanho) {
       // An error may have occured, but sometimes you can just ignore it
       // It may be good to disconnect sock because it is likely invalid now.
       cout << "Erro na leitura: " << SDLNet_GetError() << endl;
+
       #if DEBUG
         cout << "<lerTCP return (false)"<<endl;
       #endif
@@ -104,10 +106,12 @@
     #if DEBUG
       cout << "<lerTCP return (true)"<<endl;
     #endif
+
     return true;  
   }
 
   bool Network::escreveTCP(int tamanho){
+
     #if DEBUG
       cout << ">escreveTCP tamanho("<<tamanho<<")"<<endl;
       cout << " escreveTCP msg (";
@@ -159,6 +163,7 @@
 bool Network::enviaJogoInicial(int nacao, int nivel){
 
   cout << "Envia Jogo Inicial Nacao (" << nacao << ") Nivel (" << nivel << ")" << endl;
+
 
   stringstream sstm;
   sstm << "D0004P" << nacao << "N" << nivel;

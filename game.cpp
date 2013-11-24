@@ -76,10 +76,8 @@ void carregarLoading(){
 	}else {
 		recursos = 400;
 	}
-	cout << "Estados Unidos:  " << recursos << endl;
-	nacao1 = new Nacao(recursos,recursos,recursos,recursos,"Estados Unidos");
 
-	cout << "Siria  " << recursos << endl;
+	nacao1 = new Nacao(recursos,recursos,recursos,recursos,"Estados Unidos");
 	nacao2 = new Nacao(recursos,recursos,recursos,recursos,"Siria");
 
 	if((*conexaoCliente).host){
