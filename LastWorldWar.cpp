@@ -24,8 +24,11 @@ int main()
 {
 	initialize();
 
+  // int flipflop = 0;
     while( quit == false )		//main loop
     {
+        // cout << "Loop " << flipflop << endl;
+        // flipflop = !flipflop;
 		//outras funcoes (rede, tempo)
 		updateTime();
 		receiveNetworkMessages();
@@ -40,6 +43,9 @@ int main()
 		//outras funcoes (som, rede, tempo)
 		sound();
 		sendNetworkMessages();
+
+    // Da um tempo para a CPU
+    SDL_Delay(50);
     }
 
 	finalize();

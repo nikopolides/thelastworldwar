@@ -4,9 +4,18 @@
 #include <iostream>
 #include "SDL/SDL.h"
 #include "SDL/SDL_net.h"
+#include "Nacao.h"
+#include "Unidade.h"
+
 #define MAXLEN 10240
+#define MAXFILA 24
 
 using namespace std;
+
+class Nacao;
+
+class Unidade;
+
 class Network
 {
   public:
@@ -18,6 +27,12 @@ class Network
     bool host;
     char msg[MAXLEN],animacao[6];
     int loop;
+
+    int ultimoFila, primeiroFila;
+    char mensagens[MAXFILA][32];
+
+    Unidade* unidadeSelecionada;
+    Unidade* unidadeAlvo;
 
     TCPsocket conexao;
     SDLNet_SocketSet socketSet;
@@ -31,6 +46,9 @@ class Network
 
   bool enviaJogoInicial(int, int);
   bool recebeJogoInicial(int&, int&);
-
+  void pushMovimento(int, int, char);
+  bool recebeJogada(Nacao*);
+  bool enviaJogada();
+  void selecionarUnidadeNacao(Nacao, int , int );
 };
 #endif

@@ -26,4 +26,6 @@ extern Draw* drawObj;
 extern Random* randomObj;
 extern Timer* timer;
 
+extern bool meuTurno;
+
 #endif
