@@ -8,7 +8,7 @@ AudioHandler::AudioHandler(){
 
 int AudioHandler::playMusic(){
 	
-	music = Mix_LoadMUS( "soundtrack/musica2.ogg" );
+	music = Mix_LoadMUS( "soundtrack/musicaMenu.ogg" );
 	
 	return Mix_PlayMusic(music, -1);
 	 
@@ -18,7 +18,7 @@ int AudioHandler::playMusicGame(){
 	
 	Mix_HaltMusic();
 	
-	music = Mix_LoadMUS( "soundtrack/musica4.ogg" );
+	music = Mix_LoadMUS( "soundtrack/musicaJogo.ogg" );
 	
 	 Mix_VolumeMusic(5);	
 		 	
@@ -52,7 +52,7 @@ int AudioHandler:: playEffect(){
 
 int AudioHandler::playEffect_Enemy(){
 	
-	effect = Mix_LoadWAV( "sound_effects/effect_selecionar_inimigo.ogg" );
+	effect = Mix_LoadWAV( "sound_effects/ataque.ogg" );
 	
 	Mix_VolumeChunk(effect,MIX_MAX_VOLUME);
 
