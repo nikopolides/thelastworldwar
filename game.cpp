@@ -28,33 +28,7 @@ Nacao* nacaoInimigo = NULL;
 Network* conexaoCliente = new Network();
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;
-
-// void carregarLoading(){
-// 					int i = 0;
-// 					int x = 300;
-// 					int y = 432;
-// 				//SUBSTITUIR POR Thread para carregar imagem do Loading:
-// 					for(i=0; i<13 ; i++)
-// 					{
-// 						(*drawObj).apply_surface( x, y, loading, screen,0);
-
-// 						x+= 30;
-// 						if(i==13){
-// 							scenarioAtual=INICIO;
-// 						}
-						
-// 						if( event.type == SDL_KEYDOWN )
-// 								{
-// 									if(event.key.keysym.sym == SDLK_3)
-// 										{
-// 										scenarioAtual=INICIO;
-// 										}
-// 								}
-// 					}
-// }
-
-
-
+ 	
 void carregarLoading(){
 
 	int recursos = 0;
@@ -297,28 +271,28 @@ void selecionarOpcoes(){
 			if( (tileX>=15 && tileX<=24) && (tileY>=8 && tileY<=11) ){
 				//Escolheu Nivel 1... Definir como fazer essa definicao
 			
-				printf("AUmentar Sound Track\n");
+				printf("Aumentar Sound Track\n");
 			}
 				
 			//Diminuir SoundTrack
 			if( (tileX>=15 && tileX<=24) && (tileY>=12 && tileY<=14) ) {
 				//Escolheu NIvel 2... Definir como fazer essa definicao
 			
-				printf("DIminuir SoundTrACK\n");	
+				printf("Diminuir Sound Track\n");	
 		
 			}
 
 			//Aumentar Sound Effect
 			if( (tileX>=15 && tileX<=24) && (tileY>=15 && tileY<=18) ) {
 			//Escolheu NIvel 2... Definir como fazer essa definicao
-				printf("aUMENTAR SoundEFFECT\n");	
+				printf("Aumentar Sound Effect\n");	
 		
 			}
 
 			//Diminuir Sound Effect
 			if( (tileX>=15 && tileX<=24) && (tileY>=19 && tileY<=22) ) {
 			//Escolheu NIvel 3... Definir como fazer essa definicao
-					printf("DIminuir SoundEFFECT\n");	
+					printf("Diminuir Sound Effect\n");	
 		
 			}
 
@@ -375,9 +349,9 @@ int initializeCenario1()
 				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0},
 				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 3, 1, 1, 1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 	
-	for(int i = 0; i<LINHAS_MAPA; i++)
+	for(int i = 0; i < LINHAS_MAPA; i++)
 	{
-		for(int j = 0; j<COLUNAS_MAPA; j++)
+		for(int j = 0; j < COLUNAS_MAPA; j++)
 		{
 			mapaMundi[i][j] = auxMapaMundi[i][j];
 		}
@@ -474,7 +448,7 @@ int initialize()
   font = TTF_OpenFont( "lazy.ttf", 28 );
   fontMenu = TTF_OpenFont( "lazy.ttf", 40);
 
-    TTF_SetFontStyle(fontMenu, TTF_STYLE_BOLD);
+  TTF_SetFontStyle(fontMenu, TTF_STYLE_BOLD);
 
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
 	// initializeCenario1();
