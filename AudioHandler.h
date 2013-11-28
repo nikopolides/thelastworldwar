@@ -18,6 +18,8 @@ class AudioHandler{
 
 		 int playMusic();
 		 int playMusicGame();
+		 int playMusicCreditos();
+		 int playMusicOpcoes();
 		 int playVoiceMenu();
 		 int playEscolhaNacao();
 		 int playEffect();
