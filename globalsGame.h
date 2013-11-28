@@ -5,6 +5,9 @@
 #include "Cenario.h"
 #include "Unidade.h"
 
+#define LINHAS_MAPA 24
+#define COLUNAS_MAPA 33
+
 //cenarios
 enum {
 	TELA_INICIAL,
@@ -29,6 +32,26 @@ enum {
 	CINZA, //FERRO
 
 	PRETO		//unidade
+};
+
+//nomeando de acordo com as cores dos tiles do mapa-mundi
+enum {
+	OCEANO,		//oceano
+	TERRA,		//terra
+	FLORESTA,	//floresta
+	MINA_OURO,	//OURO
+	FRONTEIRA,	//fronteira agua e terra
+	PETROLEO,   //PETROLEO
+	MINA_FERRO,	//FERRO
+
+	UNIDADE		//unidade
+};
+
+//tipo de ambiente que pode se mover
+enum {
+	TERRESTRE,
+	AQUATICO,
+	QUALQUER_AMBIENTE
 };
 
 //modo de apresentacao desse mapa de bits
@@ -65,6 +88,8 @@ extern SDL_Surface *loading;
 
 extern SDL_Surface *messageRecursos;
 extern SDL_Surface *messageUnidades;
+extern SDL_Surface *messageTerritorios;
+
 extern SDL_Surface *opcaoJogar;
 extern SDL_Surface *opcaoInstrucoes;
 extern SDL_Surface *opcaoOpcoes;
@@ -84,8 +109,9 @@ extern SDL_Surface *textoAudio;
 extern SDL_Surface *textoSoundT;
 extern SDL_Surface *textoSoundE;
 
-extern char scoreRecursosNacao1[300];
-extern char scoreUnidadesNacao1[300];	
+extern char scoreRecursosNacao[300];
+extern char scoreUnidadesNacao[300];	
+extern char scoreTerritoriosNacao[300];	
 extern char instrucoes[20];
 extern char jogar[20];
 extern char opcoes[20];

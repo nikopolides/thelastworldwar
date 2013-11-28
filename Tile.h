@@ -6,16 +6,21 @@
 #include "globalsGame.h"
 #include <iostream>
 
+class Territorio;
+class Unidade;
+
 class Tile
 {
 	public:
 		int posX;
 		int posY;
 		int tipo;
-		void* ocupante;
+    Unidade* ocupante;
+    Territorio* territorio;
 
 		Tile(int _posX, int _posY, int _tipo);
 		void show();
+    void showCapital();
 };
 
 #endif

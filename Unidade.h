@@ -7,6 +7,7 @@
 #include <string>
 
 class Nacao;
+class Tile;
 
 class Unidade
 {
@@ -17,16 +18,18 @@ class Unidade
 
 		Nacao* nacao;
 
-		int qtdMovimentos;		
+		int qtdMovimentos;	
+		int ambiente;			//1 terra, 2 agua, 3 ambos	
 		
 		int forca;
 		bool isDead;
 
 		bool selecionado;
 
-		Unidade(int, int, int, int,Nacao*,int);
+		Unidade(int, int, int, int,Nacao*,int, int);
 		int show();
 		int attack(Unidade *); 
+		bool canMove(Tile* tileDestino);
 };
 
 #endif

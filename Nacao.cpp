@@ -7,7 +7,7 @@
 
 
 
-Nacao::Nacao(int _petroleo, int _madeira, int _ouro, int _ferro, string _nome)
+Nacao::Nacao(int _petroleo, int _madeira, int _ouro, int _ferro, string _nome, Uint32 _cor)
 {
 	petroleo = _petroleo;
 	madeira = _madeira;
@@ -15,6 +15,7 @@ Nacao::Nacao(int _petroleo, int _madeira, int _ouro, int _ferro, string _nome)
 	ferro = _ferro;
 
 	nome = _nome;
+	cor = _cor;
 	
 	qtdNacao[0] = 0;
 	qtdNacao[1] = 0;
@@ -143,12 +144,30 @@ void Nacao::carregaScore()
 {
 	SDL_Color textColor = {255, 255, 255, 255};
 	
-	sprintf(scoreRecursosNacao1,"%s -> Madeira: %d Ferro: %d Ouro: %d Petroleo: %d",nome.c_str(),madeira,ferro,ouro,petroleo);
+	sprintf(scoreRecursosNacao,"%s -> Madeira: %d Ferro: %d Ouro: %d Petroleo: %d",nome.c_str(),madeira,ferro,ouro,petroleo);
 	
-	sprintf(scoreUnidadesNacao1,"%s -> Soldado: %d Navio: %d Canhao: %d Aviao: %d",nome.c_str(),qtdNacao[SOLDADO],qtdNacao[NAVIO],qtdNacao[CANHAO],qtdNacao[AVIAO]);
-		
+	sprintf(scoreUnidadesNacao,"%s -> Soldado: %d Navio: %d Canhao: %d Aviao: %d",nome.c_str(),qtdNacao[SOLDADO],qtdNacao[NAVIO],qtdNacao[CANHAO],qtdNacao[AVIAO]);
+	
+	sprintf(scoreTerritoriosNacao,"Quantidade de Territorios: %d", Nacao::contarTerritorios());
 
-	messageRecursos = TTF_RenderText_Solid( (*fontHandler).font, scoreRecursosNacao1,textColor );
-	messageUnidades = TTF_RenderText_Solid( (*fontHandler).font, scoreUnidadesNacao1,textColor );
+	messageRecursos = TTF_RenderText_Solid( (*fontHandler).font, scoreRecursosNacao,textColor );
+	messageUnidades = TTF_RenderText_Solid( (*fontHandler).font, scoreUnidadesNacao,textColor );
+	messageTerritorios = TTF_RenderText_Solid( (*fontHandler).font, scoreTerritoriosNacao,textColor );
+}
 
+
+int Nacao::contarTerritorios()
+{
+	int i = 0;
+	for(list<Territorio *>::iterator it = territorios.begin(); it != territorios.end(); it++, i++);
+
+	return i;
+}
+
+void Nacao::coletar()
+{
+	for(list<Territorio *>::iterator it = territorios.begin(); it != territorios.end(); it++)
+	{
+		(*(*it)).coletar();
+	}
 }

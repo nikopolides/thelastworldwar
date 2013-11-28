@@ -1,5 +1,6 @@
 #include "Unidade.h"
 #include "Nacao.h"
+#include "Tile.h"
 
 enum {
 	AVIAO,
@@ -8,7 +9,7 @@ enum {
 	CANHAO
 };
 
-Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int _qtdMovimentos) 
+Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int _qtdMovimentos, int _ambiente) 
 {
 	posX = _posX;
 	posY = _posY;
@@ -18,6 +19,7 @@ Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int
 	nacao = _nacao;
 	selecionado = false;
 	qtdMovimentos = _qtdMovimentos;
+	ambiente = _ambiente;
 }
 int Unidade::show()
 {
@@ -102,4 +104,39 @@ int Unidade::attack(Unidade * inimigo)
 
 	return 1;
 }
+
+bool Unidade::canMove(Tile* tileDestino)
+{
+/*	cout << ambiente << " " << (*tileDestino).tipo << endl;
+	cout << ((*tileDestino).tipo != OCEANO) << endl;
+	cout << ((*tileDestino).tipo != PETROLEO) << endl;
+	cout << (ambiente == TERRESTRE) << endl;*/
+
+	if( (*tileDestino).ocupante != NULL )
+	{
+		if( nacao != (*(*tileDestino).ocupante).nacao )
+			attack( (*tileDestino).ocupante );
+
+		if( (*(*tileDestino).ocupante).isDead )
+			(*tileDestino).ocupante = NULL;
+
+		return false;
+	}
+
+	if( (*tileDestino).tipo == QUALQUER_AMBIENTE )				//qualquer ambiente AVIAO
+		return true;
+	if( ambiente == TERRESTRE )
+	{
+		if( (*tileDestino).tipo != OCEANO && (*tileDestino).tipo != PETROLEO )
+			return true;
+	}
+	if( ambiente == AQUATICO )
+	{
+		if( (*tileDestino).tipo == OCEANO || (*tileDestino).tipo == PETROLEO )
+			return true;
+	}
+
+	return false;
+}
+
 
