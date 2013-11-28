@@ -15,8 +15,6 @@ extern SDL_Surface *screen;
 extern SDL_Event event;
 extern SDL_Rect rect;
 
-
-
 extern bool quit;
 extern int quadroEstado;
 extern const int FRAMES_PER_SECOND;
@@ -28,5 +26,7 @@ extern Random* randomObj;
 extern Timer* timer;
 extern AudioHandler* audioHandler;
 extern FontHandler* fontHandler;
+
+extern bool meuTurno;
 
 #endif

@@ -12,9 +12,9 @@ enum {
 	INICIO,	
 	PREPARACAOJOGO,
 	NIVEL,
-	INSTRUCOESCENA,
+	INSTRUCOES,
 	OPCOES,
-	CREDITOSCENA,
+	CREDITOS,
 	LOADING			//trabalhar nesta para fazer a proxima entrega
 };
 
@@ -39,21 +39,11 @@ enum {
 	//MODO_CIRCULOS
 };
 
-enum {
-	MENU,
-	JOGO,
-	INSTRUCOES,
-	CREDITOS,
-	GAMEOVER
-};
-
 extern int scenarioAtual;
-
 
 extern Uint32 cores[];		//correspondendo as cores definidas no enum
 
 extern int modo;
-extern int musica;
 extern int contadorMovimentosSoldado;
 extern int contadorMovimentosNavio;
 

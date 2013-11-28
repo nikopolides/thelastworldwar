@@ -3,6 +3,7 @@
 #include "Nacao.h"
 #include "Unidade.h"
 #include "SDL/SDL_ttf.h"
+#include "Network.h"
 
 #define AVIAO 0
 #define NAVIO 1
@@ -12,23 +13,29 @@
 int height = 0;
 int width = 0;
 
-Nacao* nacao1 = new Nacao(800,800,800,800,"Estados Unidos");
-Nacao* nacao2 = new Nacao(800,800,800,800, "Siria");
-Nacao* nacaoSelecionada = nacao1;
+int nacaoHost;
+int nivelHost;
 
+// Nacao* nacao1 = new Nacao(400,400,400,400,"Estados Unidos");
+// Nacao* nacao2 = new Nacao(400,400,400,400, "Siria");
+// Nacao* nacaoSelecionada = nacao1;
 
+Nacao* nacao1 = NULL;
+Nacao* nacao2 = NULL;
+Nacao* nacaoSelecionada = NULL;
+Nacao* nacaoInimigo = NULL;
+
+Network* conexaoCliente = new Network();
 Unidade* unidadeSelecionada = NULL;
 Unidade* unidadeAlvo = NULL;
 
 
-
 int sound()
 {
-	
+
 
 	return 1;	
 }
-
 
 //Funcao Menu
 void selecionarMenu(){
@@ -36,22 +43,33 @@ void selecionarMenu(){
 	if(event.type == SDL_MOUSEBUTTONUP) 
 	{
 			
-		int tileX = event.button.x;
-		int tileY = event.button.y;
+		int X = event.button.x;
+		int Y = event.button.y;
+
+		int tileX = X/30;
+		int tileY = Y/30;
 
 	
-	
 		//Abrir jogo
-		if( (tileX>= (height + 300 )&& tileX<=(height + 570)) && (tileY>=(width + 300) && tileY<= (width+390)) ){
+		if( (tileX>=10 && tileX<=19) && (tileY>=10 && tileY<=13) ){
+			(*conexaoCliente).initializeNetwork();
+			if((*conexaoCliente).host){
+				//Colocar mensagem para aguardar conexão do próximo jogador!!!
+				cout << "Conectou como host ----> TELA PREPARACAOJOGO" << endl;
+				scenarioAtual=PREPARACAOJOGO;
+				(*audioHandler).playEscolhaNacao();	
+			}else{
+				cout << "Conectou como GUEST ----> TELA LOADING" << endl;
+				scenarioAtual=LOADING;	
+			}
 			
-			scenarioAtual=PREPARACAOJOGO;	
-			(*audioHandler).playEscolhaNacao();
+
 		}
 		
 		//Instrucoes
 		if( (tileX>=10 && tileX<=19) && (tileY>=14 && tileY<=17) ){
 			
-			scenarioAtual=INSTRUCOESCENA;	
+			scenarioAtual=INSTRUCOES;	
 
 		}
 		//opcoes
@@ -72,29 +90,17 @@ void selecionarMenu(){
 		if( (tileX>=10 && tileX<=19) && (tileY>=25 && tileY<=27) ){
 			
 			scenarioAtual=CREDITOS;	
+
 		}
 
 	}
 }
 
-// //diferentes cenarios
-// int initializeCenario1()
-// {
-// 	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
-// 	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
-// 	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
-// 	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
-
-// 	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
-// 	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
-// 	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
-// 	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
-// }
-
 void selecionaNacao(){
 
 
 if(event.type == SDL_MOUSEBUTTONUP) 
+	
 	{
 			
 		int X = event.button.x;
@@ -107,14 +113,14 @@ if(event.type == SDL_MOUSEBUTTONUP)
 		//EUA
 		if( (tileX>=6 && tileX<=15) && (tileY>=12 && tileY<=14) ){
 			//Escolheu EUA... Definir como fazer essa definicao
-		
+			nacaoHost = 0;
 			scenarioAtual=NIVEL;
 		}
 			
 		//Siria	
 		if( (tileX>=26 && tileX<=35) && (tileY>=12 && tileY<=14) ) {
 			//Escolheu sIRIA... Definir como fazer essa definicao
-		
+			nacaoHost = 1;
 			scenarioAtual=NIVEL;		
 	
 		}
@@ -128,6 +134,8 @@ if(event.type == SDL_MOUSEBUTTONUP)
 	}
 
 }
+
+
 
 void selecionarNivel(){
 
@@ -144,35 +152,38 @@ void selecionarNivel(){
 			//Nivel 1
 			if( (tileX>=15 && tileX<=24) && (tileY>=8 && tileY<=11) ){
 				//Escolheu Nivel 1... Definir como fazer essa definicao
-			
+				nivelHost = 1;
 				scenarioAtual=LOADING;
 			}
 				
 			//Nivel 2
 			if( (tileX>=15 && tileX<=24) && (tileY>=12 && tileY<=14) ) {
 				//Escolheu NIvel 2... Definir como fazer essa definicao
-			
+				nivelHost = 2;
 				scenarioAtual=LOADING;		
 		
 			}
 
 			//Nivel 3
 			if( (tileX>=15 && tileX<=24) && (tileY>=15 && tileY<=18) ) {
-			//Escolheu NIvel 2... Definir como fazer essa definicao
+			//Escolheu NIvel 3... Definir como fazer essa definicao
+				nivelHost = 3;
 				scenarioAtual=LOADING;
 		
 			}
 
 			//Nivel 4
 			if( (tileX>=15 && tileX<=24) && (tileY>=19 && tileY<=22) ) {
-			//Escolheu NIvel 3... Definir como fazer essa definicao
+			//Escolheu NIvel 4... Definir como fazer essa definicao
+				nivelHost = 4;
 				scenarioAtual=LOADING;
 		
 			}
 			
 			//Nivel 5
 			if( (tileX>=15 && tileX<=24) && (tileY>=23 && tileY<=25) ) {
-			//Escolheu NIvel 2... Definir como fazer essa definicao
+			//Escolheu NIvel 5... Definir como fazer essa definicao
+				nivelHost = 5;
 				scenarioAtual=LOADING;
 		
 			}
@@ -241,9 +252,6 @@ void selecionarOpcoes(){
 		}
 }
 
-
-
-
 //main loop functions
 int initialize()
 {
@@ -261,7 +269,6 @@ int initialize()
     //Initialize SDL_ttf 
     if( TTF_Init() == -1 ) 
 	    return false;
-
 
 	//The attributes of the screen
 	const int SCREEN_WIDTH = 1980;
@@ -304,19 +311,19 @@ int initialize()
   telaCreditos = (*ImageHandlerSDLObj).load_image("images/telaCreditos.png", 0);
   telaLoading = (*ImageHandlerSDLObj).load_image("images/telaLoading.png", 0);
   loading = (*ImageHandlerSDLObj).load_image("images/loadingPiece.png", 0);
-    
 
+	
 	(*audioHandler).initialize();
 	(*fontHandler).initialize();
 
+	(*audioHandler).playMusic();
 	//depois colocar no quadro 1 (0) da fase 1 apos a abertura no switch
-	initializeCenario1();
+	// initializeCenario1();
 
-	(*timer).start();
+	// (*timer).start();
 
 	return 1;	//sucess
 }
-
 
 int finalize()
 {
@@ -334,8 +341,6 @@ int finalize()
     SDL_FreeSurface( telaCreditos );
     SDL_FreeSurface( telaLoading );
     SDL_FreeSurface( loading );
-	
-	
 
     SDL_FreeSurface( messageRecursos );	
     SDL_FreeSurface( messageUnidades );	
@@ -376,7 +381,6 @@ int finalize()
 	delete(drawObj);
 	delete(randomObj);
 
-
 	(*audioHandler).finalize();
 	(*fontHandler).finalize();
 
@@ -385,6 +389,89 @@ int finalize()
 
 	return 1;
 }
+
+void carregarLoading(){
+
+	int recursos = 0;
+	if ((*conexaoCliente).host){
+		(*conexaoCliente).enviaJogoInicial(nacaoHost, nivelHost);
+
+	} else{
+		(*conexaoCliente).recebeJogoInicial(nacaoHost, nivelHost);
+	}
+
+	if(nivelHost == 1){
+		recursos = 3000;
+	}else if(nivelHost == 2){
+		recursos = 50;
+	}else {
+		recursos = 400;
+	}
+
+	nacao1 = new Nacao(recursos,recursos,recursos,recursos,"Estados Unidos");
+	nacao2 = new Nacao(recursos,recursos,recursos,recursos,"Siria");
+
+	if((*conexaoCliente).host){
+		if(nacaoHost == 0){
+				nacaoSelecionada = nacao1;
+				nacaoInimigo = nacao2;
+				meuTurno = true;
+		}else{
+			nacaoSelecionada = nacao2;
+			nacaoInimigo = nacao1;
+		}
+	}else{
+		if(nacaoHost == 0){
+				nacaoSelecionada = nacao2;
+				nacaoInimigo = nacao1;
+		}else{
+			nacaoSelecionada = nacao1;
+			nacaoInimigo = nacao2;
+			meuTurno = true;
+		}
+	}
+	
+	int i = 0;
+	int x = 300;
+	int y = 432;
+
+
+	SDL_FillRect(screen, NULL, 0x000000);
+	(*drawObj).apply_surface( height, width, telaLoading, screen,0);
+	
+	for(i = 0; i < 13 ; i++)
+	{
+		//SDL_Delay(400);
+		//CRIAR THREAD PARA RODAR ISSO
+		cout << "Valor de i : " << i << endl;
+		(*drawObj).apply_surface( x, y, loading, screen,0);
+
+		x+= 30;
+
+		if(i == 12){
+			
+			break;
+		}
+	}
+			initializeCenario1();
+			(*timer).start();
+			scenarioAtual=INICIO;	
+}
+
+
+int finalizeCenario1()
+{
+	(*cenario).finalize();
+	delete(cenario);
+
+	return 1;
+}
+
+
+
+
+
+
 
 //function of game main loop
 
@@ -396,8 +483,10 @@ int	updateTime()
 
 int receiveNetworkMessages()
 {
-
-	return 1;
+	if ((*conexaoCliente).recebeJogada(nacaoInimigo)) {
+			return 1;	
+	}
+	return 0;
 }
 
 void selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
@@ -414,8 +503,8 @@ void selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
 					
 					if ((*(*it1)).isDead == false)
 					{
-						(*unidadeSelecionada).selecionado = true;	
-						(*audioHandler).playEffect();
+						(*unidadeSelecionada).selecionado = true;
+						(*audioHandler).playEffect();	
 					}			
 				}					
 				else
@@ -447,68 +536,77 @@ int get_inputs()
 	
     while( SDL_PollEvent( &event ) )
     {
-		if( event.type == SDL_KEYDOWN )
-		{
-			if( event.key.keysym.sym == SDLK_ESCAPE ) 
-				quit = true;
-	
-
-			/*
-			//Remover última unidade adicionada na lista: Vai ser útil quando implementarmos o ataque corretamente
-			if(event.key.keysym.sym == SDLK_3 && unidadeSelecionada != 0)
-				(*unidadeSelecionada).isDead = true;
-			*/
-
-			if(unidadeSelecionada != 0)
+    	if( event.type == SDL_QUIT )	//If the user has Xed out the window
+    	{
+        quit = true;
+   		}
+			if( event.type == SDL_KEYDOWN )
 			{
-				if( event.key.keysym.sym == SDLK_a )
-				{ 	
-			
-					if((*unidadeSelecionada).qtdMovimentos>0)
-					{
-						(*unidadeSelecionada).posX -= 1;							
-						(*unidadeSelecionada).qtdMovimentos--;					
-					}	
-												
-			
-				}
+				if( event.key.keysym.sym == SDLK_ESCAPE ) 
+					quit = true;
+		
+				/*
+				//Remover última unidade adicionada na lista: Vai ser útil quando implementarmos o ataque corretamente
+				if(event.key.keysym.sym == SDLK_3 && unidadeSelecionada != 0)
+					(*unidadeSelecionada).isDead = true;
+				*/
 
-				if( event.key.keysym.sym == SDLK_d ) 
-				{	
-					if((*unidadeSelecionada).qtdMovimentos>0)
+				if (meuTurno) {
+
+					if(unidadeSelecionada != 0)
 					{
-						(*unidadeSelecionada).posX += 1;							
-						(*unidadeSelecionada).qtdMovimentos--;					
-					}	
-				}				
-			
-				if( event.key.keysym.sym == SDLK_w ) 
-				{
-					if((*unidadeSelecionada).qtdMovimentos>0)
-					{
-						(*unidadeSelecionada).posY -= 1;							
-						(*unidadeSelecionada).qtdMovimentos--;					
+						if( event.key.keysym.sym == SDLK_a )
+						{ 	
+					
+							if((*unidadeSelecionada).qtdMovimentos>0)
+							{
+								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'a');
+								(*unidadeSelecionada).posX -= 1;							
+								(*unidadeSelecionada).qtdMovimentos--;						
+							}								
+					
+						}
+
+						if( event.key.keysym.sym == SDLK_d ) 
+						{	
+							if((*unidadeSelecionada).qtdMovimentos>0)
+							{
+								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'d');
+								(*unidadeSelecionada).posX += 1;							
+								(*unidadeSelecionada).qtdMovimentos--;				
+							}
+								
+						}				
+					
+						if( event.key.keysym.sym == SDLK_w ) 
+						{
+							if((*unidadeSelecionada).qtdMovimentos>0)
+							{
+								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'w');
+								(*unidadeSelecionada).posY -= 1;							
+								(*unidadeSelecionada).qtdMovimentos--;					
+							}
+						}
+						
+						if( event.key.keysym.sym == SDLK_s ) 
+						{
+							if((*unidadeSelecionada).qtdMovimentos>0)
+							{
+								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'s');
+								(*unidadeSelecionada).posY += 1;								
+								(*unidadeSelecionada).qtdMovimentos--;
+							}	
+						}
 					}
-				}
-				
-				if( event.key.keysym.sym == SDLK_s ) 
-				{
-					if((*unidadeSelecionada).qtdMovimentos>0)
-					{
-						(*unidadeSelecionada).posY += 1;							
-						(*unidadeSelecionada).qtdMovimentos--;					
-					}	
-				}
-			}
 
-			//alternando modo do mapa
-			if(event.key.keysym.sym == SDLK_0)
-			{
-				modo++;
-				modo = modo % 4;		//4 modos
-			}
-			
-			if(event.key.keysym.sym == SDLK_8)
+					//alternando modo do mapa
+					if(event.key.keysym.sym == SDLK_0)
+					{
+						modo++;
+						modo = modo % 4;		//4 modos
+					}
+					
+					if(event.key.keysym.sym == SDLK_8)
 			{
 				for(list<Unidade *>::iterator it1 = (*nacao2).exercito.begin(); it1 != (*nacao2).exercito.end(); it1++)
 				{
@@ -569,32 +667,28 @@ int get_inputs()
 			{
 				(*nacaoSelecionada).exercitoAdd(new Unidade(1,1,AVIAO,10,nacaoSelecionada,10));
 				mostrandoUnidadesNacao((*nacaoSelecionada));
+			}				
+				}			
 			}
+		
+			// Eventos de mouse
+			if(event.type == SDL_MOUSEBUTTONUP && meuTurno)
+			{
+				int X = event.button.x;
+				int Y = event.button.y;
+
+				int tileX = X/30;
+				int tileY = Y/30;
+
+				//unidadeSelecionada
+				if((nacaoSelecionada == nacao1 || unidadeSelecionada != 0) && scenarioAtual==INICIO)
+				selecionarUnidadeNacao((*nacao1), tileX, tileY);
+
+				if((nacaoSelecionada == nacao2 || unidadeSelecionada != 0) && scenarioAtual==INICIO)		
+				selecionarUnidadeNacao((*nacao2), tileX, tileY);
 			
-		}
+			}
 		
-
-		if(event.type == SDL_MOUSEBUTTONUP)
-		{
-			int X = event.button.x;
-			int Y = event.button.y;
-
-			int tileX = X/30;
-			int tileY = Y/30;
-
-			//unidadeSelecionada
-			if(nacaoSelecionada == nacao1 || unidadeSelecionada != 0)
-			selecionarUnidadeNacao((*nacao1), tileX, tileY);
-
-			if(nacaoSelecionada == nacao2 || unidadeSelecionada != 0)			
-			selecionarUnidadeNacao((*nacao2), tileX, tileY);
-		
-		}
-		
-    	if( event.type == SDL_QUIT )	//If the user has Xed out the window
-    	{
-        		quit = true;
-   		}
     }
 
 	return 1;
@@ -633,6 +727,7 @@ int atualizarEstados()
 			case 6:
 					SDL_FillRect(screen, NULL, 0xFFFFFF);
 					(*drawObj).apply_surface( height,width, menu, screen,0);
+					SDL_Delay(2000);				//trabalhando com esse para esta entrega
 					break;
 
 
@@ -659,8 +754,7 @@ int do_drawing()
 	//scenarioAtual=INICIO;
 	//Telas de apresentacao
 	if(scenarioAtual==TELA_INICIAL)
-	{	
-
+	{
 		switch(quadroEstado)			//switch para diferenciar parte da animacao por quadro
 		{
 			case 1:
@@ -679,11 +773,9 @@ int do_drawing()
 					break;
 
 			case 4:
-			default:			
-					scenarioAtual = MENU_INICIAL;
+			default:
+					scenarioAtual = MENU_INICIAL;					
 					(*audioHandler).playVoiceMenu();
-				
-					
 					break;
 		}
 	}
@@ -691,8 +783,6 @@ int do_drawing()
 
 	//Menu Principal!!
 	if(scenarioAtual==MENU_INICIAL){
-
-				
 
 					SDL_FillRect(screen, NULL, 0x000000);
 					(*drawObj).apply_surface( height, width, menu, screen,0);
@@ -705,7 +795,7 @@ int do_drawing()
 					sprintf(sair,"Sair");
 					sprintf(creditos,"Créditos");
 	
-					opcaoJogar = TTF_RenderText_Solid( (*fontHandler).fontMenu, jogar,textColor );
+				opcaoJogar = TTF_RenderText_Solid( (*fontHandler).fontMenu, jogar,textColor );
 					opcaoInstrucoes = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, instrucoes,textColor );
 					opcaoOpcoes = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, opcoes,textColor );
 					opcaoSair = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, sair,textColor );
@@ -718,14 +808,11 @@ int do_drawing()
 					(*drawObj).apply_surface( height + 350, width + 770, opcaoCreditos, screen, 0 );
 
 					
-				
 					selecionarMenu();
-
-		}
-
-	
+					
+	}
   //Telas Instrucoes
-	if (scenarioAtual==INSTRUCOESCENA){
+	if (scenarioAtual==INSTRUCOES){
 
 					SDL_FillRect(screen, NULL, 0x000000);
 					(*drawObj).apply_surface( 0, 0, telaInstrucoes, screen,0);
@@ -824,7 +911,7 @@ int do_drawing()
 			sprintf(voltar,"Voltar");
 			
 
-			timeEua = TTF_RenderText_Solid( (*fontHandler).fontMenu, eua,textColor );
+					timeEua = TTF_RenderText_Solid( (*fontHandler).fontMenu, eua,textColor );
 			timeSiria = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, siria,textColor );
 			opcaoVoltar = TTF_RenderUTF8_Solid( (*fontHandler).fontMenu, voltar,textColor );
 			
@@ -871,16 +958,12 @@ int do_drawing()
 	//Telas Loading
 	if (scenarioAtual==LOADING){
 
-					SDL_FillRect(screen, NULL, 0x000000);
-					(*drawObj).apply_surface( height, width, telaLoading, screen,0);
-
-					carregarLoading();
+		carregarLoading();
 					
 	}
 	//Inicio do jogo
 	if(scenarioAtual==INICIO)
 	{
-
 		//limpando tela anterior colocando a cor branca no lugar
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
@@ -888,7 +971,6 @@ int do_drawing()
 		//desenhando mapa de bits de acordo ao modo
 		if(modo == MODO_NORMAL) {
 			(*drawObj).apply_surface( height, width, mapa, screen,0);
-					
 		}
 		else{
 			for(int i = 0; i < (*cenario).numeroTilesY; i++)
@@ -942,25 +1024,11 @@ int do_drawing()
 	return 1;
 }
 
-
 //diferentes cenarios
 int initializeCenario1()
 {
-
 	(*audioHandler).playMusic();
 	
-
-	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
-	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
-	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
-	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
-
-	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
-	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
-	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
-	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
-	
-
 	const int LINHAS_MAPA = 24;
 	const int COLUNAS_MAPA = 33;
 
@@ -1016,51 +1084,26 @@ int initializeCenario1()
 	}
 	free(mapaMundi);
 
-	return 1;
-}
+	(*nacao1).exercitoAdd(new Unidade(3,3,SOLDADO,10,nacao1,5));
+	(*nacao1).exercitoAdd(new Unidade(5,2,NAVIO,10,nacao1,3));	
+	(*nacao1).exercitoAdd(new Unidade(6,7,AVIAO,10,nacao1,10));	
+	(*nacao1).exercitoAdd(new Unidade(4,5,CANHAO,10,nacao1,5));
 
-void carregarLoading(){
-					int i = 0;
-					int x = 300;
-					int y = 432;
-				//SUBSTITUIR POR Thread para carregar imagem do Loading:
-					for(i=0; i<13 ; i++)
-					{
-						(*drawObj).apply_surface( x, y, loading, screen,0);
-
-						x+= 30;
-						if(i==13){
-							scenarioAtual=INICIO;
-						}
-						
-						if( event.type == SDL_KEYDOWN )
-								{
-									if(event.key.keysym.sym == SDLK_3)
-										{
-										Mix_HaltMusic();
-										(*audioHandler).playMusicGame();
-					
-										scenarioAtual=INICIO;
-										}
-								}
-					}
-}
-
-int finalizeCenario1()
-{
-	(*cenario).finalize();
-	delete(cenario);
+	(*nacao2).exercitoAdd(new Unidade(24,16,SOLDADO,10,nacao2,5));
+	(*nacao2).exercitoAdd(new Unidade(20,18,NAVIO,10,nacao2,3));	
+	(*nacao2).exercitoAdd(new Unidade(22,18,AVIAO,10,nacao2,10));	
+	(*nacao2).exercitoAdd(new Unidade(18,18,CANHAO,10,nacao2,5));	
 
 	return 1;
 }
-
 
 
 int sendNetworkMessages()
 {
-
-
-	return 1;	
+	if ((*conexaoCliente).enviaJogada()) {
+			return 1;	
+	}
+	return 0;
 }
 
 int do_miscAfter()
@@ -1070,6 +1113,7 @@ int do_miscAfter()
 
 	return 1;
 }
+
 
 
 

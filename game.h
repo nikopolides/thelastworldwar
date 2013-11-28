@@ -42,7 +42,7 @@ extern void carregarLoading();
 //do Logic
 extern int tratarColisoes();
 extern int atualizarEstados();
-extern int do_logic();  
+extern int do_logic();	
 
 //do drawing
 extern int do_drawing();
@@ -50,8 +50,5 @@ extern int do_drawing();
 //outras funcoes (som, rede, tempo)
 extern int sound();
 extern int sendNetworkMessages();
-
-
-
 
 #endif

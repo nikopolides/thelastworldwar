@@ -15,5 +15,7 @@ ImageHandlerSDL* ImageHandlerSDLObj = NULL;
 Draw* drawObj = NULL;
 Random* randomObj = NULL;
 Timer* timer = NULL;
+bool meuTurno = false;
+
 AudioHandler* audioHandler = NULL;
 FontHandler* fontHandler = NULL;

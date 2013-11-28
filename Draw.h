@@ -2,8 +2,8 @@
 #define DRAW_H
 
 #include "SDL/SDL.h"
-#include <iostream>
 #include <math.h>
+#include <iostream>
 
 using namespace std;
 

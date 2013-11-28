@@ -8,7 +8,7 @@ AudioHandler::AudioHandler(){
 
 int AudioHandler::playMusic(){
 	
-	music = Mix_LoadMUS( "soundtrack/musicaMenu.ogg" );
+	music = Mix_LoadMUS( "soundtrack/musica2.ogg" );
 	
 	return Mix_PlayMusic(music, -1);
 	 

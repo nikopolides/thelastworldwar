@@ -1,7 +1,7 @@
 #ifndef NACAO_H
 #define NACAO_H
-#include "Unidade.h"
-#include "FontHandler.h" 
+#include "Unidade.h" 
+#include <list> 
 #include <list> 
 
 class Nacao
