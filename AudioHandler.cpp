@@ -25,6 +25,28 @@ int AudioHandler::playMusicGame(){
 	return Mix_PlayMusic(music, -1);
 }
 
+int AudioHandler::playMusicCreditos(){
+	
+	Mix_HaltMusic();
+	
+	music = Mix_LoadMUS( "soundtrack/creditos.ogg" );
+	
+	 Mix_VolumeMusic(128);	
+		 	
+	return Mix_PlayMusic(music, -1);
+}
+
+int AudioHandler::playMusicOpcoes(){
+	
+	Mix_HaltMusic();
+	
+	music = Mix_LoadMUS( "soundtrack/opcoes.ogg" );
+	
+	 Mix_VolumeMusic(128);	
+		 	
+	return Mix_PlayMusic(music, -1);
+}
+
 int AudioHandler:: playVoiceMenu(){
 	
 	effect = Mix_LoadWAV( "soundtrack/thelastworldwar.ogg" );
@@ -32,6 +54,7 @@ int AudioHandler:: playVoiceMenu(){
 	return Mix_PlayChannel( 2,effect, 0 );
 
 }
+
 
 int AudioHandler:: playEscolhaNacao(){
 	
@@ -68,7 +91,7 @@ void AudioHandler:: initialize(){
 
 void AudioHandler:: finalize(){
 	Mix_FreeMusic( music );
-	//Mix_FreeMusic( effect );
+	Mix_FreeChunk( effect );
 
 	Mix_CloseAudio();
 	

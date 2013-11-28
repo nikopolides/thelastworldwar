@@ -75,12 +75,14 @@ void selecionarMenu(){
 		//opcoes
 		if( (tileX>=10 && tileX<=19) && (tileY>=18 && tileY<=20) ){
 			
-			scenarioAtual=OPCOES;	
+			scenarioAtual=OPCOES;
+			(*audioHandler).playMusicOpcoes();	
 
 		}
 
 		//Sair	
-		if( (tileX>=10 && tileX<=19) && (tileY>=21 && tileY<=24) ) {
+		if( (tileX>=10 && tileX<=19) && (tileY>=21 && tileY<=24) ) 
+		{			
 			quit = true;
 	
 		}
@@ -90,7 +92,7 @@ void selecionarMenu(){
 		if( (tileX>=10 && tileX<=19) && (tileY>=25 && tileY<=27) ){
 			
 			scenarioAtual=CREDITOS;	
-
+			(*audioHandler).playMusicCreditos();
 		}
 
 	}
@@ -244,7 +246,7 @@ void selecionarOpcoes(){
 			if( (tileX>=1 && tileX<=10) && (tileY>=24 && tileY<=26) ) {
 			
 				scenarioAtual=MENU_INICIAL;
-		
+				(*audioHandler).playMusic();		
 			}
 			
 			
