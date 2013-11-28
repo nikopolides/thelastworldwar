@@ -40,9 +40,9 @@ void Network::selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
 
  Network::Network(){
     //IP do servidor
-    ipServidor = (char *) "127.0.0.1";
+    //ipServidor = (char *) "127.0.0.1";
     //Enderço do Dynamic DNS para jogar online. Funciona na rede da casa da Gabriela. Atualizar o IP no site dyndns.com.br
-    //ipServidor = (char *) "thelastworldwar.game-host.org";
+    ipServidor = (char *) "thelastworldwar.game-host.org";
     porta = 9999;
     backspace = 8;
     animacao[0] = '|';
