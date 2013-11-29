@@ -2,6 +2,7 @@
 #include "Nacao.h"
 #include "Tile.h"
 
+
 enum {
 	AVIAO,
 	NAVIO,
