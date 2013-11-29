@@ -3,7 +3,8 @@
 
 
 AudioHandler::AudioHandler(){
-
+	/*music = NULL;
+   	effect = NULL;*/
 }
 
 int AudioHandler::playMusic(){

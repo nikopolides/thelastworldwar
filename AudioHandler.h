@@ -10,24 +10,22 @@ using namespace std;
 class AudioHandler{
 	
 	public:
-			
-		Mix_Music *music = NULL;
-   		Mix_Chunk *effect = NULL;
+
+		Mix_Music* music;
+		Mix_Chunk* effect;
+
+		int playMusic();
+		int playMusicGame();
+		int playMusicCreditos();
+		int playMusicOpcoes();
+		int playVoiceMenu();
+		int playEscolhaNacao();
+		int playEffect();
+		int playEffect_Enemy();
 
 		AudioHandler();
-
-		 int playMusic();
-		 int playMusicGame();
-		 int playMusicCreditos();
-		 int playMusicOpcoes();
-		 int playVoiceMenu();
-		 int playEscolhaNacao();
-		 int playEffect();
-		 int playEffect_Enemy();
-
-		 void initialize();	
-		 void finalize();	
-
+		void initialize();	
+		void finalize();	
 };
 
 
