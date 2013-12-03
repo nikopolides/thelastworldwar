@@ -16,6 +16,7 @@ extern SDL_Event event;
 extern SDL_Rect rect;
 
 extern bool quit;
+extern bool gameOver;
 extern int quadroEstado;
 extern const int FRAMES_PER_SECOND;
 extern int frame;

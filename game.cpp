@@ -44,6 +44,22 @@ int sound()
 	return 1;	
 }
 
+bool confereGameOver()
+{
+	int qtd_territorios = 0, qtd_totalTerritorios = 0;
+
+	for(list<Territorio *>::iterator it = territorios.begin(); it != territorios.end(); it++, qtd_territorios++)
+	{
+		if( (*(*it)).nacao == nacaoSelecionada )
+			qtd_totalTerritorios++;
+	}
+
+	if( qtd_territorios==qtd_totalTerritorios )		//&& nivel == 1 (nivel onde se deve conquistar todos os territorios por exemplo)
+		return true;
+
+	return false;
+}
+
 //Funcao Menu
 void selecionarMenu(){
 
@@ -354,6 +370,7 @@ int finalize()
     SDL_FreeSurface( messageRecursos );	
     SDL_FreeSurface( messageUnidades );	
     SDL_FreeSurface( messageTerritorios );
+    SDL_FreeSurface( messageGameOver );
 
 		SDL_FreeSurface( opcaoJogar );	
 		SDL_FreeSurface( opcaoInstrucoes );	
@@ -377,7 +394,8 @@ int finalize()
     SDL_FreeSurface( opcaoNivel5 );
 
 	//cenario
-	finalizeCenario1();
+	if(scenarioAtual==INICIO)
+		finalizeCenario1();
 
 	//delete other objects
 	delete(ImageHandlerSDLObj);
@@ -467,7 +485,13 @@ void carregarLoading(){
 int finalizeCenario1()
 {
 	(*cenario).finalize();
-	delete(cenario);
+		delete(cenario);
+
+	for(list<Nacao *>::iterator it = nacoes.begin(); it != nacoes.end(); it++)
+		delete(*it);
+
+	for(list<Territorio *>::iterator it = territorios.begin(); it != territorios.end(); it++)
+		delete(*it);
 
 	return 1;
 }
@@ -1030,7 +1054,6 @@ int do_drawing()
 		//limpando tela anterior colocando a cor branca no lugar
 		SDL_FillRect(screen, NULL, 0xFFFFFF);	
 
-
 		//desenhando mapa de bits de acordo ao modo
 		if(modo == MODO_NORMAL) {
 			(*drawObj).apply_surface( height, width, mapa, screen,0);
@@ -1084,6 +1107,16 @@ int do_drawing()
 		(*drawObj).apply_surface( height, width + 0*40, messageRecursos, screen, 0 );
 		(*drawObj).apply_surface( height, width + 1*40, messageUnidades, screen, 0 );	
 		(*drawObj).apply_surface( height, width + 2*40, messageTerritorios, screen, 0 );	
+
+		gameOver = confereGameOver();
+
+		if(gameOver)
+		{
+			SDL_Color textColor = {255, 255, 255, 255};
+			sprintf(scoreGameOver,"Game Over %s Ganhou! \\o/", (*nacaoSelecionada).nome.c_str());
+			messageGameOver = TTF_RenderText_Solid( (*fontHandler).font, scoreGameOver, textColor );
+			(*drawObj).apply_surface( height, width + 4*40, messageGameOver, screen, 0 );
+		}
 	}
 		
 
@@ -1092,6 +1125,13 @@ int do_drawing()
 	{
 		cout << "Nao conseguiu realizar a funcao SDL_Flip" << endl;
 	    return -1;
+	}
+
+	if(gameOver)
+	{
+		finalizeCenario1();
+		scenarioAtual = MENU_INICIAL;
+		SDL_Delay( 5000 );
 	}
 
     frame++;
@@ -1109,6 +1149,8 @@ int do_drawing()
 //diferentes cenarios
 int initializeCenario1()
 {
+	gameOver = false;
+
 	(*audioHandler).playMusic();
 
 	territorios.push_back(new Territorio());

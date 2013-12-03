@@ -7,6 +7,7 @@ SDL_Event event;
 SDL_Rect rect;
 
 bool quit = false;
+bool gameOver;
 int quadroEstado = 0;
 const int FRAMES_PER_SECOND = 20;
 int frame = 0;

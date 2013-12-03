@@ -89,6 +89,7 @@ extern SDL_Surface *loading;
 extern SDL_Surface *messageRecursos;
 extern SDL_Surface *messageUnidades;
 extern SDL_Surface *messageTerritorios;
+extern SDL_Surface *messageGameOver;
 
 extern SDL_Surface *opcaoJogar;
 extern SDL_Surface *opcaoInstrucoes;
@@ -112,6 +113,8 @@ extern SDL_Surface *textoSoundE;
 extern char scoreRecursosNacao[300];
 extern char scoreUnidadesNacao[300];	
 extern char scoreTerritoriosNacao[300];	
+extern char scoreGameOver[300];	
+
 extern char instrucoes[20];
 extern char jogar[20];
 extern char opcoes[20];
