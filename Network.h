@@ -47,8 +47,10 @@ class Network
   bool enviaJogoInicial(int, int);
   bool recebeJogoInicial(int&, int&);
   void pushMovimento(int, int, char);
-  bool recebeJogada(Nacao*);
+  bool recebeJogada(Nacao*, Nacao*);
   bool enviaJogada();
   void selecionarUnidadeNacao(Nacao, int , int );
+  void pushTurno();
+  void pushAtaque(int, int, bool, int, int, bool);
 };
 #endif

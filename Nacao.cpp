@@ -22,6 +22,7 @@ Nacao::Nacao(int _petroleo, int _madeira, int _ouro, int _ferro, string _nome, U
 	qtdNacao[2] = 0;
 	qtdNacao[3] = 0;
 
+	energia = 10;
 
 }
 
@@ -150,9 +151,12 @@ void Nacao::carregaScore()
 	
 	sprintf(scoreTerritoriosNacao,"Quantidade de Territorios: %d", Nacao::contarTerritorios());
 
+	sprintf(qtdEnergia, "Energia: %d", energia);
+
 	messageRecursos = TTF_RenderText_Solid( (*fontHandler).font, scoreRecursosNacao,textColor );
 	messageUnidades = TTF_RenderText_Solid( (*fontHandler).font, scoreUnidadesNacao,textColor );
 	messageTerritorios = TTF_RenderText_Solid( (*fontHandler).font, scoreTerritoriosNacao,textColor );
+	messageEnergia = TTF_RenderText_Solid( (*fontHandler).font, qtdEnergia,textColor );
 }
 
 

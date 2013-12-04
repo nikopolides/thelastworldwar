@@ -94,11 +94,13 @@ int Unidade::attack(Unidade * inimigo)
 
 	if(ataque > defesa)
 	{
+		cout << "ATAQUE: Inimigo morreu" << endl;
 		(* inimigo).isDead = true;		
 		(*(* inimigo).nacao).contarExercito();	
 	}
 	else
 	{
+		cout << "ATAQUE: Voce morreu" << endl;
 		isDead = true;
 		(*nacao).contarExercito();
 	}

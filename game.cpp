@@ -370,6 +370,7 @@ int finalize()
     SDL_FreeSurface( messageRecursos );	
     SDL_FreeSurface( messageUnidades );	
     SDL_FreeSurface( messageTerritorios );
+    SDL_FreeSurface( messageEnergia );
     SDL_FreeSurface( messageGameOver );
 
 		SDL_FreeSurface( opcaoJogar );	
@@ -512,37 +513,49 @@ int	updateTime()
 
 int receiveNetworkMessages()
 {
-	if ((*conexaoCliente).recebeJogada(nacaoInimigo)) {
+	if ((*conexaoCliente).recebeJogada(nacaoInimigo, nacaoSelecionada)) {
 			return 1;	
 	}
 	return 0;
 }
 
-void selecionarUnidadeNacao(Nacao* nacao, int tileX, int tileY)
+void selecionarUnidadeNacao(Nacao* nacao, Nacao* nacaoInimigo, int tileX, int tileY)
 {
+		bool selecionei = false;
 		for(list<Unidade *>::iterator it1 = (*nacao).exercito.begin(); it1 != (*nacao).exercito.end(); it1++) 
 		{
 
 			if(tileX == (*(*it1)).posX && tileY == (*(*it1)).posY)
 			{
-				if(unidadeSelecionada==0)
+				if ((*(*it1)).isDead == false)
 				{
+					if(unidadeSelecionada != NULL){
+						(*unidadeSelecionada).selecionado = false;
+					}
 					unidadeSelecionada = (*it1);
-					
+					(*unidadeSelecionada).selecionado = true;
+					(*audioHandler).playEffect();
+					selecionei = true;	
+				}
+			}
+		}
+		if (!selecionei && unidadeSelecionada != NULL && (*nacaoSelecionada).energia > 1) // Tentando atacar ?
+		{
+			for(list<Unidade *>::iterator it1 = (*nacaoInimigo).exercito.begin(); it1 != (*nacaoInimigo).exercito.end(); it1++) 
+			{
+				if(tileX == (*(*it1)).posX && tileY == (*(*it1)).posY)
+				{
 					if ((*(*it1)).isDead == false)
 					{
-						(*unidadeSelecionada).selecionado = true;
-						(*audioHandler).playEffect();	
-					}			
-				}					
-				else
-				{
-					(*unidadeSelecionada).selecionado = false;					
-					unidadeAlvo = (*it1);
-					(*unidadeSelecionada).attack(unidadeAlvo);
-					(*audioHandler).playEffect_Enemy();
-					unidadeSelecionada = 0;					
-					unidadeAlvo = 0;	
+						(*unidadeSelecionada).selecionado = false;					
+						unidadeAlvo = (*it1);
+						(*unidadeSelecionada).attack(unidadeAlvo);
+						(*nacaoSelecionada).energia -= 2;
+						(*conexaoCliente).pushAtaque((*unidadeSelecionada).posX, (*unidadeSelecionada).posY, (*unidadeSelecionada).isDead, (*unidadeAlvo).posX, (*unidadeAlvo).posY, (*unidadeAlvo).isDead );
+						(*audioHandler).playEffect_Enemy();
+						unidadeSelecionada = 0;					
+						unidadeAlvo = 0;	
+					}
 				}
 			}
 		}
@@ -561,81 +574,74 @@ void mostrandoUnidadesNacao(Nacao nacao)
 		
 int get_inputs()
 {
-	
-    while( SDL_PollEvent( &event ) )
+	while( SDL_PollEvent( &event ) )
+	{
+    if( event.type == SDL_QUIT )	//If the user has Xed out the window
     {
-    	if( event.type == SDL_QUIT )	//If the user has Xed out the window
-    	{
-        quit = true;
-   		}
-			if( event.type == SDL_KEYDOWN )
-			{
-				if( event.key.keysym.sym == SDLK_ESCAPE ) 
-					quit = true;
-		
-				/*
-				//Remover última unidade adicionada na lista: Vai ser útil quando implementarmos o ataque corretamente
-				if(event.key.keysym.sym == SDLK_3 && unidadeSelecionada != 0)
-					(*unidadeSelecionada).isDead = true;
-				*/
+			quit = true;
+   	}
+		if( event.type == SDL_KEYDOWN )
+		{
+			if( event.key.keysym.sym == SDLK_ESCAPE ) 
+				quit = true;
 
-				if (meuTurno) {
-
-			if(unidadeSelecionada != 0)
+			if (meuTurno && (*nacaoSelecionada).energia!=0)
 			{
-				//cout << (*unidadeSelecionada).canMove((*cenario).tiles[(*unidadeSelecionada).posX-1][(*unidadeSelecionada).posY]) << endl;
-				
-				if( (*unidadeSelecionada).qtdMovimentos > 0 )
+				if(unidadeSelecionada != 0)
 				{
-					int destX = (*unidadeSelecionada).posX;
-					int destY = (*unidadeSelecionada).posY;
-
-					if( event.key.keysym.sym == SDLK_a )
+					if( (*unidadeSelecionada).qtdMovimentos > 0 )
 					{
-						destX -= 1;
-						
-					}
-					if( event.key.keysym.sym == SDLK_d )
-					{
-						destX += 1;
-						
-					}
-					if( event.key.keysym.sym == SDLK_w ){
-						destY -= 1;
-						
-					}
-					if( event.key.keysym.sym == SDLK_s ){
-						destY += 1;
-						
-					}
+						int destX = (*unidadeSelecionada).posX;
+						int destY = (*unidadeSelecionada).posY;
 
-					if( ((*unidadeSelecionada).posX == destX) && ((*unidadeSelecionada).posY == destY) )	//se nao tiver escolhido nova posicao
-						break;
-					if( (destX < 0 || destX > COLUNAS_MAPA) || (destY < 0 || destY > LINHAS_MAPA) )			//limites do mapa
-						break;
+						if( event.key.keysym.sym == SDLK_a )
+						{
+							destX -= 1;
+						}
+						if( event.key.keysym.sym == SDLK_d )
+						{
+							destX += 1;
+						}
+						if( event.key.keysym.sym == SDLK_w )
+						{
+							destY -= 1;
+						}
+						if( event.key.keysym.sym == SDLK_s )
+						{
+							destY += 1;
+						}
 
-/*					cout << "Pode Mover: " << (*unidadeSelecionada).canMove((*cenario).tiles[(*unidadeSelecionada).posX][(*unidadeSelecionada).posY]) << endl;
-					cout << "From tile to tileDestino: (" << (*unidadeSelecionada).posX << "," << (*unidadeSelecionada).posY << ") to (" << destX << "," << destY << ")" << endl;
-					cout << "Tipo do tile destino:" << (*(*cenario).tiles[destX][destY]).tipo << endl;*/
+						if( ((*unidadeSelecionada).posX == destX) && ((*unidadeSelecionada).posY == destY) )	//se nao tiver escolhido nova posicao
+							break;
+						if( (destX < 0 || destX > COLUNAS_MAPA) || (destY < 0 || destY > LINHAS_MAPA) )			//limites do mapa
+							break;
 
+						/*
+						cout << "Pode Mover: " << (*unidadeSelecionada).canMove((*cenario).tiles[(*unidadeSelecionada).posX][(*unidadeSelecionada).posY]) << endl;
+						cout << "From tile to tileDestino: (" << (*unidadeSelecionada).posX << "," << (*unidadeSelecionada).posY << ") to (" << destX << "," << destY << ")" << endl;
+						cout << "Tipo do tile destino:" << (*(*cenario).tiles[destX][destY]).tipo << endl;
+						*/
 
-					if( (*unidadeSelecionada).canMove((*cenario).tiles[destX][destY]) )
-					{
+						if( (*unidadeSelecionada).canMove((*cenario).tiles[destX][destY]) )
+						{
 							(*(*cenario).tiles[(*unidadeSelecionada).posX][(*unidadeSelecionada).posY]).ocupante = NULL;
-
 
 							if( event.key.keysym.sym == SDLK_a )
 							{
+								(*nacaoSelecionada).energia--;
 								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'a');
 							}
 							if( event.key.keysym.sym == SDLK_d )
 							{
+								(*nacaoSelecionada).energia--;
 								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'d');
 							}
 							if( event.key.keysym.sym == SDLK_w ){
+								(*nacaoSelecionada).energia--;
 								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'w');
 							}
 							if( event.key.keysym.sym == SDLK_s ){
+								(*nacaoSelecionada).energia--;
 								(*conexaoCliente).pushMovimento((*unidadeSelecionada).posX,(*unidadeSelecionada).posY,'s');
 							}
 							
@@ -650,121 +656,88 @@ int get_inputs()
 								if( (*(*(*cenario).tiles[destX][destY]).territorio).tiles.front() == (*cenario).tiles[destX][destY] && (*unidadeSelecionada).nacao != (*(*(*cenario).tiles[destX][destY]).territorio).nacao )
 									(*(*(*cenario).tiles[destX][destY]).territorio).serConquistado((*unidadeSelecionada).nacao);
 							}
-					}
-					else if( (*unidadeSelecionada).isDead )
-					{
-						(*(*cenario).tiles[(*unidadeSelecionada).posX][(*unidadeSelecionada).posY]).ocupante = NULL;
-						unidadeSelecionada = NULL;
-					}
-				}
-			}
-
-			/**
-			if(event.key.keysym.sym == SDLK_t)
-			{
-				if( unidadeSelecionada != NULL )
-				{
-					(*unidadeSelecionada).selecionado = false;
-					unidadeSelecionada = NULL;
-				}
-
-				if( nacaoSelecionada == nacoes.front() )
-					nacaoSelecionada = nacoes.back();
-				else
-					nacaoSelecionada = nacoes.front();
-
-				(*nacaoSelecionada).coletar();
-
-				for(list<Unidade *>::iterator it = (*nacaoSelecionada).exercito.begin(); it != (*nacaoSelecionada).exercito.end(); it++)
-				{
-					if((*(*it)).tipo == SOLDADO)
-						(*(*it)).qtdMovimentos = 3; 
-					else if((*(*it)).tipo == NAVIO)
-						(*(*it)).qtdMovimentos = 5; 		
-					else if((*(*it)).tipo == AVIAO)
-						(*(*it)).qtdMovimentos = 10; 
-					else if((*(*it)).tipo == CANHAO)
-						(*(*it)).qtdMovimentos = 2; 	
-				}
-			}
-			**/
-
-					//alternando modo do mapa
-					if(event.key.keysym.sym == SDLK_0)
-					{
-						modo++;
-						modo = modo % 4;		//4 modos
-					}
-					
-					if(event.key.keysym.sym == SDLK_8)
-					{
-						for(list<Unidade *>::iterator it1 = (*nacoes.back()).exercito.begin(); it1 != (*nacoes.back()).exercito.end(); it1++)
-						{
-							if((*(*it1)).tipo == SOLDADO)
-							(*(*it1)).qtdMovimentos = 5; 
-
-							else if((*(*it1)).tipo == NAVIO)
-							(*(*it1)).qtdMovimentos = 3; 
-							
-							else if((*(*it1)).tipo == AVIAO)
-							(*(*it1)).qtdMovimentos = 10; 
-
-							else if((*(*it1)).tipo == CANHAO)
-							(*(*it1)).qtdMovimentos = 5; 	
 						}
+						else if( (*unidadeSelecionada).isDead )
+						{
+							(*(*cenario).tiles[(*unidadeSelecionada).posX][(*unidadeSelecionada).posY]).ocupante = NULL;
+							unidadeSelecionada = NULL;
+						}
+					}
+				}
 
-					nacaoSelecionada = nacoes.front();
+				//alternando modo do mapa
+				if(event.key.keysym.sym == SDLK_0)
+				{
+					modo++;
+					modo = modo % 4;		//4 modos
+				}
+					
+				if(event.key.keysym.sym == SDLK_8)
+				{
+					for(list<Unidade *>::iterator it1 = (*nacoes.back()).exercito.begin(); it1 != (*nacoes.back()).exercito.end(); it1++)
+					{
+						if((*(*it1)).tipo == SOLDADO)
+						(*(*it1)).qtdMovimentos = 5; 
+
+						else if((*(*it1)).tipo == NAVIO)
+						(*(*it1)).qtdMovimentos = 3; 
+						
+						else if((*(*it1)).tipo == AVIAO)
+						(*(*it1)).qtdMovimentos = 10; 
+
+						else if((*(*it1)).tipo == CANHAO)
+						(*(*it1)).qtdMovimentos = 5; 	
 					}
 
-			if(event.key.keysym.sym == SDLK_9)
-			{
-				for(list<Unidade *>::iterator it1 = (*nacoes.front()).exercito.begin(); it1 != (*nacoes.front()).exercito.end(); it1++)
-				{
-					if((*(*it1)).tipo == SOLDADO)
-					(*(*it1)).qtdMovimentos = 5; 
-
-					if((*(*it1)).tipo == NAVIO)
-					(*(*it1)).qtdMovimentos = 3; 
-								
-					if((*(*it1)).tipo == AVIAO)
-					(*(*it1)).qtdMovimentos = 10; 
-
-					if((*(*it1)).tipo == CANHAO)
-					(*(*it1)).qtdMovimentos = 5;
+					nacaoSelecionada = nacoes.front();
 				}
-				nacaoSelecionada = nacoes.back();
-			}
 
+				if(event.key.keysym.sym == SDLK_9)
+				{
+					for(list<Unidade *>::iterator it1 = (*nacoes.front()).exercito.begin(); it1 != (*nacoes.front()).exercito.end(); it1++)
+					{
+						if((*(*it1)).tipo == SOLDADO)
+						(*(*it1)).qtdMovimentos = 5; 
 
-			int posXBase = (*(*(*nacaoSelecionada).territorios.front()).tiles.front()).posX;
-			int posYBase = (*(*(*nacaoSelecionada).territorios.front()).tiles.front()).posY;
-			
-			if(event.key.keysym.sym == SDLK_1)
-				(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,SOLDADO,10,nacaoSelecionada,3,TERRESTRE));
+						if((*(*it1)).tipo == NAVIO)
+						(*(*it1)).qtdMovimentos = 3; 
+									
+						if((*(*it1)).tipo == AVIAO)
+						(*(*it1)).qtdMovimentos = 10; 
 
-			if(event.key.keysym.sym == SDLK_2)
-			{
-				//Base Marinha sendo o segundo tile do territorio ou ver uma posicao a direita/esquerda que seja agua
-				posXBase = 1;
-				posYBase = 1;
+						if((*(*it1)).tipo == CANHAO)
+						(*(*it1)).qtdMovimentos = 5;
+					}
+					nacaoSelecionada = nacoes.back();
+				}
 
-				(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,NAVIO,10,nacaoSelecionada,5,AQUATICO));
-				//mostrandoUnidadesNacao((*nacaoSelecionada));
-			}
+				int posXBase = (*(*(*nacaoSelecionada).territorios.front()).tiles.front()).posX;
+				int posYBase = (*(*(*nacaoSelecionada).territorios.front()).tiles.front()).posY;
+				
+				if(event.key.keysym.sym == SDLK_1)
+					(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,SOLDADO,10,nacaoSelecionada,3,TERRESTRE));
 
-			if(event.key.keysym.sym == SDLK_3)
-				(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,CANHAO,10,nacaoSelecionada,2,TERRESTRE));
+				if(event.key.keysym.sym == SDLK_2)
+				{
+					//Base Marinha sendo o segundo tile do territorio ou ver uma posicao a direita/esquerda que seja agua
+					posXBase = 1;
+					posYBase = 1;
 
-			if(event.key.keysym.sym == SDLK_4)
-				(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,AVIAO,10,nacaoSelecionada,10,QUALQUER_AMBIENTE));
-			
-					
-	}			
-}
+					(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,NAVIO,10,nacaoSelecionada,5,AQUATICO));
+					//mostrandoUnidadesNacao((*nacaoSelecionada));
+				}
+
+				if(event.key.keysym.sym == SDLK_3)
+					(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,CANHAO,10,nacaoSelecionada,2,TERRESTRE));
+
+				if(event.key.keysym.sym == SDLK_4)
+					(*nacaoSelecionada).exercitoAdd(new Unidade(posXBase,posYBase,AVIAO,10,nacaoSelecionada,10,QUALQUER_AMBIENTE));
+			}			
+		}
 		
-			// Eventos de mouse
-			if(event.type == SDL_MOUSEBUTTONUP && meuTurno)
-			{
+		// Eventos de mouse
+		if(event.type == SDL_MOUSEBUTTONUP && meuTurno)
+		{
 			int X = event.button.x;
 			int Y = event.button.y;
 
@@ -773,10 +746,16 @@ int get_inputs()
 
 			//unidadeSelecionada
 			if(nacaoSelecionada != 0 || unidadeSelecionada != 0)
-				selecionarUnidadeNacao(nacaoSelecionada, tileX, tileY);		
-			}
+				selecionarUnidadeNacao(nacaoSelecionada, nacaoInimigo, tileX, tileY);
+		}
 		
-    }
+  }
+
+  // Verifica se é hora de passar o turno
+  if ( meuTurno && !(*nacaoSelecionada).energia) {
+  	meuTurno = false;
+  	(*conexaoCliente).pushTurno();
+  }
 
 	return 1;
 }
@@ -1107,6 +1086,8 @@ int do_drawing()
 		(*drawObj).apply_surface( height, width + 0*40, messageRecursos, screen, 0 );
 		(*drawObj).apply_surface( height, width + 1*40, messageUnidades, screen, 0 );	
 		(*drawObj).apply_surface( height, width + 2*40, messageTerritorios, screen, 0 );	
+		(*drawObj).apply_surface( height + 500, width + 2*40, messageEnergia, screen, 0 );	
+
 
 		gameOver = confereGameOver();
 
