@@ -747,6 +747,7 @@ int get_inputs()
 			//unidadeSelecionada
 			if(nacaoSelecionada != 0 || unidadeSelecionada != 0)
 				selecionarUnidadeNacao(nacaoSelecionada, nacaoInimigo, tileX, tileY);
+
 		}
 		
   }
