@@ -14,7 +14,7 @@ class Nacao
 		int madeira;
 		int ouro;
 		int ferro;
-
+		int energia;
 	
 		int qtdNacao[4];
 

@@ -29,9 +29,9 @@ void Network::selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
         {
           (*unidadeSelecionada).selecionado = false;          
           unidadeAlvo = (*it1);
-          (*unidadeSelecionada).attack(unidadeAlvo);
-          unidadeSelecionada = 0;         
-          unidadeAlvo = 0;  
+          // (*unidadeSelecionada).attack(unidadeAlvo);
+          // unidadeSelecionada = 0;         
+          // unidadeAlvo = 0;  
         }
       }
     }
@@ -73,7 +73,7 @@ void Network::selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
     return volta;
   }
 
-  bool Network::recebeJogada(Nacao* nacaoInimigo) {
+  bool Network::recebeJogada(Nacao* nacaoInimigo, Nacao* nacaoSelecionada) {
     //cout << "<RecebeJogada" << endl;
     // Verifica se tem algo para receber
     int numReady = SDLNet_CheckSockets(socketSet, 0);
@@ -147,9 +147,69 @@ void Network::selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
           return true;
         }else if (msg[5] == 'T') { // Passa o turno
           meuTurno = true;
+          (*nacaoSelecionada).energia = 10;
           unidadeSelecionada = NULL;
           unidadeAlvo = NULL; 
-        } 
+          return true;
+        }else if ( msg[5] == 'A') { //Ataque
+          int x = 0, y = 0, xAlvo = 0, yAlvo = 0, pos = 7;
+          bool isDeadAlvo = false, isDead = false;
+          // calcula x
+          for (int i=6;i<tamDados+5;i++) {
+            if (msg[i] == 'Y') {
+              break;
+            }
+            pos += 1;
+            x = x * 10 + (msg[i] - '0');
+          }
+          // calcula y
+          for (int i=pos;i<(tamDados+5);i++) {
+            if ((msg[i] == 'T') || (msg[i] == 'F')) {
+              break;
+            }
+            pos += 1;
+            y = y * 10 + (msg[i] - '0');
+          }
+          isDead = (msg[pos] == 'T') ? true : false;
+          pos++;
+          // calcula xAlvo
+          for (int i=pos;i<tamDados+5;i++) {
+            if (msg[i] == 'Y') {
+              break;
+            }
+            pos += 1;
+            xAlvo = xAlvo * 10 + (msg[i] - '0');
+          }
+          // calcula yAlvo
+          for (int i=pos+1;i<(tamDados+5);i++) {
+            if ((msg[i] == 'T') || (msg[i] == 'F')) {
+              break;
+            }
+            pos += 1;
+            yAlvo = yAlvo * 10 + (msg[i] - '0');
+          }
+          isDeadAlvo = (msg[pos] == 'T') ? true : false;
+          pos++;
+          cout << "RecebeJogada x (" << x << ") y (" << y << ") isDead (" << isDead << ")" << "xAlvo (" << xAlvo << ") yAlvo (" << yAlvo << ") isDeadAlvo (" << isDeadAlvo << ")" <<endl;
+          
+          unidadeSelecionada = NULL;
+          selecionarUnidadeNacao((*nacaoInimigo), x, y);
+          if (unidadeSelecionada == NULL) {
+            cout << "Ataque não encontrou unidade" << endl;
+            return false;
+          }
+          unidadeAlvo = NULL;
+          selecionarUnidadeNacao((*nacaoSelecionada), xAlvo, yAlvo);
+          if (unidadeAlvo == NULL) {
+            cout << "Ataque não encontrou unidade Alvo" << endl;
+            return false;
+          }
+          (*unidadeSelecionada).isDead = isDead;
+          (*unidadeAlvo).isDead = isDeadAlvo;
+
+          return true;
+
+        }
       }
     }  
     return false;
@@ -179,6 +239,40 @@ void Network::selecionarUnidadeNacao(Nacao nacao, int tileX, int tileY)
     cout << "Push Movimento  X: " << x << " Y: " << y << " Evento: " << evento << endl;
     stringstream sstm;
     sstm << "M" << x << "Y" << y << evento;
+    strcpy(mensagens[ultimoFila]+1,sstm.str().c_str());
+    mensagens[ultimoFila][0] = (char) sstm.str().size();
+    cout << "ultimoFila (" << ultimoFila << ") Tamanho (" << (int) mensagens[ultimoFila][0] << ") Mensagem (";
+    for (int i=1; i<((int) mensagens[ultimoFila][0])+1;i++) {
+      cout << mensagens[ultimoFila][i];
+    }
+    cout << ")" << endl;
+    ultimoFila += 1;
+    // fila circular...
+    if (ultimoFila==MAXFILA) {
+      ultimoFila = 0;
+    }
+  }
+
+  void Network::pushTurno(){
+    cout << "Push Turno" << endl;
+    mensagens[ultimoFila][0] = 1;
+    mensagens[ultimoFila][1] = 'T';
+    cout << "ultimoFila (" << ultimoFila << ") Tamanho (" << (int) mensagens[ultimoFila][0] << ") Mensagem (";
+    for (int i=1; i<((int) mensagens[ultimoFila][0])+1;i++) {
+      cout << mensagens[ultimoFila][i];
+    }
+    cout << ")" << endl;
+    ultimoFila += 1;
+    // fila circular...
+    if (ultimoFila==MAXFILA) {
+      ultimoFila = 0;
+    }    
+  }
+
+  void Network::pushAtaque(int x, int y, bool isDead, int xAlvo, int yAlvo, bool isDeadAlvo){
+    cout << "Push Ataque  X: " << x << " Y: " << y << " Morto: " << isDead << "Alvo: X: " << xAlvo << " Y: " << yAlvo << " Morto: " << isDeadAlvo << endl;
+    stringstream sstm;
+    sstm << "A" << x << "Y" << y << (isDead ? 'T' : 'F') << xAlvo << "Y" << yAlvo << (isDeadAlvo ? 'T' : 'F') ;
     strcpy(mensagens[ultimoFila]+1,sstm.str().c_str());
     mensagens[ultimoFila][0] = (char) sstm.str().size();
     cout << "ultimoFila (" << ultimoFila << ") Tamanho (" << (int) mensagens[ultimoFila][0] << ") Mensagem (";

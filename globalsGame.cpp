@@ -26,6 +26,7 @@ SDL_Surface *messageRecursos = NULL;
 SDL_Surface *messageUnidades = NULL;
 SDL_Surface *messageTerritorios = NULL;
 SDL_Surface *messageGameOver = NULL;
+SDL_Surface *messageEnergia = NULL;
 SDL_Surface *opcaoJogar = NULL;
 SDL_Surface *opcaoInstrucoes = NULL;
 SDL_Surface *opcaoOpcoes = NULL;
@@ -49,6 +50,7 @@ SDL_Surface *textoSoundE = NULL;
 char scoreRecursosNacao[300];
 char scoreUnidadesNacao[300];	
 char scoreTerritoriosNacao[300];
+char qtdEnergia[300];
 char scoreGameOver[300];	
 
 char instrucoes[20];
