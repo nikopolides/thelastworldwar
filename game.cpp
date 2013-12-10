@@ -585,6 +585,8 @@ int get_inputs()
 			if( event.key.keysym.sym == SDLK_ESCAPE ) 
 				quit = true;
 
+			if( event.key.keysym.sym == SDLK_p )
+				SDL_SaveBMP(screen, "screen_shot.bmp");
 			if (meuTurno && (*nacaoSelecionada).energia!=0)
 			{
 				if(unidadeSelecionada != 0)
