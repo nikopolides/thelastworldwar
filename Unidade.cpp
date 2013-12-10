@@ -10,6 +10,11 @@ enum {
 	CANHAO
 };
 
+	int lastTime = SDL_GetTicks();
+	int animationRate = 12;
+    int animationLength = 13;
+
+
 Unidade::Unidade(int _posX, int _posY, int _tipo, int _forca, Nacao* _nacao, int _qtdMovimentos, int _ambiente) 
 {
 	posX = _posX;
@@ -26,9 +31,19 @@ int Unidade::show()
 {
 	if(tipo == SOLDADO)
 	{
-		rect.x = 30*0+1;
-		rect.y = 30*0+1;
-	}
+		  if (((SDL_GetTicks() - lastTime) * animationRate / 1000) % animationLength ==0) 
+    	  {	
+			rect.x = 30*0+1;
+			rect.y = 30*0+1;		
+		}				
+		else if (((SDL_GetTicks() - lastTime) * animationRate / 1000) % animationLength !=0) 
+		{
+			rect.x = 30*1+1;
+			rect.y = 30*0+1;
+		} 
+	 } 
+	
+
 	if (tipo == NAVIO)
 	{
 		rect.x = 30*0;
